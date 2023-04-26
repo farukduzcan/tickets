@@ -18,7 +18,7 @@ class LoginAndRegisterBackground extends StatelessWidget {
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-            top: 0,
+            top: 20,
             left: 0,
             child: Image.asset(
               "assets/images/main_left.png",
@@ -30,7 +30,15 @@ class LoginAndRegisterBackground extends StatelessWidget {
             left: 0,
             child: Image.asset(
               "assets/images/login_bottom.png",
-              width: size.width * 0.2,
+              width: size.width * 0.1,
+            ),
+          ),
+          Positioned(
+            top: size.height * 0.2,
+            right: 0,
+            child: Image.asset(
+              "assets/images/right_center_1.png",
+              width: size.width * 0.08,
             ),
           ),
           child,

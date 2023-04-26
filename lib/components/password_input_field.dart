@@ -3,6 +3,8 @@ import 'package:tickets/components/text_field_container.dart';
 import '../constants.dart';
 
 class RaundedPasswordField extends StatefulWidget {
+  final TextEditingController? controller;
+  final FocusNode? focusnode;
   final TextInputAction textInputAction;
   final ValueChanged<String> onChanged;
   final String hintText;
@@ -11,6 +13,8 @@ class RaundedPasswordField extends StatefulWidget {
     required this.onChanged,
     required this.hintText,
     this.textInputAction = TextInputAction.done,
+    this.controller,
+    this.focusnode,
   });
 
   @override
@@ -31,6 +35,8 @@ class _RaundedPasswordFieldState extends State<RaundedPasswordField> {
           }
           return null;
         },
+        focusNode: widget.focusnode,
+        controller: widget.controller,
         onChanged: widget.onChanged,
         obscureText: _isHidden,
         decoration: InputDecoration(

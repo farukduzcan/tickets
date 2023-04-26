@@ -4,6 +4,8 @@ import 'package:tickets/components/text_field_container.dart';
 import '../constants.dart';
 
 class InputField extends StatelessWidget {
+  final FocusNode? focusnode;
+  final TextEditingController? controller;
   final List<TextInputFormatter> inputFormatters;
   final TextInputAction textInputAction;
   final TextInputType keyboardType;
@@ -19,7 +21,7 @@ class InputField extends StatelessWidget {
     this.textInputAction = TextInputAction.done,
     this.keyboardType = TextInputType.text,
     required this.autofillHints,
-    this.inputFormatters = const [],
+    this.inputFormatters = const [],  this.controller,  this.focusnode,
   });
 
   @override
@@ -32,6 +34,8 @@ class InputField extends StatelessWidget {
           }
           return null;
         },
+        focusNode: focusnode,
+        controller: controller,
         inputFormatters: inputFormatters,
         textInputAction: textInputAction,
         keyboardType: keyboardType,

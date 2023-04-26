@@ -7,10 +7,22 @@ import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
+import 'package:http/http.dart' as http;
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  const Body({super.key});
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Body({super.key});
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +41,34 @@ class Body extends StatelessWidget {
             child: Column(
               children: [
                 InputField(
-                  autofillHints: const [AutofillHints.email],
+                    controller: _emailController,
+                    focusnode: _emailFocusNode,
+                    autofillHints: const [AutofillHints.email],
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     hintText: kEmailHintText,
                     icon: Icons.person,
                     onChanged: (value) {}),
                 RaundedPasswordField(
-                    hintText: kPasswordHintText, onChanged: (value) {}),
+                  controller: _passwordController,
+                  focusnode: _passwordFocusNode,
+                  hintText: kPasswordHintText,
+                  onChanged: (value) {},
+                ),
               ],
             ),
           ),
           RaundedButton(
               buttonText: kLoginButtonTitle,
               press: () {
-                if (_formKey.currentState?.validate() ?? false) {}
+                if (_formKey.currentState?.validate() ?? false) {
+                  var result = http.post(
+                      Uri.parse('https://tickets-sys.herokuapp.com/login'),
+                      body: {
+                        'email': _emailController.text,
+                        'password': _passwordController.text
+                      });
+                }
               }),
           AlreadyHaveAnAccount(
               press: () {
