@@ -22,14 +22,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: size.width * 0.8,
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: kPrimaryLightColor.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
+        boxShadow: kFieldBoxShodow,
         color: kPrimaryLightColor,
         borderRadius: BorderRadius.circular(29),
       ),

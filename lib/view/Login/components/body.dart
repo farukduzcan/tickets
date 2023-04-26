@@ -7,7 +7,8 @@ import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
-import 'package:http/http.dart' as http;
+
+import '../../Dashboard/dashboard_screen.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -61,14 +62,20 @@ class _BodyState extends State<Body> {
           RaundedButton(
               buttonText: kLoginButtonTitle,
               press: () {
-                if (_formKey.currentState?.validate() ?? false) {
-                  var result = http.post(
-                      Uri.parse('https://tickets-sys.herokuapp.com/login'),
-                      body: {
-                        'email': _emailController.text,
-                        'password': _passwordController.text
-                      });
-                }
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return const DashboardScreen();
+                  }),
+                );
+                // if (_formKey.currentState?.validate() ?? false) {
+                //   var result = http.post(
+                //       Uri.parse('https://tickets-sys.herokuapp.com/login'),
+                //       body: {
+                //         'email': _emailController.text,
+                //         'password': _passwordController.text
+                //       });
+                // }
               }),
           AlreadyHaveAnAccount(
               press: () {

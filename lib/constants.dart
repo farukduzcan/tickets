@@ -30,6 +30,27 @@ ButtonStyle kElevatedButtonStyle = ElevatedButton.styleFrom(
   ),
 );
 
+List<BoxShadow> kContainerBoxShodow = [
+  BoxShadow(
+    offset: const Offset(0,
+        20), //Gölgelik yönü ve uzaklığı belirlendi (0,10) = alttan 10 birim yukarı doğru gölgelik oluştur
+    blurRadius: 50, //Gölgelik yarıçapı (50 = gölgelik yarıçapı)
+    color: kPrimaryColor.withOpacity(
+        0.23), //Gölgelik rengi ve saydamlık değeri (0.23 = saydamlık değeri)
+  ),
+];
+
+List<BoxShadow> kFieldBoxShodow = [
+  BoxShadow(
+    blurStyle: BlurStyle.normal,
+    color: kPrimaryLightColor.withOpacity(0.5),
+    spreadRadius: 3, //gölgenin yayılma miktarı
+    blurRadius: 7,
+    offset: const Offset(
+        0, 3), // changes position of shadow değiştiriyor gölgenin konumunu
+  ),
+];
+
 TextStyle kTitleStyle = const TextStyle(
   fontSize: 30,
   fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tickets/components/already_account.dart';
 import 'package:tickets/components/background.dart';
 import 'package:tickets/components/raunded_button.dart';
@@ -28,8 +29,8 @@ class _BodyState extends State<Body> {
               padding: const EdgeInsets.only(top: 40),
               child: Text(kRegisterTitle, style: kTitleStyle),
             ),
-            //Lottie.asset('assets/lottie/register_page.json',
-            //    width: size.width * 0.50, repeat: false),
+            Lottie.asset('assets/lottie/register_page.json',
+                width: size.width * 0.50, repeat: false),
             //Email
             RegisterForm(formKey: _formKey),
             RaundedButton(
