@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tickets/components/text_field_container.dart';
 import '../constants.dart';
 
 class InputField extends StatelessWidget {
+  final List<TextInputFormatter> inputFormatters;
   final TextInputAction textInputAction;
   final TextInputType keyboardType;
   final Iterable<String> autofillHints;
@@ -17,6 +19,7 @@ class InputField extends StatelessWidget {
     this.textInputAction = TextInputAction.done,
     this.keyboardType = TextInputType.text,
     required this.autofillHints,
+    this.inputFormatters = const [],
   });
 
   @override
@@ -29,6 +32,7 @@ class InputField extends StatelessWidget {
           }
           return null;
         },
+        inputFormatters: inputFormatters,
         textInputAction: textInputAction,
         keyboardType: keyboardType,
         autofillHints: autofillHints,

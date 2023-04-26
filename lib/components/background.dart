@@ -21,13 +21,13 @@ class LoginAndRegisterBackground extends StatelessWidget {
             top: 0,
             left: 0,
             child: Image.asset(
-              "assets/images/main_top.png",
-              width: size.width * 0.3,
+              "assets/images/main_left.png",
+              width: size.width * 0.1,
             ),
           ),
           Positioned(
             bottom: 0,
-            right: 0,
+            left: 0,
             child: Image.asset(
               "assets/images/login_bottom.png",
               width: size.width * 0.2,

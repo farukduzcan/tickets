@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../components/input_field.dart';
 import '../../../components/password_input_field.dart';
 import '../../../constants.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterForm extends StatelessWidget {
   const RegisterForm({
@@ -18,6 +19,7 @@ class RegisterForm extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: [
+          //Email
           InputField(
               autofillHints: const [AutofillHints.email],
               keyboardType: TextInputType.emailAddress,
@@ -41,7 +43,12 @@ class RegisterForm extends StatelessWidget {
               onChanged: (value) {}),
           //Telefon
           InputField(
-              autofillHints: const [AutofillHints.telephoneNumber],
+              inputFormatters: [
+                MaskTextInputFormatter(mask: "(###) ### ## ##)"),
+              ],
+              autofillHints: const [
+                AutofillHints.telephoneNumber
+              ],
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintText: kPhoneHintText,
