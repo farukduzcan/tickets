@@ -31,7 +31,7 @@ ButtonStyle kElevatedButtonStyle = ElevatedButton.styleFrom(
 );
 
 TextStyle kTitleStyle = const TextStyle(
-  fontSize: 20,
+  fontSize: 30,
   fontWeight: FontWeight.bold,
   color: kPrimaryColor,
 );
@@ -44,6 +44,7 @@ String kPasswordHintText = "Şifre";
 String kLoginButtonTitle = "Giriş Yap";
 String kNameHintText = "İsim";
 String kSurnameHintText = "Soyisim";
+String kCompanyName = "Şirket Ünvanı";
 String kPhoneHintText = "Telefon";
 String kRegisterButtonTitle = "Kayıt Ol";
 String accountQuestionsHave = "Hesabınız var mı? ";

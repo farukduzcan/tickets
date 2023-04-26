@@ -5,6 +5,7 @@ import 'package:tickets/components/input_field.dart';
 import 'package:tickets/components/password_input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
 
 class Body extends StatelessWidget {
@@ -28,6 +29,9 @@ class Body extends StatelessWidget {
             child: Column(
               children: [
                 InputField(
+                  autofillHints: const [AutofillHints.email],
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                     hintText: kEmailHintText,
                     icon: Icons.person,
                     onChanged: (value) {}),
@@ -41,7 +45,16 @@ class Body extends StatelessWidget {
               press: () {
                 if (_formKey.currentState?.validate() ?? false) {}
               }),
-          AlreadyHaveAnAccount(press: () {}, login: true),
+          AlreadyHaveAnAccount(
+              press: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return const SignUpScreen();
+                  }),
+                );
+              },
+              login: true),
         ],
       ),
     ));
