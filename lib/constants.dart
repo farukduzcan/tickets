@@ -30,6 +30,14 @@ ButtonStyle kElevatedButtonStyle = ElevatedButton.styleFrom(
   ),
 );
 
+List<BoxShadow> kCardBoxShodow = [
+  BoxShadow(
+    offset: const Offset(0, 10),
+    blurRadius: 50,
+    color: kPrimaryTextColor.withOpacity(0.15),
+  ),
+];
+
 List<BoxShadow> kContainerBoxShodow = [
   BoxShadow(
     offset: const Offset(0,

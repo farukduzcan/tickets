@@ -1,5 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+
 import 'package:tickets/constants.dart';
+import 'package:tickets/view/Dashboard/components/dashboard_card.dart';
+import 'package:tickets/view/Dashboard/components/top_icon_name.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -17,7 +21,7 @@ class _BodyState extends State<Body> {
         Stack(
           children: [
             Container(
-              height: size.height * 0.25,
+              height: size.height * 0.15,
               decoration: BoxDecoration(
                 boxShadow: kContainerBoxShodow,
                 color: Colors.blue,
@@ -27,20 +31,68 @@ class _BodyState extends State<Body> {
                 ),
               ),
             ),
-            const Positioned(
-              top: 50,
+            Positioned(
               left: 20,
-              child: Text(
-                'Merhaba Faruk',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                    color: Colors.white),
-              ),
+              right: 20,
+              child: TopIconAndText(
+                  icon: Icons.business_center_outlined,
+                  welcomeText: "Hoşgeldin",
+                  nameText: "VeriPlus"),
             ),
           ],
+        ),
+        SizedBox(height: size.height * 0.02),
+        Expanded(
+          child: GridView.count(
+            physics: const BouncingScrollPhysics(),
+            crossAxisCount: 2,
+            children: [
+              DashboardCard(
+                imageAssets: "assets/images/check.png",
+                title: "Cevaplanan",
+                count: 10,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/time-left.png",
+                title: "Cevap Bekleyen",
+                count: 25,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/complate.png",
+                title: "Tamamlanan",
+                count: 50,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/complate.png",
+                title: "Tamamlanan",
+                count: 50,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/complate.png",
+                title: "Tamamlanan",
+                count: 50,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/complate.png",
+                title: "Tamamlanan",
+                count: 50,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/complate.png",
+                title: "Tamamlanan",
+                count: 50,
+              ),
+              DashboardCard(
+                imageAssets: "assets/images/complate.png",
+                title: "Tamamlanan",
+                count: 50,
+              ),
+            ],
+          ),
         )
       ],
     );
   }
 }
+
+
