@@ -9,6 +9,7 @@ const kSecondaryTextColor = Color(0xFF757575);
 const kDividerColor = Color(0xFFBDBDBD);
 const kWhiteColor = Color(0xFFFFFFFF);
 const kBlackColor = Color(0xFF000000);
+const kScaffoldBackgroundColor = Color.fromARGB(255, 255, 255, 255);
 
 Padding kPaddingAllMin = const Padding(padding: EdgeInsets.all(20));
 Padding kPaddingAllMid = const Padding(padding: EdgeInsets.all(40));
@@ -40,8 +41,8 @@ List<BoxShadow> kCardBoxShodow = [
 
 List<BoxShadow> kContainerBoxShodow = [
   BoxShadow(
-    offset: const Offset(0,
-        20), //Gölgelik yönü ve uzaklığı belirlendi (0,10) = alttan 10 birim yukarı doğru gölgelik oluştur
+    spreadRadius: 10, // yayılma miktarı
+    offset: const Offset(0, 20),
     blurRadius: 50, //Gölgelik yarıçapı (50 = gölgelik yarıçapı)
     color: kPrimaryColor.withOpacity(
         0.23), //Gölgelik rengi ve saydamlık değeri (0.23 = saydamlık değeri)

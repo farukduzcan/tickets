@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
-
-import '../../components/nav_bar_item.dart';
+import '../../components/nav_bar.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -10,8 +9,16 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blueGrey[20],
+        backgroundColor: kScaffoldBackgroundColor,
+        drawerEdgeDragWidth: 60,
         drawer: Drawer(
+          width: 233,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -22,11 +29,11 @@ class DashboardScreen extends StatelessWidget {
                 child: Text('Tickets'),
               ),
               ListTile(
-                title: const Text('Item 1'),
+                title: const Text('Başlık 1'),
                 onTap: () {},
               ),
               ListTile(
-                title: const Text('Item 2'),
+                title: const Text('Başlık 2'),
                 onTap: () {},
               ),
             ],
@@ -43,41 +50,6 @@ class DashboardScreen extends StatelessWidget {
           backgroundColor: kPrimaryColor,
           child: const Icon(Icons.add),
         ),
-        bottomNavigationBar: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 10,
-          child: SizedBox(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    NavBarItem(
-                        icon: Icons.dashboard_outlined,
-                        title: 'Dashboard',
-                        press: () {}),
-                    NavBarItem(
-                        icon: Icons.person_outline,
-                        title: 'Profile',
-                        press: () {}),
-                  ],
-                ),
-                Row(
-                  children: [
-                    NavBarItem(
-                        icon: Icons.settings_outlined,
-                        title: 'Settings',
-                        press: () {}),
-                    NavBarItem(
-                        icon: Icons.logout_outlined,
-                        title: 'Logout',
-                        press: () {}),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ));
+        bottomNavigationBar: const NavBar());
   }
 }

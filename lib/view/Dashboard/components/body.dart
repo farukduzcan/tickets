@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
 import 'package:tickets/constants.dart';
+
 import 'package:tickets/view/Dashboard/components/dashboard_card.dart';
 import 'package:tickets/view/Dashboard/components/top_icon_name.dart';
 
@@ -18,81 +18,78 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Stack(
-          children: [
-            Container(
-              height: size.height * 0.15,
-              decoration: BoxDecoration(
-                boxShadow: kContainerBoxShodow,
-                color: Colors.blue,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
+        Container(
+          height: size.height * 0.15,
+          decoration: BoxDecoration(
+            boxShadow: kContainerBoxShodow,
+            color: kPrimaryColor,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(40),
+              bottomRight: Radius.circular(40),
             ),
-            Positioned(
-              left: 20,
-              right: 20,
-              child: TopIconAndText(
-                  icon: Icons.business_center_outlined,
-                  welcomeText: "Hoşgeldin",
-                  nameText: "VeriPlus"),
-            ),
-          ],
+          ),
+          child: const Padding(
+            padding: EdgeInsets.only(left: 20.0, right: 20),
+            child: TopIconAndText(
+                icon: Icons.business_center_outlined,
+                welcomeText: "Hoş geldin",
+                nameText: "VeriPlus"),
+          ),
         ),
-        SizedBox(height: size.height * 0.02),
         Expanded(
-          child: GridView.count(
-            physics: const BouncingScrollPhysics(),
-            crossAxisCount: 2,
-            children: [
-              DashboardCard(
-                imageAssets: "assets/images/check.png",
-                title: "Cevaplanan",
-                count: 10,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/time-left.png",
-                title: "Cevap Bekleyen",
-                count: 25,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/complate.png",
-                title: "Tamamlanan",
-                count: 50,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/complate.png",
-                title: "Tamamlanan",
-                count: 50,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/complate.png",
-                title: "Tamamlanan",
-                count: 50,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/complate.png",
-                title: "Tamamlanan",
-                count: 50,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/complate.png",
-                title: "Tamamlanan",
-                count: 50,
-              ),
-              DashboardCard(
-                imageAssets: "assets/images/complate.png",
-                title: "Tamamlanan",
-                count: 50,
-              ),
-            ],
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            child: GridView.count(
+              physics: const BouncingScrollPhysics(),
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 5,
+              children: const [
+                DashboardCard(
+                  imageAssets: "assets/images/check.png",
+                  title: "Cevaplanan",
+                  count: 10,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/time-left.png",
+                  title: "Cevap Bekleyen",
+                  count: 25,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/complate.png",
+                  title: "Tamamlanan",
+                  count: 50,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/complate.png",
+                  title: "Tamamlanan",
+                  count: 50,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/complate.png",
+                  title: "Tamamlanan",
+                  count: 50,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/complate.png",
+                  title: "Tamamlanan",
+                  count: 50,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/complate.png",
+                  title: "Tamamlanan",
+                  count: 50,
+                ),
+                DashboardCard(
+                  imageAssets: "assets/images/complate.png",
+                  title: "Tamamlanan",
+                  count: 50,
+                ),
+              ],
+            ),
           ),
         )
       ],
     );
   }
 }
-
-
