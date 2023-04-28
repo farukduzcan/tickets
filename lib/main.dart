@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tickets/constants.dart';
-
-import 'view/Dashboard/dashboard_screen.dart';
+import 'package:tickets/view/Login/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const DashboardScreen(),
+      home: const LoginScreen(),
     );
   }
 }

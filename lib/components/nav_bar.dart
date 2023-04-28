@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:tickets/components/nav_bar_item.dart';
+import 'package:tickets/constants.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({
@@ -20,12 +20,10 @@ class NavBar extends StatelessWidget {
             Row(
               children: [
                 NavBarItem(
-                    icon: Icons.dashboard_outlined,
-                    title: 'Dashboard',
-                    press: () {}),
+                    icon: Icons.home_outlined, title: kHomeTitle, press: () {}),
                 NavBarItem(
                     icon: Icons.person_outline,
-                    title: 'Profile',
+                    title: kProfileTitle,
                     press: () {}),
               ],
             ),
@@ -33,11 +31,11 @@ class NavBar extends StatelessWidget {
               children: [
                 NavBarItem(
                     icon: Icons.settings_outlined,
-                    title: 'Settings',
+                    title: kSettingsTitle,
                     press: () {}),
                 NavBarItem(
                     icon: Icons.logout_outlined,
-                    title: 'Logout',
+                    title: kLogoutTitle,
                     press: () {}),
               ],
             ),
