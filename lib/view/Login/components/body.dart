@@ -9,6 +9,7 @@ import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
 
+import '../../../models/user_model.dart';
 import '../../Dashboard/dashboard_screen.dart';
 
 class Body extends StatefulWidget {
@@ -72,6 +73,7 @@ class _BodyState extends State<Body> {
                         userName: _emailController.text,
                         password: _passwordController.text);
                     if (result != null && result.data != null) {
+                      UserModel.userToken = result.data!.token;
                       //TOKEN BİLGİSİ İLE USER INFO ÇEK.
                       Navigator.pushReplacement(
                         context,
@@ -83,14 +85,6 @@ class _BodyState extends State<Body> {
                   }
                 }
               }),
-          //
-          //   var result = http.post(
-          //       Uri.parse('https://tickets-sys.herokuapp.com/login'),
-          //       body: {
-          //         'email': _emailController.text,
-          //         'password': _passwordController.text
-          //       });
-          // }
           AlreadyHaveAnAccount(
               press: () {
                 Navigator.pushReplacement(
