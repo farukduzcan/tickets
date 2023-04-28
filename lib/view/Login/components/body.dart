@@ -5,6 +5,7 @@ import 'package:tickets/components/input_field.dart';
 import 'package:tickets/components/password_input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
 
@@ -20,8 +21,10 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(text: "osman.buran@veri.plus");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "Mert29%OB");
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
@@ -61,22 +64,33 @@ class _BodyState extends State<Body> {
           ),
           RaundedButton(
               buttonText: kLoginButtonTitle,
-              press: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return const DashboardScreen();
-                  }),
-                );
-                // if (_formKey.currentState?.validate() ?? false) {
-                //   var result = http.post(
-                //       Uri.parse('https://tickets-sys.herokuapp.com/login'),
-                //       body: {
-                //         'email': _emailController.text,
-                //         'password': _passwordController.text
-                //       });
-                // }
+              press: () async {
+                if (_formKey.currentState?.validate() ?? false) {
+                  {
+                    LoginServices loginServices = LoginServices();
+                    var result = await loginServices.login(
+                        userName: _emailController.text,
+                        password: _passwordController.text);
+                    if (result != null && result.data != null) {
+                      //TOKEN BİLGİSİ İLE USER INFO ÇEK.
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return const DashboardScreen();
+                        }),
+                      );
+                    }
+                  }
+                }
               }),
+          //
+          //   var result = http.post(
+          //       Uri.parse('https://tickets-sys.herokuapp.com/login'),
+          //       body: {
+          //         'email': _emailController.text,
+          //         'password': _passwordController.text
+          //       });
+          // }
           AlreadyHaveAnAccount(
               press: () {
                 Navigator.pushReplacement(

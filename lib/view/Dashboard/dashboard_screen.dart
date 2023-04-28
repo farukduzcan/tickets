@@ -11,34 +11,7 @@ class DashboardScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: kScaffoldBackgroundColor,
         drawerEdgeDragWidth: 60,
-        drawer: Drawer(
-          width: 233,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-            ),
-          ),
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                ),
-                child: Text('Tickets'),
-              ),
-              ListTile(
-                title: const Text('Başlık 1'),
-                onTap: () {},
-              ),
-              ListTile(
-                title: const Text('Başlık 2'),
-                onTap: () {},
-              ),
-            ],
-          ),
-        ),
+        drawer: const DrawerBar(),
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
           elevation: 0,
@@ -51,5 +24,26 @@ class DashboardScreen extends StatelessWidget {
           child: const Icon(Icons.add),
         ),
         bottomNavigationBar: const NavBar());
+  }
+}
+
+class DrawerBar extends StatelessWidget {
+  const DrawerBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Drawer(
+      backgroundColor: kPrimaryColor,
+      width: 233,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      
+    );
   }
 }
