@@ -70,6 +70,7 @@ class _BodyState extends State<Body> {
             ),
           ),
           RaundedButton(
+              loadingText: kLoginLoadingText,
               isLoading: loading,
               buttonText: kLoginButtonTitle,
               press: () async {

@@ -84,3 +84,5 @@ String kHomeTitle = "Anasayfa";
 String kProfileTitle = "Profil";
 String kSettingsTitle = "Ayarlar";
 String kLogoutTitle = "Çıkış Yap";
+String kLoginLoadingText = "Giriş Yapılıyor...";
+String kRegisterLoadingText = "Kayıt Yapılıyor...";

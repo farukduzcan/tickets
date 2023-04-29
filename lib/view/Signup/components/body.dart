@@ -34,6 +34,7 @@ class _BodyState extends State<Body> {
             //Email
             RegisterForm(formKey: _formKey),
             RaundedButton(
+                loadingText: kRegisterLoadingText,
                 buttonText: kRegisterButtonTitle,
                 press: () {
                   if (_formKey.currentState?.validate() ?? false) {}

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class RaundedButton extends StatefulWidget {
+  final String loadingText;
   final bool isLoading;
   final String buttonText;
   final Function press;
@@ -16,7 +17,8 @@ class RaundedButton extends StatefulWidget {
     this.textColor = Colors.white,
     this.shadowColor = kPrimaryLightColor,
     this.elevation = 1,
-    this.isLoading = true,
+    this.isLoading = false,
+    this.loadingText = '',
   });
 
   @override
@@ -29,15 +31,7 @@ class _RaundedButtonState extends State<RaundedButton> {
     Size size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: widget.shadowColor.withOpacity(0.5),
-            spreadRadius: 3, // gölge genişliği değiştirir
-            blurRadius: 7, // gölge yumuşaklığı değiştirir
-            offset: const Offset(0,
-                3), // gölge pozisyonu değiştirir (x,y koordinatları için) (0,3) (x,y)
-          ),
-        ],
+        boxShadow: kFieldBoxShodow,
       ),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       width: size.width * 0.8,
@@ -64,7 +58,7 @@ class _RaundedButtonState extends State<RaundedButton> {
                     ),
                   ),
                   Text(
-                    "Giriş Yapılıyor...",
+                    widget.loadingText,
                     style: TextStyle(
                       color: widget.textColor,
                       fontSize: 18,
