@@ -28,6 +28,12 @@ class _BodyState extends State<Body> {
       TextEditingController(text: "Mert29%OB");
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+  bool loading = false;
+  void _loadingBar() {
+    setState(() {
+      loading = !loading;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +70,12 @@ class _BodyState extends State<Body> {
             ),
           ),
           RaundedButton(
+              isLoading: loading,
               buttonText: kLoginButtonTitle,
               press: () async {
+                _loadingBar();
                 if (_formKey.currentState?.validate() ?? false) {
+                  //loading = true;
                   {
                     LoginServices loginServices = LoginServices();
                     var result = await loginServices.login(
@@ -83,6 +92,7 @@ class _BodyState extends State<Body> {
                       );
                     }
                   }
+                  _loadingBar();
                 }
               }),
           AlreadyHaveAnAccount(

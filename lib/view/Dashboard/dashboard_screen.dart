@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tickets/constants.dart';
-import 'package:tickets/models/user_model.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import '../../components/drawer_bar.dart';
 import '../../components/nav_bar.dart';
@@ -21,9 +20,7 @@ class DashboardScreen extends StatelessWidget {
         body: const Body(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            print(UserModel.userToken);
-          },
+          onPressed: () {},
           backgroundColor: kPrimaryColor,
           child: const Icon(Icons.add),
         ),
