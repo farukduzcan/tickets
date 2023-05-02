@@ -21,17 +21,20 @@ class DrawerBar extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: kPrimaryColor,
-            ),
-            child: Text(
-              "VeriPlus",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+          const UserAccountsDrawerHeader(
+            accountName: Text("VeriPlus"),
+            accountEmail: Text("veriplus@veri.plus"),
+            currentAccountPicture: CircleAvatar(
+              radius: 35,
+              child: ClipOval(
+                child: Icon(
+                  Icons.business_outlined,
+                  color: Colors.white,
+                  size: 40,
+                ),
               ),
             ),
+            decoration: BoxDecoration(),
           ),
           DrawerItem(
             isSelected: true,

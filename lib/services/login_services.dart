@@ -19,15 +19,9 @@ class LoginServices {
     //var toBase64 = utf8.encode(password);
     final base64Str = base64.encode(password.codeUnits);
     try {
-      var url = Uri.parse(
-          '${Globals.apiBaseUrl}token'); // bu bizim url'imiz uri parse ile url'e çevirdik. içindeki global bi url tanımladık sonrada /token ekledik.
-      var result = await http.post(
-          url, //post işlemi yaptık url'e gittik ve body'e username ve password gönderdik. header'a da content type ekledik.
-          //header ve content type olmazsa 415 hatası alırız. 415 hatası unsupported media type hatasıdır. yani desteklenmeyen medya tipi hatasıdır.
-          // yani content type'ı belirtmemiz gerekir. content type'ı belirtmezsek varsayılan olarak application/x-www-form-urlencoded olarak gelir.
-          // bizim gönderdiğimiz ise application/json'dır. bu yüzden content type'ı belirtmemiz gerekir.
-          // body'e gönderdiğimiz verileri json'a çevirmemiz gerekir. bunun için jsonEncode kullandık.
-          body: jsonEncode({"Username": userName, "Password": base64Str}), //jsonEncode ile body'e gönderdiğimiz verileri json'a çevirdik.
+      var url = Uri.parse('${Globals.apiBaseUrl}token');
+      var result = await http.post(url,
+          body: jsonEncode({"Username": userName, "Password": base64Str}),
           headers: {"Content-Type": "application/json; charset=utf-8"});
       return LoginResponseModel.fromJson(json.decode(result.body));
     } on SocketException {
