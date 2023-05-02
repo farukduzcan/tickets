@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tickets/components/already_account.dart';
@@ -8,7 +10,6 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
-
 import '../../../models/user_model.dart';
 import '../../Dashboard/dashboard_screen.dart';
 
@@ -76,15 +77,25 @@ class _BodyState extends State<Body> {
               press: () async {
                 _loadingBar();
                 if (_formKey.currentState?.validate() ?? false) {
-                  //loading = true;
                   {
                     LoginServices loginServices = LoginServices();
                     var result = await loginServices.login(
                         userName: _emailController.text,
                         password: _passwordController.text);
+
+                    if (result?.errors != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(result!.errors![0].error),
+                        backgroundColor: Colors.red,
+                      ));
+                    }
+
                     if (result != null && result.data != null) {
                       UserModel.userToken = result.data!.token;
+                      await setToken(result.data!.token);
+
                       //TOKEN BİLGİSİ İLE USER INFO ÇEK.
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) {

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/models/user_model.dart';
+import 'package:tickets/view/Dashboard/dashboard_screen.dart';
 import 'package:tickets/view/Login/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  UserModel.userToken = await getToken();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const LoginScreen(),
+      home: UserModel.userToken != null
+          ? const DashboardScreen()
+          : const LoginScreen(),
     );
   }
 }

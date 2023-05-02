@@ -26,11 +26,14 @@ class LoginServices {
           // bizim gönderdiğimiz ise application/json'dır. bu yüzden content type'ı belirtmemiz gerekir.
           // body'e gönderdiğimiz verileri json'a çevirmemiz gerekir. bunun için jsonEncode kullandık.
           body: jsonEncode({"Username": userName, "Password": base64Str}), //jsonEncode ile body'e gönderdiğimiz verileri json'a çevirdik.
-          headers: {"Content-Type": "application/json"});
-      if (result.statusCode == 200 || result.statusCode == 400) {
-        return LoginResponseModel.fromJson(jsonDecode(result
-            .body)); //jsonDecode ile result.body'i json'a çevirdik. sonra da fromJson ile LoginResponseModel'e çevirdik.
+          headers: {"Content-Type": "application/json; charset=utf-8"});
+      if (result.statusCode == 200) {
+        var responseJson = json.decode(result.body);
+        return LoginResponseModel.fromJson(
+            responseJson); //jsonDecode ile result.body'i json'a çevirdik. sonra da fromJson ile LoginResponseModel'e çevirdik.
         // fromeJson ile LoginResponseModel'e çevirdikten sonra LoginResponseModel'in içindeki data'yı döndürdük.
+      } else if (result.statusCode == 400) {
+        return LoginResponseModel.fromJson(json.decode(result.body));
       }
       return null;
     } catch (e) {

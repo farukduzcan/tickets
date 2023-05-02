@@ -1,6 +1,6 @@
 class LoginResponseModel {
   UserToken? data;
-  dynamic errors;
+  List<LoginError>? errors;
   int result;
 
   LoginResponseModel({
@@ -9,15 +9,19 @@ class LoginResponseModel {
     required this.result,
   });
 
-  factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
-      LoginResponseModel(
-        data: json["data"] == null
-            ? null
-            : UserToken.fromJson(json[
-                "data"]), //data null değilse UserToken.fromJson ile json'ı UserToken'a çevirdik. null ise null döndürdük.
-        errors: json["errors"],
-        result: json["result"],
-      );
+  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    return LoginResponseModel(
+      data: json["data"] == null
+          ? null
+          : UserToken.fromJson(json[
+              "data"]), //data null değilse UserToken.fromJson ile json'ı UserToken'a çevirdik. null ise null döndürdük.
+      errors: json["errors"] == null
+          ? null
+          : List<LoginError>.from(
+              json["errors"].map((x) => LoginError.fromJson(x))),
+      result: json["result"],
+    );
+  }
 }
 
 class UserToken {
@@ -34,5 +38,20 @@ class UserToken {
         //UserToken.fromJson ile json'ı UserToken'a çevirdik.
         token: json["token"], //  token ve expires'ı json'dan aldık.
         expires: DateTime.parse(json["expires"]),
+      );
+}
+
+class LoginError {
+  String property;
+  String error;
+
+  LoginError({
+    required this.property,
+    required this.error,
+  });
+
+  factory LoginError.fromJson(Map<String, dynamic> json) => LoginError(
+        property: json["property"],
+        error: json["error"],
       );
 }
