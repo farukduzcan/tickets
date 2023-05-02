@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:tickets/constants.dart';
 import 'package:tickets/models/login_response_model.dart';
 import 'package:tickets/services/global.dart';
 
@@ -27,17 +29,11 @@ class LoginServices {
           // body'e gönderdiğimiz verileri json'a çevirmemiz gerekir. bunun için jsonEncode kullandık.
           body: jsonEncode({"Username": userName, "Password": base64Str}), //jsonEncode ile body'e gönderdiğimiz verileri json'a çevirdik.
           headers: {"Content-Type": "application/json; charset=utf-8"});
-      if (result.statusCode == 200) {
-        var responseJson = json.decode(result.body);
-        return LoginResponseModel.fromJson(
-            responseJson); //jsonDecode ile result.body'i json'a çevirdik. sonra da fromJson ile LoginResponseModel'e çevirdik.
-        // fromeJson ile LoginResponseModel'e çevirdikten sonra LoginResponseModel'in içindeki data'yı döndürdük.
-      } else if (result.statusCode == 400) {
-        return LoginResponseModel.fromJson(json.decode(result.body));
-      }
-      return null;
+      return LoginResponseModel.fromJson(json.decode(result.body));
+    } on SocketException {
+      throw Exception(kLoginErrorEthernet);
     } catch (e) {
-      return null;
+      throw Exception("$kErrorTitle, $e");
     }
   }
 }

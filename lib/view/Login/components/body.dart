@@ -78,30 +78,37 @@ class _BodyState extends State<Body> {
                 _loadingBar();
                 if (_formKey.currentState?.validate() ?? false) {
                   {
-                    LoginServices loginServices = LoginServices();
-                    var result = await loginServices.login(
-                        userName: _emailController.text,
-                        password: _passwordController.text);
+                    try {
+                      LoginServices loginServices = LoginServices();
+                      var result = await loginServices.login(
+                          userName: _emailController.text,
+                          password: _passwordController.text);
 
-                    if (result?.errors != null) {
+                      if (result?.errors != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(result!.errors![0].error),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+
+                      if (result != null && result.data != null) {
+                        UserModel.userToken = result.data!.token;
+                        await setToken(result.data!.token);
+
+                        //TOKEN BİLGİSİ İLE USER INFO ÇEK.
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return const DashboardScreen();
+                          }),
+                        );
+                      }
+                    } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(result!.errors![0].error),
+                        content: Text(e.toString()),
                         backgroundColor: Colors.red,
                       ));
-                    }
-
-                    if (result != null && result.data != null) {
-                      UserModel.userToken = result.data!.token;
-                      await setToken(result.data!.token);
-
-                      //TOKEN BİLGİSİ İLE USER INFO ÇEK.
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return const DashboardScreen();
-                        }),
-                      );
                     }
                   }
                   _loadingBar();
