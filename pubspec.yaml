@@ -39,6 +39,7 @@ dependencies:
   mask_text_input_formatter: ^2.4.0
   http:
   flutter_secure_storage: ^8.0.0
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:

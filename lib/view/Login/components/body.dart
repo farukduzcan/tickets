@@ -11,6 +11,7 @@ import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
 import '../../../models/user_model.dart';
+import '../../../services/user_info_services.dart';
 import '../../Dashboard/dashboard_screen.dart';
 
 class Body extends StatefulWidget {
@@ -94,8 +95,8 @@ class _BodyState extends State<Body> {
                       if (result != null && result.data != null) {
                         UserModel.userToken = result.data!.token;
                         await setToken(result.data!.token);
-
-                        //TOKEN BİLGİSİ İLE USER INFO ÇEK.
+                        UserInfoServices userInfoServices = UserInfoServices();
+                        var response = await userInfoServices.user();
 
                         Navigator.pushReplacement(
                           context,

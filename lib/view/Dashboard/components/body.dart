@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/models/user_model.dart';
 
 import 'package:tickets/view/Dashboard/components/dashboard_card.dart';
 import 'package:tickets/view/Dashboard/components/top_icon_name.dart';
@@ -28,12 +29,14 @@ class _BodyState extends State<Body> {
               bottomRight: Radius.circular(40),
             ),
           ),
-          child: const Padding(
-            padding: EdgeInsets.only(left: 20.0, right: 20),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20),
             child: TopIconAndText(
                 icon: Icons.business_center_outlined,
                 welcomeText: "Hoş geldin",
-                nameText: "VeriPlus"),
+                nameText: UserModel.userData!.firstName! +
+                    " " +
+                    UserModel.userData!.lastName!),
           ),
         ),
         Expanded(

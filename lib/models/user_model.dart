@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserModel {
   static String? userToken;
+  static UserData? userData;
   UserModel({
     required this.data,
     required this.errors,
@@ -57,6 +60,26 @@ class UserData {
         "lastName": lastName,
         "role": role,
       };
+}
+
+//ToDo: cahce json kaydetme
+//cache'den json okuma
+
+Future<void> saveUserData(UserData user) async {
+  final prefs = await SharedPreferences.getInstance();
+  final userData = jsonEncode(user.toJson());
+  prefs.setString('user', userData);
+  loadUserData();
+}
+
+Future<void> loadUserData() async {
+  final prefs = await SharedPreferences.getInstance();
+  final userData = prefs.getString('user');
+
+  if (userData != null) {
+    final json = jsonDecode(userData);
+    UserModel.userData = UserData.fromJson(json);
+  }
 }
 
 FlutterSecureStorage storage = const FlutterSecureStorage();
