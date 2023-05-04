@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:tickets/components/already_account.dart';
 import 'package:tickets/components/background.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/extensions/error_extensions.dart';
 import 'package:tickets/models/register_response_model.dart';
 import 'package:tickets/services/register_services.dart';
 import 'package:tickets/view/Login/login_screen.dart';
@@ -28,20 +30,14 @@ class _BodyState extends State<Body> {
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController =
-      TextEditingController(text: "dinamik2@gmail.com");
-  final TextEditingController _firstNameController =
-      TextEditingController(text: "Dinamik2 Kampüs");
-  final TextEditingController _lastNameController =
-      TextEditingController(text: "Dinamik2 Kampüs");
-  final TextEditingController _phoneNumberController =
-      TextEditingController(text: "055555555");
-  final TextEditingController _companyNameController =
-      TextEditingController(text: "Dinamik2 Kampüs");
-  final TextEditingController _passwordController =
-      TextEditingController(text: "123456789");
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _companyNameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _comfirmpasswordController =
-      TextEditingController(text: "123456789");
+      TextEditingController();
 
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _firstNameFocusNode = FocusNode();
@@ -158,10 +154,6 @@ class _BodyState extends State<Body> {
                     );
                     if (result != null && result.data != null) {
                       RegisterResponseModel.confirmationCode = result.data!;
-                      print(result.data);
-                      print(result.data);
-                      print(result.data);
-                      print(result.data);
                       // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
@@ -171,8 +163,24 @@ class _BodyState extends State<Body> {
                           );
                         }),
                       );
+                    } else {
+                      // ScaffoldMessenger.of(context).showSnackBar(
+                      //   SnackBar(
+                      //     backgroundColor: Colors.red,
+                      //     content: Text(result?.errors.errorToString() ??
+                      //         "Beklenmeyen bir hata oluştu!."),
+                      //   ),
+                      // );
+                      _loadingBar();
+                      // ignore: use_build_context_synchronously
+                      QuickAlert.show(
+                          confirmBtnText: kOk,
+                          context: context,
+                          type: QuickAlertType.error,
+                          title: "Hata",
+                          text: result?.errors.errorToString() ??
+                              "Beklenmeyen bir hata oluştu!.");
                     }
-                    _loadingBar();
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

@@ -24,10 +24,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController =
-      TextEditingController(text: "osman.buran@veri.plus");
-  final TextEditingController _passwordController =
-      TextEditingController(text: "Mert29%OB");
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   bool loading = false;

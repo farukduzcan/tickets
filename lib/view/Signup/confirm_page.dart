@@ -7,6 +7,9 @@ class ConfirmPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 121), () {
+      Navigator.pop(context);
+    });
     return Scaffold(
       body: ConfirmBody(mailAddress: mailAddress),
     );

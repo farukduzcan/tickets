@@ -103,3 +103,5 @@ String kConfirmSuccess = "Aktivasyon kodu doğru";
 String kOk = "Tamam";
 String kAlertSuccssesTitle = "Başarılı";
 String kConfirmSuccessSubtitle = "Hesabınız başarıyla aktifleştirildi.";
+String kAlertConfirmLoadingTitle = "Aktivasyon Kodu Gönderiliyor...";
+String kAlertConfirmLoadingText = "Lütfen bekleyiniz.";

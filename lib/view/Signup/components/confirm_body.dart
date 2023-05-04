@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quickalert/quickalert.dart';
@@ -32,6 +34,22 @@ class _ConfirmBodyState extends State<ConfirmBody> {
       borderRadius: BorderRadius.circular(20),
     ),
   );
+
+  int _counter = 120;
+
+  void _timerCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      _timerCounter();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +102,7 @@ class _ConfirmBodyState extends State<ConfirmBody> {
                       text: kConfirmSuccess,
                       confirmBtnText: kOk,
                       onConfirmBtnTap: () {
+                        Navigator.pop(context);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
@@ -98,6 +117,8 @@ class _ConfirmBodyState extends State<ConfirmBody> {
                 //print(widget.mailAddress);
               },
             ),
+            Text("Kalan Süre: $_counter sn",
+                style: const TextStyle(fontSize: 20, color: Colors.red)),
             RaundedButton(
                 buttonText: "KOD",
                 press: () {
@@ -106,7 +127,7 @@ class _ConfirmBodyState extends State<ConfirmBody> {
                         "Onay Kodunuz: ${RegisterResponseModel.confirmationCode.toString()}"),
                     backgroundColor: Colors.red,
                   ));
-                })
+                }),
           ],
         ),
       ),

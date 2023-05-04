@@ -8,6 +8,7 @@ import 'package:tickets/view/Login/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   UserModel.userToken = await getToken();
+  await loadUserData();
   runApp(const MyApp());
 }
 

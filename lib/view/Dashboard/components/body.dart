@@ -34,9 +34,7 @@ class _BodyState extends State<Body> {
             child: TopIconAndText(
                 icon: Icons.business_center_outlined,
                 welcomeText: "Hoş geldin",
-                nameText: UserModel.userData!.firstName! +
-                    " " +
-                    UserModel.userData!.lastName!),
+                nameText: UserModel.userData!.firstName!),
           ),
         ),
         Expanded(

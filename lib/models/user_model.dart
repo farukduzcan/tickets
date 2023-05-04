@@ -69,7 +69,7 @@ Future<void> saveUserData(UserData user) async {
   final prefs = await SharedPreferences.getInstance();
   final userData = jsonEncode(user.toJson());
   prefs.setString('user', userData);
-  loadUserData();
+  await loadUserData();
 }
 
 Future<void> loadUserData() async {

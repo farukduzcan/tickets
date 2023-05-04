@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tickets/components/drawer_item.dart';
+import 'package:tickets/models/user_model.dart';
 import '../constants.dart';
 
 class DrawerBar extends StatelessWidget {
@@ -21,20 +22,29 @@ class DrawerBar extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         children: [
-          const UserAccountsDrawerHeader(
-            accountName: Text("VeriPlus"),
-            accountEmail: Text("veriplus@veri.plus"),
-            currentAccountPicture: CircleAvatar(
-              radius: 35,
-              child: ClipOval(
-                child: Icon(
-                  Icons.business_outlined,
-                  color: Colors.white,
-                  size: 40,
+          UserAccountsDrawerHeader(
+            accountName: Text(
+                "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}"),
+            accountEmail: Text(UserModel.userData!.email!),
+            currentAccountPicture: Row(
+              children: const [
+                CircleAvatar(
+                  radius: 35,
+                  child: ClipOval(
+                    child: Icon(
+                      Icons.business_outlined,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Company Name", style: TextStyle(color: Colors.white)),
+              ],
             ),
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
           ),
           DrawerItem(
             isSelected: true,

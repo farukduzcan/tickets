@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:tickets/components/nav_bar_item.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/models/user_model.dart';
@@ -39,14 +40,39 @@ class NavBar extends StatelessWidget {
                     icon: Icons.logout_outlined,
                     title: kLogoutTitle,
                     press: () async {
-                      await deleteToken();
+                      QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.warning,
+                          title: "Çıkış Yap",
+                          text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
+                          confirmBtnText: "Evet",
+                          cancelBtnText: "Hayır",
+                          confirmBtnColor: Colors.green,
+                          showCancelBtn: true,
+                          cancelBtnTextStyle: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                          //cancelBtnColor: Colors.green,
+                          onConfirmBtnTap: () async {
+                            await deleteToken();
+                            // ignore: use_build_context_synchronously
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return const LoginScreen();
+                              }),
+                            );
+                          },
+                          onCancelBtnTap: () {
+                            Navigator.pop(context);
+                          });
+                      //await deleteToken();
                       // ignore: use_build_context_synchronously
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return const LoginScreen();
-                        }),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) {
+                      //     return const LoginScreen();
+                      //   }),
+                      // );
                     }),
               ],
             ),
