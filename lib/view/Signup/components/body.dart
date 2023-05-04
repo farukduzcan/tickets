@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:tickets/components/already_account.dart';
 import 'package:tickets/components/background.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/models/register_response_model.dart';
 import 'package:tickets/services/register_services.dart';
 import 'package:tickets/view/Login/login_screen.dart';
+import 'package:tickets/view/Signup/confirm_page.dart';
 import '../../../components/input_field.dart';
 import '../../../components/password_input_field.dart';
 
@@ -139,44 +140,49 @@ class _BodyState extends State<Body> {
               ),
             ),
             RaundedButton(
-                isLoading: loading,
-                loadingText: kRegisterLoadingText,
-                buttonText: kRegisterButtonTitle,
-                press: () async {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    try {
-                      _loadingBar();
-                      RegisterServices registerServices = RegisterServices();
-                      var result = await registerServices.register(
-                        companyName: _companyNameController.text,
-                        eMail: _emailController.text,
-                        firsName: _firstNameController.text,
-                        lastName: _lastNameController.text,
-                        password: _passwordController.text,
-                        confirmPassword: _comfirmpasswordController.text,
-                      );
-                      if (result != null && result.data != null) {}
-                      _loadingBar();
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(e.toString()),
-                        ),
+              isLoading: loading,
+              loadingText: kRegisterLoadingText,
+              buttonText: kRegisterButtonTitle,
+              press: () async {
+                if (_formKey.currentState?.validate() ?? false) {
+                  try {
+                    _loadingBar();
+                    RegisterServices registerServices = RegisterServices();
+                    var result = await registerServices.register(
+                      companyName: _companyNameController.text,
+                      eMail: _emailController.text,
+                      firsName: _firstNameController.text,
+                      lastName: _lastNameController.text,
+                      password: _passwordController.text,
+                      confirmPassword: _comfirmpasswordController.text,
+                    );
+                    if (result != null && result.data != null) {
+                      RegisterResponseModel.confirmationCode = result.data!;
+                      print(result.data);
+                      print(result.data);
+                      print(result.data);
+                      print(result.data);
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return ConfirmPage(
+                            mailAddress: _emailController.text,
+                          );
+                        }),
                       );
                     }
+                    _loadingBar();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(e.toString()),
+                      ),
+                    );
                   }
-                }),
-
-            RaundedButton(
-              buttonText: "test",
-              press: () {
-                QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.success,
-                    title: "Doğrulaman Kodunu Giriniz");
+                }
               },
             ),
-
             Padding(
               padding: const EdgeInsets.all(20),
               child: AlreadyHaveAnAccount(

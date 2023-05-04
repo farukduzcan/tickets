@@ -1,17 +1,16 @@
-class RegisterResponseModel {
-  static String? confirmationCode;
-  RegisterResponseModel({
+class ConfirmModel {
+  ConfirmModel({
     required this.data,
     required this.errors,
     required this.result,
   });
 
-  final String? data;
+  final dynamic data;
   final dynamic errors;
   final int? result;
 
-  factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
-    return RegisterResponseModel(
+  factory ConfirmModel.fromJson(Map<String, dynamic> json) {
+    return ConfirmModel(
       data: json["data"],
       errors: json["errors"],
       result: json["result"],

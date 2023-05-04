@@ -13,7 +13,6 @@ class RegisterServices {
       required String eMail,
       required String confirmPassword,
       required String password}) async {
-    //final base64Str = base64.encode(password.codeUnits);
     try {
       var url = Uri.parse('${Globals.apiBaseUrl}client/register');
       var result = await http.post(url,

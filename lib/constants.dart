@@ -95,3 +95,11 @@ String kRegisterErrorTitle = "Kayıt Hatası";
 String kLoginErrorEthernet = "İnternet bağlantınızı kontrol ediniz.";
 String kRegisterErrorSubtitle = "Kayıt olurken bir hata oluştu";
 String kErrorTitle = "Bir Hata Oluştu";
+String kConfirmTitle = "Hesap Aktifleştirme";
+String kConfirmSubtitle =
+    "Hesabınızı aktifleştirmek için lütfen e-posta adresinize gönderilen aktivasyon kodunu giriniz.";
+String kConfirincorrect = "Aktivasyon kodu hatalı";
+String kConfirmSuccess = "Aktivasyon kodu doğru";
+String kOk = "Tamam";
+String kAlertSuccssesTitle = "Başarılı";
+String kConfirmSuccessSubtitle = "Hesabınız başarıyla aktifleştirildi.";

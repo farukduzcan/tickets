@@ -41,6 +41,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   shared_preferences: ^2.1.0
   quickalert: ^1.0.1
+  pinput: ^2.2.31
 
 dev_dependencies:
   flutter_test:
