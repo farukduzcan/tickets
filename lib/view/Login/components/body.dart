@@ -119,6 +119,7 @@ class _BodyState extends State<Body> {
                         UserModel.userToken = result.data!.token;
                         await setToken(result.data!.token);
                         UserInfoServices userInfoServices = UserInfoServices();
+                        // ignore: unused_local_variable
                         var response = await userInfoServices.user();
 
                         // ignore: use_build_context_synchronously

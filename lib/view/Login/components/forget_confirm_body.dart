@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
@@ -35,22 +37,28 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
     ),
   );
 
-  final int _counter = 120;
-  // final bool _counterActive = true;
+  int _counter = 120;
+  late Timer _timerconfirm;
 
-  // void _timerCounter() {
-  //   setState(() {
-  //     _counter--;
-  //   });
-  // }
+  void _timerCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     _counterActive ? _timerCounter() : timer.cancel();
-  //   });
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    _timerconfirm.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timerconfirm = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _timerCounter();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,15 +114,18 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
             ),
             Text("Kalan Süre: $_counter sn",
                 style: const TextStyle(fontSize: 20, color: Colors.red)),
-            RaundedButton(
-                buttonText: "KOD",
-                press: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
-                    backgroundColor: Colors.red,
-                  ));
-                }),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: RaundedButton(
+                  buttonText: "KOD",
+                  press: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
+                      backgroundColor: Colors.red,
+                    ));
+                  }),
+            ),
           ],
         ),
       ),
