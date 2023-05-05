@@ -11,7 +11,7 @@ class ForgetConfirmPage extends StatelessWidget {
     //   Navigator.pop(context);
     // });
     return Scaffold(
-      body: ForgetConfirmBody(mailAddress: mailAddress),
+      body: ForgetConfirmBody(confirmmailAddress: mailAddress),
     );
   }
 }

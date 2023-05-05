@@ -1,19 +1,18 @@
-import 'fogetpass_mail_model.dart';
+import 'package:tickets/models/fogetpass_mail_model.dart';
 
-class RegisterResponseModel {
-  static String? confirmationCode;
-  RegisterResponseModel({
+class ResetPassword {
+  ResetPassword({
     required this.data,
     required this.errors,
     required this.result,
   });
 
-  final String? data;
+  final dynamic data;
   final List<ApiError> errors;
   final int? result;
 
-  factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
-    return RegisterResponseModel(
+  factory ResetPassword.fromJson(Map<String, dynamic> json) {
+    return ResetPassword(
       data: json["data"],
       errors: json["errors"] == null
           ? []

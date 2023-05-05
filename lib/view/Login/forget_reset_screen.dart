@@ -7,8 +7,8 @@ class ForgetResetPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: ForgetResetBody(email: "faruk_duzcan@hotmail.com"),
+    return Scaffold(
+      body: ForgetResetBody(email: mailAddress),
     );
   }
 }

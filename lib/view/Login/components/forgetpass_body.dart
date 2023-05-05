@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/components/input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/extensions/error_extensions.dart';
+import 'package:tickets/models/fogetpass_mail_model.dart';
+import 'package:tickets/services/forgetpass_mail_services.dart';
 import 'package:tickets/view/Login/forget_confirm_screen.dart';
 import '../../../components/background.dart';
 
@@ -56,7 +61,6 @@ class _ForgetPassBodyState extends State<ForgetPassBody> {
                     focusnode: _emailFocusNode,
                     autofillHints: const [AutofillHints.email],
                     keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
                     hintText: kEmailHintText,
                     icon: Icons.person,
                     onChanged: (value) {}),
@@ -72,14 +76,31 @@ class _ForgetPassBodyState extends State<ForgetPassBody> {
                 if (_formKey.currentState?.validate() ?? false) {
                   {
                     try {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) {
-                          return const ForgetConfirmPage(
-                            mailAddress: "faruk_duzcan@hotmail.com",
-                          );
-                        }),
-                      );
+                      ForgetPassMailServices forgetPassMailServices =
+                          ForgetPassMailServices();
+                      var response = await forgetPassMailServices.sendMail(
+                          eMail: _emailController.text);
+                      if (response?.data != null) {
+                        ForgetPassMailModel.resetPasswordCode = response?.data;
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return ForgetConfirmPage(
+                              mailAddress: _emailController.text,
+                            );
+                          }),
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        QuickAlert.show(
+                            confirmBtnText: kOk,
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: "Hata",
+                            text: response?.errors.errorToString() ??
+                                "Beklenmeyen bir hata oluştu!.");
+                      }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(e.toString()),

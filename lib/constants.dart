@@ -92,6 +92,7 @@ String kForgetResetTitle = "ŞİFRE SIFIRLAMA";
 String kForgetResetSubtitle = "Yeni şifrenizi giriniz.";
 String kForgetResetButton = "Şifreyi Sıfırla";
 String kForgetResetLoadingText = "Şifre Sıfırlanıyor...";
+String kResetPasswordSuccess = "Şifreniz başarıyla değiştirildi.";
 
 String kHomeTitle = "Anasayfa";
 String kProfileTitle = "Profil";

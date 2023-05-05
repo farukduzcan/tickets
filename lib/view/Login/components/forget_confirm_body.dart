@@ -1,15 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pinput/pinput.dart';
+
 import 'package:tickets/components/background.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
-import 'package:pinput/pinput.dart';
-import 'package:tickets/models/register_response_model.dart';
+import 'package:tickets/models/fogetpass_mail_model.dart';
 import 'package:tickets/view/Login/forget_reset_screen.dart';
 
 class ForgetConfirmBody extends StatefulWidget {
-  final String mailAddress;
-  const ForgetConfirmBody({super.key, required this.mailAddress});
+  final String confirmmailAddress;
+  const ForgetConfirmBody({
+    Key? key,
+    required this.confirmmailAddress,
+  }) : super(key: key);
 
   @override
   State<ForgetConfirmBody> createState() => _ForgetConfirmBodyState();
@@ -78,17 +83,19 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
               autofocus: true,
               defaultPinTheme: defaultPinTheme,
               validator: (s) {
-                return s == "123456" ? null : kConfirincorrect;
+                return s == ForgetPassMailModel.resetPasswordCode
+                    ? null
+                    : kConfirincorrect;
               },
               pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
               showCursor: true,
               onCompleted: (pin) async {
-                if (pin == "123456") {
+                if (pin == ForgetPassMailModel.resetPasswordCode) {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return const ForgetResetPage(
-                        mailAddress: "faruk_duzcan@hotmail.com",
+                      return ForgetResetPage(
+                        mailAddress: widget.confirmmailAddress,
                       );
                     }),
                   );
@@ -104,7 +111,7 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
                 press: () {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
-                        "Onay Kodunuz: ${RegisterResponseModel.confirmationCode.toString()}"),
+                        "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
                     backgroundColor: Colors.red,
                   ));
                 }),

@@ -1,12 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/extensions/error_extensions.dart';
+import 'package:tickets/services/reset_password_services.dart';
 
 import '../../../components/background.dart';
 import '../../../components/password_input_field.dart';
+import '../../../models/fogetpass_mail_model.dart';
+import '../login_screen.dart';
 
 class ForgetResetBody extends StatefulWidget {
   final String email;
@@ -73,7 +79,41 @@ class _ForgetResetBodyState extends State<ForgetResetBody> {
                 _loadingBar();
                 if (_formKey.currentState?.validate() ?? false) {
                   {
-                    try {} catch (e) {
+                    try {
+                      ResetPasswordServices resetPasswordServices =
+                          ResetPasswordServices();
+                      var result = await resetPasswordServices.resetPassword(
+                          eMail: widget.email,
+                          newPassword: _passwordController.text,
+                          confimCode:
+                              ForgetPassMailModel.resetPasswordCode.toString());
+                      if (result?.data == null) {
+                        // ignore: use_build_context_synchronously
+                        QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.success,
+                            title: kAlertSuccssesTitle,
+                            text: kResetPasswordSuccess,
+                            confirmBtnText: kLoginButtonTitle,
+                            onConfirmBtnTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return const LoginScreen();
+                                }),
+                              );
+                            });
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        QuickAlert.show(
+                            confirmBtnText: kOk,
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: "Hata",
+                            text: result?.errors.errorToString() ??
+                                "Beklenmeyen bir hata oluştu!.");
+                      }
+                    } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(e.toString()),
                         backgroundColor: Colors.red,
