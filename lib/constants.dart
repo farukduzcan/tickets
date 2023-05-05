@@ -79,7 +79,20 @@ String kPhoneHintText = "Telefon";
 String kRegisterButtonTitle = "Kayıt Ol";
 String accountQuestionsHave = "Hesabınız var mı? ";
 String accountQuestions = "Hesabınız Yok mu? ";
+
 String kForgotPassword = "Şifremi Unuttum";
+String kForgotPasswordSubTitle =
+    " Şifrenizi sıfırlamak için e-posta adresinizi giriniz.";
+String kForgotPasswordSendCode = "Kodu Gönder";
+String kForgotPasswordLoadingText = "Kod Gönderiliyor...";
+String kForgetConfirmTitle = "KOD DOĞRULAMA";
+String kForgetConfirmSubtitle =
+    "Şifrenizi sıfırlamak için lütfen e-posta adresinize gönderilen aktivasyon kodunu giriniz.";
+String kForgetResetTitle = "ŞİFRE SIFIRLAMA";
+String kForgetResetSubtitle = "Yeni şifrenizi giriniz.";
+String kForgetResetButton = "Şifreyi Sıfırla";
+String kForgetResetLoadingText = "Şifre Sıfırlanıyor...";
+
 String kHomeTitle = "Anasayfa";
 String kProfileTitle = "Profil";
 String kSettingsTitle = "Ayarlar";

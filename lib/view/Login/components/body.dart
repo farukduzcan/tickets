@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tickets/components/already_account.dart';
@@ -8,6 +6,7 @@ import 'package:tickets/components/password_input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/services/login_services.dart';
+import 'package:tickets/view/Login/forgetpass_screen.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
 import '../../../models/user_model.dart';
@@ -69,6 +68,31 @@ class _BodyState extends State<Body> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(right: 45, top: 5, bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return const ForgetPassScreen();
+                      }),
+                    );
+                  },
+                  child: Text(
+                    kForgotPassword,
+                    style: const TextStyle(
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           RaundedButton(
               loadingText: kLoginLoadingText,
               isLoading: loading,
@@ -84,6 +108,7 @@ class _BodyState extends State<Body> {
                           password: _passwordController.text);
 
                       if (result?.errors != null) {
+                        // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(result!.errors![0].error),
                           backgroundColor: Colors.red,
@@ -96,6 +121,7 @@ class _BodyState extends State<Body> {
                         UserInfoServices userInfoServices = UserInfoServices();
                         var response = await userInfoServices.user();
 
+                        // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
