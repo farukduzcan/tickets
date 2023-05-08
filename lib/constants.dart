@@ -119,3 +119,13 @@ String kAlertSuccssesTitle = "Başarılı";
 String kConfirmSuccessSubtitle = "Hesabınız başarıyla aktifleştirildi.";
 String kAlertConfirmLoadingTitle = "Aktivasyon Kodu Gönderiliyor...";
 String kAlertConfirmLoadingText = "Lütfen bekleyiniz.";
+
+String kTicketTitle = "Talep Oluştur";
+String kCatocoryTitle = "Kategori Seçiniz";
+String kCreateTicketTitle = "Konu Başlığı Giriniz";
+String kCreateTicketDescription = "Açıklama Giriniz";
+String kCreateTicketFileAdd = "Dosya Ekle";
+String kCreateTicketButton = "Gönder";
+String kCreateTicketLoadingText = "Gönderiliyor...";
+String kCreateTicketSuccessText = "Talebiniz başarıyla oluşturuldu.";
+String kCreateTicketErrorText = "Talep oluşturulurken bir hata oluştu.";
