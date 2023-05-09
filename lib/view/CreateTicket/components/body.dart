@@ -19,10 +19,11 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  Future<CategorySelectList?>? categoryDropdownData;
   @override
   void initState() {
     super.initState();
-    getDropdownData();
+    categoryDropdownData = getDropdownData();
   }
 
   Future<CategorySelectList?> getDropdownData() async {
@@ -32,11 +33,13 @@ class _BodyState extends State<Body> {
       return categorySelectListServices.categoryselect();
     } catch (e) {
       if (kDebugMode) {
-        print("itemler çekilirken hata oluşt");
+        print("itemler çekilirken hata oluştu");
       }
     }
     return null;
   }
+
+  //List<String> denemeStringList = List.generate(10, (index) => "Sinan");
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class _BodyState extends State<Body> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     FutureBuilder<CategorySelectList?>(
-                        future: getDropdownData(),
+                        future: categoryDropdownData,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
@@ -79,16 +82,6 @@ class _BodyState extends State<Body> {
                             color: kWhiteColor,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButtonFormField2(
-                                  onMenuStateChange: (isOpen) {
-                                    // if (isOpen == true) {
-                                    //   CateGorySelectListServices
-                                    //       categorySelectListServices =
-                                    //       CateGorySelectListServices();
-                                    //   var result =
-                                    //       categorySelectListServices.categoryselect();
-                                    // }
-                                    print(isOpen);
-                                  },
                                   hint: Text(kCatocoryTitle),
                                   isExpanded: true,
                                   dropdownStyleData: DropdownStyleData(
@@ -106,14 +99,16 @@ class _BodyState extends State<Body> {
                                     border: InputBorder.none,
                                   ),
                                   items: List<DropdownMenuItem>.generate(
-                                      snapshot.data?.data.length ?? 0, (index) {
-                                    var item = snapshot.data?.data[index];
-                                    return DropdownMenuItem(
-                                      value: item?.value ?? 0,
-                                      child: Text(item?.label ?? ""),
-                                      onTap: () {},
-                                    );
-                                  }),
+                                    snapshot.data?.data.length ?? 0,
+                                    (index) {
+                                      var item = snapshot.data?.data[index];
+                                      return DropdownMenuItem(
+                                        value: item?.value ?? 0,
+                                        child: Text(item?.label ?? ""),
+                                        onTap: () {},
+                                      );
+                                    },
+                                  ),
                                   onChanged: (selectValue) {
                                     print(selectValue);
                                   }),
