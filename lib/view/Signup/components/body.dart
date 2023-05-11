@@ -14,14 +14,14 @@ import 'package:tickets/view/Signup/confirm_page.dart';
 import '../../../components/input_field.dart';
 import '../../../components/password_input_field.dart';
 
-class Body extends StatefulWidget {
-  const Body({super.key});
+class SingUpBody extends StatefulWidget {
+  const SingUpBody({super.key});
 
   @override
-  State<Body> createState() => _BodyState();
+  State<SingUpBody> createState() => _SingUpBodyState();
 }
 
-class _BodyState extends State<Body> {
+class _SingUpBodyState extends State<SingUpBody> {
   bool loading = false;
   void _loadingBar() {
     setState(() {

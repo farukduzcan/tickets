@@ -5,22 +5,22 @@ import 'package:tickets/components/input_field.dart';
 import 'package:tickets/components/password_input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/home.dart';
 import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Login/forgetpass_screen.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
 import '../../../models/user_model.dart';
 import '../../../services/user_info_services.dart';
-import '../../Dashboard/dashboard_screen.dart';
 
-class Body extends StatefulWidget {
-  const Body({super.key});
+class LoginBody extends StatefulWidget {
+  const LoginBody({super.key});
 
   @override
-  State<Body> createState() => _BodyState();
+  State<LoginBody> createState() => _LoginBodyState();
 }
 
-class _BodyState extends State<Body> {
+class _LoginBodyState extends State<LoginBody> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController();
@@ -98,10 +98,11 @@ class _BodyState extends State<Body> {
               isLoading: loading,
               buttonText: kLoginButtonTitle,
               press: () async {
-                _loadingBar();
                 if (_formKey.currentState?.validate() ?? false) {
                   {
                     try {
+                      _loadingBar();
+
                       LoginServices loginServices = LoginServices();
                       var result = await loginServices.login(
                           userName: _emailController.text,
@@ -126,10 +127,11 @@ class _BodyState extends State<Body> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return const DashboardScreen();
+                            return const HomeScreen();
                           }),
                         );
                       }
+                      _loadingBar();
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(e.toString()),
@@ -137,7 +139,6 @@ class _BodyState extends State<Body> {
                       ));
                     }
                   }
-                  _loadingBar();
                 }
               }),
           AlreadyHaveAnAccount(

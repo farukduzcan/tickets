@@ -10,14 +10,14 @@ import '../../../components/raunded_button.dart';
 import '../../../models/category_select_list.dart';
 import 'filewidget.dart';
 
-class Body extends StatefulWidget {
-  const Body({super.key});
+class CreateTicketBody extends StatefulWidget {
+  const CreateTicketBody({super.key});
 
   @override
-  State<Body> createState() => _BodyState();
+  State<CreateTicketBody> createState() => _CreateTicketBodyState();
 }
 
-class _BodyState extends State<Body> {
+class _CreateTicketBodyState extends State<CreateTicketBody> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<String> selectedFiles = [];
@@ -71,12 +71,13 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return LoginAndRegisterBackground(
-      child: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            child: Form(
+    return Scaffold(
+      body: LoginAndRegisterBackground(
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          children: [
+            Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -124,7 +125,7 @@ class _BodyState extends State<Body> {
                                   },
                                 ),
                                 onChanged: (selectValue) {
-                                  print(selectValue);
+                                  //print(selectValue);
                                 }),
                           ),
                         );
@@ -203,42 +204,8 @@ class _BodyState extends State<Body> {
                           ),
                         ),
                       )
-
-                      // Expanded(
-                      //   flex: 1,
-                      //   child: SizedBox(
-                      //     height: 50,
-                      //     child: ListView.builder(
-                      //       scrollDirection: Axis.horizontal,
-                      //       shrinkWrap: true,
-                      //       itemCount: selectedFiles.length,
-                      //       itemBuilder: (context, index) {
-                      //         final file = selectedFiles[index];
-                      //         return const SizedBox();
-                      //         // Expanded(
-                      //         //   flex: 3,
-                      //         //   child: SizedBox(
-                      //         //     width: 50,
-                      //         //     child: ListTile(
-                      //         //       title: Text(file),
-                      //         //       trailing: IconButton(
-                      //         //         icon: const Icon(Icons.delete),
-                      //         //         onPressed: () {
-                      //         //           setState(() {
-                      //         //             selectedFiles.removeAt(index);
-                      //         //           });
-                      //         //         },
-                      //         //       ),
-                      //         //     ),
-                      //         //   ),
-                      //         // );
-                      //       },
-                      //     ),
-                      //   ),
-                      // )
                     ],
                   ),
-
                   RaundedButton(
                     buttonText: kCreateTicketButton,
                     press: () {
@@ -250,8 +217,8 @@ class _BodyState extends State<Body> {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

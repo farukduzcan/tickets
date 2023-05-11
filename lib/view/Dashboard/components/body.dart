@@ -6,14 +6,14 @@ import 'package:tickets/models/user_model.dart';
 import 'package:tickets/view/Dashboard/components/dashboard_card.dart';
 import 'package:tickets/view/Dashboard/components/top_icon_name.dart';
 
-class Body extends StatefulWidget {
-  const Body({super.key});
+class DashboardBody extends StatefulWidget {
+  const DashboardBody({super.key});
 
   @override
-  State<Body> createState() => _BodyState();
+  State<DashboardBody> createState() => _DashboardBodyState();
 }
 
-class _BodyState extends State<Body> {
+class _DashboardBodyState extends State<DashboardBody> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
