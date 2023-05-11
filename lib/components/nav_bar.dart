@@ -5,11 +5,16 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/models/user_model.dart';
 import 'package:tickets/view/Login/login_screen.dart';
 
-class NavBar extends StatelessWidget {
+class NavBar extends StatefulWidget {
   const NavBar({
     super.key,
   });
 
+  @override
+  State<NavBar> createState() => _NavBarState();
+}
+
+class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -23,7 +28,12 @@ class NavBar extends StatelessWidget {
             Row(
               children: [
                 NavBarItem(
-                    icon: Icons.home_outlined, title: kHomeTitle, press: () {}),
+                  icon: Icons.home_outlined,
+                  title: kHomeTitle,
+                  press: () {
+                    setState(() {});
+                  },
+                ),
                 NavBarItem(
                     icon: Icons.person_outline,
                     title: kProfileTitle,
