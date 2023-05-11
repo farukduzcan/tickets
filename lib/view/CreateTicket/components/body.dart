@@ -74,17 +74,6 @@ class _BodyState extends State<Body> {
     return LoginAndRegisterBackground(
       child: ListView(
         children: [
-          Container(
-            height: size.height * 0.02,
-            decoration: BoxDecoration(
-              boxShadow: kContainerBoxShodow,
-              color: kPrimaryColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(40),
-                bottomRight: Radius.circular(40),
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: Form(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/home.dart';
 import 'package:tickets/models/user_model.dart';
-import 'package:tickets/view/Dashboard/dashboard_screen.dart';
 import 'package:tickets/view/Login/login_screen.dart';
 
 void main() async {
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
       home: UserModel.userToken != null
-          ? const DashboardScreen()
+          ? const HomeScreen()
           : const LoginScreen(),
     );
   }
