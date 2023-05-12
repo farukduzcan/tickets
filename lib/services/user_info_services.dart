@@ -8,6 +8,7 @@ import 'package:tickets/services/global.dart';
 import '../models/user_model.dart';
 
 class UserInfoServices {
+  static bool isTokenValid = false;
   Future<UserModel?> user() async {
     try {
       var url = Uri.parse('${Globals.apiBaseUrl}account/info');
@@ -17,9 +18,13 @@ class UserInfoServices {
       });
       //data hatasızsa bu işlemi yap
       if (result.statusCode == 200) {
+        isTokenValid = true;
         var resultJson = UserModel.fromJson(json.decode(result.body));
         saveUserData(resultJson.data!);
         return resultJson;
+      }
+      if (result.statusCode == 401) {
+        isTokenValid = false;
       }
     } on SocketException {
       throw Exception(kLoginErrorEthernet);

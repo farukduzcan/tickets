@@ -1,14 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:tickets/constants.dart';
-import 'package:tickets/view/CreateTicket/create_ticket_screen.dart';
-import 'package:tickets/view/Dashboard/dashboard_screen.dart';
+import 'package:tickets/view/CreateTicket/components/body.dart';
+import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
 
 import '../../components/drawer_bar.dart';
@@ -26,16 +25,30 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  Size get size => MediaQuery.of(context).size;
   //Navigasyon Barı İçin
+  bool isKeyboardActived = false;
   int currentIndex = 0;
   final screens = [
-    const DashboardScreen(),
-    const CreateTicketScreen(),
+    const DashboardBody(),
+    const CreateTicketBody(),
+    const LoginScreen(),
+  ];
+  final isActivated = [
+    true,
+    false,
+    false,
+    false,
   ];
 
   void onItemTapped(int index) {
     setState(() {
+      for (int i = 0; i < isActivated.length; i++) {
+        isActivated[i] = false;
+      }
       currentIndex = index;
+      isActivated[index] = true;
+      _toggleRotation();
     });
   }
 
@@ -58,12 +71,23 @@ class _HomeScreenState extends State<HomeScreen>
       backgroundColor: kPrimaryColor,
       title: Text(kTicketTitle),
     ),
+    AppBar(
+      centerTitle: true,
+      shadowColor: kPrimaryColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(29),
+          bottomRight: Radius.circular(29),
+        ),
+      ),
+      backgroundColor: kPrimaryColor,
+      title: Text(kTicketTitle),
+    ),
   ];
 
   //Animasyon için
 
   AnimationController? _animationController;
-  bool _isRotated = false;
 
   @override
   void initState() {
@@ -81,113 +105,121 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   void _toggleRotation() {
-    if (_isRotated) {
-      _animationController?.reverse();
-    } else {
+    if (currentIndex == 1) {
       _animationController?.forward();
+    } else {
+      _animationController?.reverse();
     }
-    _isRotated = !_isRotated;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBars[currentIndex],
-      resizeToAvoidBottomInset: false,
-      backgroundColor: kScaffoldBackgroundColor,
-      drawerEdgeDragWidth: 60,
-      drawer: const DrawerBar(),
-      body: screens[currentIndex],
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _toggleRotation();
-          currentIndex == 1 ? onItemTapped(0) : onItemTapped(1);
-        },
-        backgroundColor: kPrimaryColor,
-        child: AnimatedBuilder(
-          animation: _animationController!,
-          builder: (context, child) {
-            return Transform.rotate(
-              angle: _animationController!.value * 2.23 * pi,
-              child: child,
-            );
-          },
-          child: const Icon(
-            Icons.add,
-            size: 30,
+    return KeyboardVisibilityBuilder(
+      builder: (context, isKeyboardVisible) {
+        return Scaffold(
+          appBar: appBars[currentIndex],
+          resizeToAvoidBottomInset: false,
+          backgroundColor: kScaffoldBackgroundColor,
+          drawerEdgeDragWidth: 60,
+          drawer: const DrawerBar(),
+          body: screens[currentIndex],
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              currentIndex == 1 ? onItemTapped(0) : onItemTapped(1);
+            },
+            backgroundColor: kPrimaryColor,
+            child: AnimatedBuilder(
+              animation: _animationController!,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _animationController!.value * 1.23 * pi,
+                  child: child,
+                );
+              },
+              child: const Icon(
+                Icons.add,
+                size: 30,
+              ),
+            ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 10,
-        child: SizedBox(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+          bottomNavigationBar: BottomAppBar(
+            shape: const CircularNotchedRectangle(),
+            notchMargin: 10,
+            //height: MediaQuery.of(context).size.height * 0.08,
+            child: SizedBox(
+              height: isKeyboardVisible ? size.height * 0 : size.height * 0.08,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  NavBarItem(
-                    icon: Icons.home_outlined,
-                    title: kHomeTitle,
-                    press: () {
-                      onItemTapped(0);
-                    },
+                  Row(
+                    children: [
+                      NavBarItem(
+                        isActive: isActivated[0],
+                        icon: Icons.home_outlined,
+                        title: kHomeTitle,
+                        press: () {
+                          onItemTapped(0);
+                        },
+                      ),
+                      NavBarItem(
+                          isActive: isActivated[1],
+                          icon: Icons.person_outline,
+                          title: kProfileTitle,
+                          press: () {
+                            onItemTapped(1);
+                          }),
+                    ],
                   ),
-                  NavBarItem(
-                      icon: Icons.person_outline,
-                      title: kProfileTitle,
-                      press: () {
-                        onItemTapped(1);
-                      }),
+                  Row(
+                    children: [
+                      NavBarItem(
+                          isActive: isActivated[2],
+                          icon: Icons.settings_outlined,
+                          title: kSettingsTitle,
+                          press: () {
+                            onItemTapped(2);
+                          }),
+                      NavBarItem(
+                          isActive: isActivated[3],
+                          icon: Icons.logout_outlined,
+                          title: kLogoutTitle,
+                          press: () async {
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.warning,
+                                title: "Çıkış Yap",
+                                text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
+                                confirmBtnText: "Evet",
+                                cancelBtnText: "Hayır",
+                                confirmBtnColor: Colors.green,
+                                showCancelBtn: true,
+                                cancelBtnTextStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                                onConfirmBtnTap: () async {
+                                  await deleteToken();
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return const LoginScreen();
+                                    }),
+                                  );
+                                },
+                                onCancelBtnTap: () {
+                                  Navigator.pop(context);
+                                });
+                          }),
+                    ],
+                  ),
                 ],
               ),
-              Row(
-                children: [
-                  NavBarItem(
-                      icon: Icons.settings_outlined,
-                      title: kSettingsTitle,
-                      press: () {
-                        onItemTapped(1);
-                      }),
-                  NavBarItem(
-                      icon: Icons.logout_outlined,
-                      title: kLogoutTitle,
-                      press: () async {
-                        QuickAlert.show(
-                            context: context,
-                            type: QuickAlertType.warning,
-                            title: "Çıkış Yap",
-                            text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
-                            confirmBtnText: "Evet",
-                            cancelBtnText: "Hayır",
-                            confirmBtnColor: Colors.green,
-                            showCancelBtn: true,
-                            cancelBtnTextStyle: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                            onConfirmBtnTap: () async {
-                              await deleteToken();
-                              // ignore: use_build_context_synchronously
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) {
-                                  return const LoginScreen();
-                                }),
-                              );
-                            },
-                            onCancelBtnTap: () {
-                              Navigator.pop(context);
-                            });
-                      }),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
