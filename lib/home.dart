@@ -147,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen>
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
             notchMargin: 10,
-            //height: MediaQuery.of(context).size.height * 0.08,
             child: SizedBox(
               height: isKeyboardVisible ? size.height * 0 : size.height * 0.08,
               child: Row(
