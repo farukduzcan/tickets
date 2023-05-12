@@ -147,7 +147,6 @@ class _HomeScreenState extends State<HomeScreen>
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
             notchMargin: 10,
-            //height: MediaQuery.of(context).size.height * 0.08,
             child: SizedBox(
               height: isKeyboardVisible ? size.height * 0 : size.height * 0.08,
               child: Row(
@@ -201,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 onConfirmBtnTap: () async {
                                   await deleteToken();
                                   // ignore: use_build_context_synchronously
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(builder: (context) {
                                       return const LoginScreen();

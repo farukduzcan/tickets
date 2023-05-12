@@ -1,16 +1,25 @@
+import 'dart:io';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/components/background.dart';
 import 'package:tickets/components/text_field_container.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/extensions/error_extensions.dart';
 import 'package:tickets/services/category_select_list_services.dart';
+import 'package:tickets/services/create_ticket_addfile.dart';
 import '../../../components/raunded_button.dart';
 import '../../../models/category_select_list.dart';
+import '../../../services/create_ticket_services.dart';
 import 'filewidget.dart';
 
 class CreateTicketBody extends StatefulWidget {
+  static bool isComplated = false;
+
   const CreateTicketBody({super.key});
 
   @override
@@ -19,11 +28,14 @@ class CreateTicketBody extends StatefulWidget {
 
 class _CreateTicketBodyState extends State<CreateTicketBody> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _dropdownbuttonKey = GlobalKey<FormState>();
 
   List<String> selectedFiles = [];
   List<Widget> fileWidgets = [];
+  List<File> fileList = [];
 
   void pickFiles() async {
+    fileList.clear();
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
     );
@@ -33,6 +45,12 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
           .where((path) => path != null)
           .map((path) => path!)
           .toList();
+
+      for (var path in validPaths) {
+        fileList.add(File(path));
+      }
+      //base64'e çevir
+      //apiye array olarak gönder
 
       setState(() {
         selectedFiles.addAll(validPaths);
@@ -66,7 +84,24 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
     return null;
   }
 
+  //Controllerlar
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _bodyController = TextEditingController();
+  final FocusNode _subjectFocusNode = FocusNode();
+  final FocusNode _bodyFocusNode = FocusNode();
+  int catogoryId = 0;
+
   //List<String> denemeStringList = List.generate(10, (index) => "Sinan");
+
+  // Buton Loadin Bar
+  bool loading = false;
+  void _loadingBar() {
+    setState(() {
+      loading = !loading;
+    });
+  }
+
+  //API sonuc
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +132,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                           color: kWhiteColor,
                           child: DropdownButtonHideUnderline(
                             child: DropdownButtonFormField2(
+                                key: _dropdownbuttonKey,
                                 hint: Text(kCatocoryTitle),
                                 isExpanded: true,
                                 dropdownStyleData: DropdownStyleData(
@@ -125,7 +161,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                                   },
                                 ),
                                 onChanged: (selectValue) {
-                                  //print(selectValue);
+                                  catogoryId = selectValue;
                                 }),
                           ),
                         );
@@ -136,6 +172,14 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                     child: TextFieldContainer(
                       color: kWhiteColor,
                       child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Konu alanı boş olamaz';
+                          }
+                          return null;
+                        },
+                        controller: _subjectController,
+                        focusNode: _subjectFocusNode,
                         decoration: InputDecoration(
                           hintText: kCreateTicketTitle,
                           border: InputBorder.none,
@@ -148,6 +192,14 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                     child: TextFieldContainer(
                       color: kWhiteColor,
                       child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Açıklama alanı boş olamaz';
+                          }
+                          return null;
+                        },
+                        controller: _bodyController,
+                        focusNode: _bodyFocusNode,
                         minLines: 4,
                         maxLines: 5,
                         maxLength: 500,
@@ -208,11 +260,71 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                   ),
                   RaundedButton(
                     buttonText: kCreateTicketButton,
-                    press: () {
-                      if (_formKey.currentState?.validate() ?? false) {}
+                    press: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        {
+                          try {
+                            _loadingBar();
+                            CreateTicketServices createTicketServices =
+                                CreateTicketServices();
+                            var result = await createTicketServices.create(
+                              subject: _subjectController.text,
+                              body: _bodyController.text,
+                              categoryId: catogoryId,
+                            );
+
+                            if (result != null &&
+                                result.result?.isNegative == false) {
+                              CreateTicketServices.fileUploadId = result.result;
+                              CreateTicketBody.isComplated = false;
+                              if (fileList.isNotEmpty) {
+                                CreateTicketServicesFileAdd fileAdd =
+                                    CreateTicketServicesFileAdd();
+                                var resultFileAdd =
+                                    await fileAdd.sendFiles(fileList);
+                              }
+                              // ignore: use_build_context_synchronously
+                              QuickAlert.show(
+                                confirmBtnText: kOk,
+                                onConfirmBtnTap: () {
+                                  _bodyController.clear();
+                                  _subjectController.clear();
+                                  setState(() {
+                                    fileList.clear();
+                                    fileWidgets.clear();
+                                    _dropdownbuttonKey.currentState?.reset();
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                context: context,
+                                type: QuickAlertType.success,
+                                title: "Başarılı",
+                                text: CreateTicketBody.isComplated
+                                    ? "Bilet oluşturuldu. Görselleriniz gönderildi."
+                                    : "Bilet Oluşturuldu (Görsel yok)",
+                              );
+                            } else {
+                              // ignore: use_build_context_synchronously
+                              QuickAlert.show(
+                                  confirmBtnText: kOk,
+                                  context: context,
+                                  type: QuickAlertType.error,
+                                  title: "Hata",
+                                  text: result?.errors.errorToString() ??
+                                      "Beklenmeyen bir hata oluştu!.");
+                            }
+                            _loadingBar();
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(e.toString()),
+                              backgroundColor: Colors.red,
+                            ));
+                          }
+                        }
+                      }
                     },
                     loadingText: kCreateTicketLoadingText,
-                    isLoading: false,
+                    isLoading: loading,
                   ),
                 ],
               ),
