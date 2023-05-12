@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 onConfirmBtnTap: () async {
                                   await deleteToken();
                                   // ignore: use_build_context_synchronously
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(builder: (context) {
                                       return const LoginScreen();
