@@ -164,9 +164,9 @@ class _HomeScreenState extends State<HomeScreen>
                         },
                       ),
                       NavBarItem(
-                          isActive: isActivated[1],
-                          icon: Icons.person_outline,
-                          title: kProfileTitle,
+                          isActive: isActivated[2],
+                          icon: Icons.mail_outline_outlined,
+                          title: kTicketListTitle,
                           press: () {
                             onItemTapped(1);
                           }),
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen>
                   Row(
                     children: [
                       NavBarItem(
-                          isActive: isActivated[2],
+                          isActive: isActivated[1],
                           icon: Icons.settings_outlined,
                           title: kSettingsTitle,
                           press: () {

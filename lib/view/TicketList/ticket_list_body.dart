@@ -18,6 +18,7 @@ class _TicketListBodyState extends State<TicketListBody> {
   void initState() {
     super.initState();
     ticketListData = getTicketList();
+    pageIndeks++;
     _scrollController.addListener(() {
       _scrollListener();
     });
@@ -164,7 +165,7 @@ class _TicketListBodyState extends State<TicketListBody> {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
-                    } else if (snapshot.data!.totalItemsCount! <=
+                    } else if (snapshot.data!.totalItemsCount! ==
                         snapshot.data!.datas.length) {
                       return const Center(
                         child: Text("Yükleniyor..."),
