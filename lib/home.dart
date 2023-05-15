@@ -9,6 +9,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
+import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import '../../components/drawer_bar.dart';
 import 'components/nav_bar_item.dart';
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen>
   final screens = [
     const DashboardBody(),
     const CreateTicketBody(),
-    const LoginScreen(),
+    const TicketListBody(),
   ];
   final isActivated = [
     true,
@@ -81,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       ),
       backgroundColor: kPrimaryColor,
-      title: Text(kTicketTitle),
+      title: Text(kTicketListTitle),
     ),
   ];
 

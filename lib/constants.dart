@@ -129,3 +129,5 @@ String kCreateTicketButton = "Gönder";
 String kCreateTicketLoadingText = "Gönderiliyor...";
 String kCreateTicketSuccessText = "Talebiniz başarıyla oluşturuldu.";
 String kCreateTicketErrorText = "Talep oluşturulurken bir hata oluştu.";
+
+String kTicketListTitle = "Taleplerim";
