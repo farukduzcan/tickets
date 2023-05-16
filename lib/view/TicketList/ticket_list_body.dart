@@ -162,6 +162,7 @@ class _TicketListBodyState extends State<TicketListBody> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: ListTile(
+                          contentPadding: const EdgeInsets.all(10),
                           leading: getIcon(
                               ticketType:
                                   snapshot.data!.datas[index].ticketStatus!),
@@ -169,8 +170,8 @@ class _TicketListBodyState extends State<TicketListBody> {
                           onTap: () {},
                           title: Text(snapshot.data!.datas[index].subject!),
                           subtitle: Text(
-                            snapshot.data!.datas[index].body!,
-                            maxLines: 2,
+                            "${snapshot.data!.datas[index].body!} \n\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
+                            maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
