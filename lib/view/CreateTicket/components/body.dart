@@ -10,10 +10,13 @@ import 'package:tickets/components/background.dart';
 import 'package:tickets/components/text_field_container.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/extensions/error_extensions.dart';
+import 'package:tickets/models/customer_selectlist_model.dart';
 import 'package:tickets/services/category_select_list_services.dart';
 import 'package:tickets/services/create_ticket_addfile.dart';
+import 'package:tickets/services/customer_selectlist_services.dart';
 import '../../../components/raunded_button.dart';
 import '../../../models/category_select_list.dart';
+import '../../../models/user_model.dart';
 import '../../../services/create_ticket_services.dart';
 import 'filewidget.dart';
 
@@ -65,10 +68,26 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
   }
 
   Future<CategorySelectList?>? categoryDropdownData;
+  Future<CustomerSelectListModel?>? customerDropdownData;
   @override
   void initState() {
     super.initState();
     categoryDropdownData = getDropdownData();
+    UserModel.userData!.role == 2
+        ? customerDropdownData = getCustomerDropdownData()
+        : null;
+  }
+
+  Future<CustomerSelectListModel?> getCustomerDropdownData() async {
+    try {
+      CustomerSelectListServices customerList = CustomerSelectListServices();
+      return customerList.customerList();
+    } catch (e) {
+      if (kDebugMode) {
+        print("itemler çekilirken hata oluştu");
+      }
+    }
+    return null;
   }
 
   Future<CategorySelectList?> getDropdownData() async {
@@ -90,6 +109,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
   final FocusNode _subjectFocusNode = FocusNode();
   final FocusNode _bodyFocusNode = FocusNode();
   int catogoryId = 0;
+  int customerId = 0;
 
   //List<String> denemeStringList = List.generate(10, (index) => "Sinan");
 
@@ -117,6 +137,58 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // kullanıcı seçimi
+                  UserModel.userData!.role == 2
+                      ? FutureBuilder<CustomerSelectListModel?>(
+                          future: customerDropdownData,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return const Center(child: Text("Hata oluştu."));
+                            }
+                            return TextFieldContainer(
+                              color: kWhiteColor,
+                              child: DropdownButtonFormField2(
+                                  //key: _dropdownbuttonKey,
+                                  hint: Text(kCustomerTitle),
+                                  isExpanded: true,
+                                  dropdownStyleData: DropdownStyleData(
+                                    maxHeight: size.height * 0.3,
+                                    width: size.width * 0.8,
+                                    offset: const Offset(-20, -20), //
+                                    useRootNavigator: true,
+                                    useSafeArea: true,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(29),
+                                    ),
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: kCatocoryTitle,
+                                    border: InputBorder.none,
+                                  ),
+                                  items: List<DropdownMenuItem>.generate(
+                                    snapshot.data?.data.length ?? 0,
+                                    (index) {
+                                      var item = snapshot.data?.data[index];
+                                      return DropdownMenuItem(
+                                        value: item?.value ?? 0,
+                                        child: Text(item?.label ?? ""),
+                                        onTap: () {},
+                                      );
+                                    },
+                                  ),
+                                  onChanged: (selectValue) {
+                                    customerId = selectValue;
+                                  }),
+                            );
+                          })
+                      : const SizedBox(),
+
+                  //Kategori Seçimi
                   FutureBuilder<CategorySelectList?>(
                       future: categoryDropdownData,
                       builder: (context, snapshot) {
@@ -130,40 +202,38 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                         }
                         return TextFieldContainer(
                           color: kWhiteColor,
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButtonFormField2(
-                                key: _dropdownbuttonKey,
-                                hint: Text(kCatocoryTitle),
-                                isExpanded: true,
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: size.height * 0.3,
-                                  width: size.width * 0.8,
-                                  offset: const Offset(-20, -20), //
-                                  useRootNavigator: true,
-                                  useSafeArea: true,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(29),
-                                  ),
+                          child: DropdownButtonFormField2(
+                              key: _dropdownbuttonKey,
+                              hint: Text(kCatocoryTitle),
+                              isExpanded: true,
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: size.height * 0.3,
+                                width: size.width * 0.8,
+                                offset: const Offset(-20, -20), //
+                                useRootNavigator: true,
+                                useSafeArea: true,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(29),
                                 ),
-                                decoration: InputDecoration(
-                                  hintText: kCatocoryTitle,
-                                  border: InputBorder.none,
-                                ),
-                                items: List<DropdownMenuItem>.generate(
-                                  snapshot.data?.data.length ?? 0,
-                                  (index) {
-                                    var item = snapshot.data?.data[index];
-                                    return DropdownMenuItem(
-                                      value: item?.value ?? 0,
-                                      child: Text(item?.label ?? ""),
-                                      onTap: () {},
-                                    );
-                                  },
-                                ),
-                                onChanged: (selectValue) {
-                                  catogoryId = selectValue;
-                                }),
-                          ),
+                              ),
+                              decoration: InputDecoration(
+                                hintText: kCatocoryTitle,
+                                border: InputBorder.none,
+                              ),
+                              items: List<DropdownMenuItem>.generate(
+                                snapshot.data?.data.length ?? 0,
+                                (index) {
+                                  var item = snapshot.data?.data[index];
+                                  return DropdownMenuItem(
+                                    value: item?.value ?? 0,
+                                    child: Text(item?.label ?? ""),
+                                    onTap: () {},
+                                  );
+                                },
+                              ),
+                              onChanged: (selectValue) {
+                                catogoryId = selectValue;
+                              }),
                         );
                       }),
                   //title
@@ -268,6 +338,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                             CreateTicketServices createTicketServices =
                                 CreateTicketServices();
                             var result = await createTicketServices.create(
+                              customerId: customerId,
                               subject: _subjectController.text,
                               body: _bodyController.text,
                               categoryId: catogoryId,

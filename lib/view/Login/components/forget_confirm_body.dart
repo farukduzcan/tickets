@@ -6,7 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 
 import 'package:tickets/components/background.dart';
-import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/models/fogetpass_mail_model.dart';
 import 'package:tickets/view/Login/forget_reset_screen.dart';
@@ -114,18 +113,18 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
             ),
             Text("Kalan Süre: $_counter sn",
                 style: const TextStyle(fontSize: 20, color: Colors.red)),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: RaundedButton(
-                  buttonText: "KOD",
-                  press: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
-                      backgroundColor: Colors.red,
-                    ));
-                  }),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(15.0),
+            //   child: RaundedButton(
+            //       buttonText: "KOD",
+            //       press: () {
+            //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //           content: Text(
+            //               "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
+            //           backgroundColor: Colors.red,
+            //         ));
+            //       }),
+            // ),
           ],
         ),
       ),

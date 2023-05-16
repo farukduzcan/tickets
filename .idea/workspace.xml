@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b096b86-4415-431d-85c4-0f2e60b24e32" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/tickets.iml" beforeDir="false" afterPath="$PROJECT_DIR$/tickets.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/category_select_list_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/category_select_list_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/create_ticket_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/create_ticket_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/view/CreateTicket/components/body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/view/CreateTicket/components/body.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
