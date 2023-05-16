@@ -9,7 +9,7 @@ import '../models/user_model.dart';
 class TicketListServices {
   Future<TicketListModel?> getTicketList({
     required int pageIndex,
-    int pageSize = 10,
+    int pageSize = 15,
     String orderField = "Id",
     String orderDir = "ASC",
     required String filter,

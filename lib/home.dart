@@ -145,6 +145,8 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
           ),
+
+          // navigation bar
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
             notchMargin: 10,
@@ -168,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
                           icon: Icons.mail_outline_outlined,
                           title: kTicketListTitle,
                           press: () {
-                            onItemTapped(1);
+                            onItemTapped(2);
                           }),
                     ],
                   ),
@@ -179,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen>
                           icon: Icons.settings_outlined,
                           title: kSettingsTitle,
                           press: () {
-                            onItemTapped(2);
+                            onItemTapped(1);
                           }),
                       NavBarItem(
                           isActive: isActivated[3],

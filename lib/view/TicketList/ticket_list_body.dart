@@ -34,7 +34,7 @@ class _TicketListBodyState extends State<TicketListBody> {
   bool _isLoading = false;
   void _scrollListener() {
     if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent * 0.40 &&
         !_scrollController.position.outOfRange) {
       setState(() {
         _isLoading = true;
@@ -46,16 +46,25 @@ class _TicketListBodyState extends State<TicketListBody> {
   Future<void> _loadNextPage() async {
     try {
       TicketListModel? newData = await getTicketList();
-      if (newData != null) {
+      if (newData != null && newData.totalPageCount! > pageIndeks) {
         setState(() {
+          //print(pageIndeks);
           pageIndeks++;
           ticketListData!.then((oldData) {
             oldData!.datas.addAll(newData.datas);
+            _isLoading = false;
             return oldData;
           });
         });
+      } else if (newData != null && newData.totalPageCount! <= pageIndeks) {
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
       }
-      _isLoading = false;
     } catch (e) {
       if (kDebugMode) {
         print("Yeni veriler getirilirken hata oluştu");
@@ -72,7 +81,7 @@ class _TicketListBodyState extends State<TicketListBody> {
           orderDir: "ASC",
           orderField: "Id",
           pageIndex: pageIndeks,
-          pageSize: 10);
+          pageSize: 15);
     } catch (e) {
       if (kDebugMode) {
         print("itemler çekilirken hata oluştu");
@@ -165,15 +174,11 @@ class _TicketListBodyState extends State<TicketListBody> {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
-                    } else if (snapshot.data!.totalItemsCount! ==
-                        snapshot.data!.datas.length) {
+                    } else {
                       return const Center(
-                        child: Text("Yükleniyor..."),
+                        child: SizedBox(),
                       );
                     }
-                    return const Center(
-                      child: SizedBox(),
-                    );
                   },
                 );
               } else if (snapshot.hasError) {
