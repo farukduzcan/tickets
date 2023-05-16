@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tickets/constants.dart';
 import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/services/ticket_list_services.dart';
 
@@ -32,43 +33,47 @@ class _TicketListBodyState extends State<TicketListBody> {
 
   //scroll işlemleri
   bool _isLoading = false;
-  void _scrollListener() {
+  Future<void> _scrollListener() async {
     if (_scrollController.offset >=
-            _scrollController.position.maxScrollExtent * 0.40 &&
+            _scrollController.position.maxScrollExtent * 0.80 &&
         !_scrollController.position.outOfRange) {
-      setState(() {
-        _isLoading = true;
-        _loadNextPage();
-      });
+      if (_isLoading) {
+        // print("Gereksiz istek atıldı");
+        return;
+      } else if (_isLoading == false) {
+        setState(() {
+          _isLoading = true;
+        });
+        // print("Sayfa yüklendi yüklenen sayfa: $pageIndeks");
+        await _loadNextPage();
+      }
     }
   }
 
   Future<void> _loadNextPage() async {
     try {
       TicketListModel? newData = await getTicketList();
-      if (newData != null && newData.totalPageCount! > pageIndeks) {
+      if (newData != null && newData.totalPageCount! >= pageIndeks) {
         setState(() {
-          //print(pageIndeks);
+          // print("Current Page: $pageIndeks");
           pageIndeks++;
+          //print("TotalPage: ${newData.totalPageCount}");
           ticketListData!.then((oldData) {
             oldData!.datas.addAll(newData.datas);
-            _isLoading = false;
             return oldData;
           });
         });
       } else if (newData != null && newData.totalPageCount! <= pageIndeks) {
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() {});
       }
     } catch (e) {
       if (kDebugMode) {
         print("Yeni veriler getirilirken hata oluştu");
       }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -78,7 +83,7 @@ class _TicketListBodyState extends State<TicketListBody> {
       TicketListServices ticketlist = TicketListServices();
       return ticketlist.getTicketList(
           filter: "",
-          orderDir: "ASC",
+          orderDir: "DESC",
           orderField: "Id",
           pageIndex: pageIndeks,
           pageSize: 15);
@@ -97,25 +102,25 @@ class _TicketListBodyState extends State<TicketListBody> {
         return const Icon(
           Icons.fiber_new_outlined,
           size: 45,
-          color: Colors.green,
+          color: kAccentColor,
         );
       case "APPROVED":
         return const Icon(
           Icons.fiber_new_outlined,
           size: 45,
-          color: Colors.green,
+          color: kAccentColor,
         );
       case "WORKING":
         return const Icon(
           Icons.hourglass_top_rounded,
           size: 45,
-          color: Colors.blue,
+          color: kDarkPrimaryColor,
         );
       case "CLOSE":
         return const Icon(
           Icons.lock_outline,
           size: 45,
-          color: Colors.grey,
+          color: kSecondaryTextColor,
         );
       case "CANCEL":
         return const Icon(

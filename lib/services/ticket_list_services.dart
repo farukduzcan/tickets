@@ -11,7 +11,7 @@ class TicketListServices {
     required int pageIndex,
     int pageSize = 15,
     String orderField = "Id",
-    String orderDir = "ASC",
+    String orderDir = "DESC",
     required String filter,
   }) async {
     try {

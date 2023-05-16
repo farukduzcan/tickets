@@ -3,11 +3,22 @@ import 'package:tickets/components/drawer_item.dart';
 import 'package:tickets/models/user_model.dart';
 import '../constants.dart';
 
-class DrawerBar extends StatelessWidget {
+class DrawerBar extends StatefulWidget {
+  final List<bool> isActivated;
+  final int currentIndex;
+  final List<StatefulWidget> screens;
   const DrawerBar({
     super.key,
+    required this.isActivated,
+    required this.currentIndex,
+    required this.screens,
   });
 
+  @override
+  State<DrawerBar> createState() => _DrawerBarState();
+}
+
+class _DrawerBarState extends State<DrawerBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -49,25 +60,33 @@ class DrawerBar extends StatelessWidget {
           DrawerItem(
             isSelected: true,
             title: kHomeTitle,
-            press: () {},
+            press: () {
+              widget.isActivated[0];
+            },
             icon: Icons.home,
           ),
           DrawerItem(
             isSelected: false,
             title: kProfileTitle,
-            press: () {},
+            press: () {
+              widget.isActivated[2];
+            },
             icon: Icons.person,
           ),
           DrawerItem(
             isSelected: false,
             title: kSettingsTitle,
-            press: () {},
+            press: () {
+              widget.isActivated[1];
+            },
             icon: Icons.settings,
           ),
           DrawerItem(
             isSelected: false,
             title: kLogoutTitle,
-            press: () {},
+            press: () {
+              widget.isActivated[0];
+            },
             icon: Icons.logout_outlined,
           ),
         ],

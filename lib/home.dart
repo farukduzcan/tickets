@@ -122,7 +122,11 @@ class _HomeScreenState extends State<HomeScreen>
           resizeToAvoidBottomInset: false,
           backgroundColor: kScaffoldBackgroundColor,
           drawerEdgeDragWidth: 60,
-          drawer: const DrawerBar(),
+          drawer: DrawerBar(
+            currentIndex: currentIndex,
+            isActivated: isActivated,
+            screens: screens,
+          ),
           body: screens[currentIndex],
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
