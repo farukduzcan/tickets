@@ -6,6 +6,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/services/delete_ticket_services.dart';
 import 'package:tickets/services/ticket_list_services.dart';
+import 'package:tickets/view/TicketList/components/ticket_details_body.dart';
 
 class TicketListBody extends StatefulWidget {
   const TicketListBody({super.key});
@@ -267,6 +268,7 @@ class _TicketListBodyState extends State<TicketListBody> {
                             onDismissed: (direction) async {
                               DeleteTicketServices deleteTicket =
                                   DeleteTicketServices();
+                              // ignore: unused_local_variable
                               var deleterespons = await deleteTicket
                                   .deleteTicket(
                                 id: snapshot.data!.datas[index].id!.toString(),
@@ -290,7 +292,17 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   ticketType: snapshot
                                       .data!.datas[index].ticketStatus!),
                               trailing: const Icon(Icons.arrow_forward_ios),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TicketDetailsBody(
+                                      id: snapshot.data!.datas[index].id!
+                                          .toString(),
+                                    ),
+                                  ),
+                                );
+                              },
                               title: Text(snapshot.data!.datas[index].subject!),
                               subtitle: Text(
                                 "${snapshot.data!.datas[index].body!} \n\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",

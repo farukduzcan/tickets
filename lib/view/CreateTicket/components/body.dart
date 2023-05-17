@@ -300,7 +300,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                                 padding: const EdgeInsets.all(13.0),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.add),
+                                    const Icon(Icons.attach_file),
                                     const SizedBox(
                                       width: 10,
                                     ),
