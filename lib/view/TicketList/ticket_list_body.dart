@@ -1,8 +1,10 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/models/ticket_list_model.dart';
+import 'package:tickets/services/delete_ticket_services.dart';
 import 'package:tickets/services/ticket_list_services.dart';
 
 class TicketListBody extends StatefulWidget {
@@ -138,6 +140,32 @@ class _TicketListBodyState extends State<TicketListBody> {
     }
   }
 
+  //bildirim
+  void showTopMessageBar(BuildContext context) {
+    Flushbar(
+      margin: const EdgeInsets.all(10),
+      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
+      backgroundGradient: LinearGradient(
+        colors: List.of(
+          [Colors.green, Colors.green.shade400],
+        ),
+      ),
+      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      boxShadows: const [
+        BoxShadow(
+          color: Colors.black45,
+          offset: Offset(3, 3),
+          blurRadius: 3,
+        ),
+      ],
+      barBlur: 0.50,
+      borderRadius: const BorderRadius.all(Radius.circular(15)),
+      flushbarPosition: FlushbarPosition.TOP,
+      message: 'Öğe silindi',
+      duration: const Duration(seconds: 2),
+    ).show(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -180,18 +208,95 @@ class _TicketListBodyState extends State<TicketListBody> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(10),
-                            leading: getIcon(
-                                ticketType:
-                                    snapshot.data!.datas[index].ticketStatus!),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            onTap: () {},
-                            title: Text(snapshot.data!.datas[index].subject!),
-                            subtitle: Text(
-                              "${snapshot.data!.datas[index].body!} \n\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis,
+                          child: Dismissible(
+                            direction: DismissDirection.endToStart,
+                            key:
+                                Key(snapshot.data!.datas[index].id!.toString()),
+                            background: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: const [
+                                  Text(
+                                    "Talep Sil",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 45,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            confirmDismiss: (DismissDirection direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                final result = await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Öğeyi Sil"),
+                                      content: const Text(
+                                          "Bu öğeyi silmek istediğinize emin misiniz?"),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: const Text("İptal"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                          child: const Text("Sil"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                return result ?? false;
+                              }
+                              return false;
+                            },
+                            onDismissed: (direction) async {
+                              DeleteTicketServices deleteTicket =
+                                  DeleteTicketServices();
+                              var deleterespons = await deleteTicket
+                                  .deleteTicket(
+                                id: snapshot.data!.datas[index].id!.toString(),
+                              )
+                                  .then((value) {
+                                if (value!.data == null &&
+                                    value.result!.isNegative == false) {
+                                  showTopMessageBar(context);
+                                }
+                              });
+                              setState(() {
+                                snapshot.data!.datas.removeAt(index);
+                              });
+                            },
+                            dismissThresholds: const {
+                              DismissDirection.endToStart: 0.5, // Yüzde 0.5
+                            },
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(10),
+                              leading: getIcon(
+                                  ticketType: snapshot
+                                      .data!.datas[index].ticketStatus!),
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              onTap: () {},
+                              title: Text(snapshot.data!.datas[index].subject!),
+                              subtitle: Text(
+                                "${snapshot.data!.datas[index].body!} \n\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         );

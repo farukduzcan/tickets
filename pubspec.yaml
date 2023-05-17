@@ -46,6 +46,7 @@ dependencies:
   dropdown_button2: ^2.1.0
   file_picker: ^5.3.0
   flutter_keyboard_visibility: ^5.4.1
+  another_flushbar: ^1.12.30
   
 
 dev_dependencies:

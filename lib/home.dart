@@ -193,30 +193,33 @@ class _HomeScreenState extends State<HomeScreen>
                           title: kLogoutTitle,
                           press: () async {
                             QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.warning,
-                                title: "Çıkış Yap",
-                                text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
-                                confirmBtnText: "Evet",
-                                cancelBtnText: "Hayır",
-                                confirmBtnColor: Colors.green,
-                                showCancelBtn: true,
-                                cancelBtnTextStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                onConfirmBtnTap: () async {
-                                  await deleteToken();
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
+                              context: context,
+                              type: QuickAlertType.warning,
+                              title: "Çıkış Yap",
+                              text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
+                              confirmBtnText: "Evet",
+                              cancelBtnText: "Hayır",
+                              confirmBtnColor: Colors.green,
+                              showCancelBtn: true,
+                              cancelBtnTextStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              onConfirmBtnTap: () async {
+                                await deleteToken();
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
                                       return const LoginScreen();
-                                    }),
-                                  );
-                                },
-                                onCancelBtnTap: () {
-                                  Navigator.pop(context);
-                                });
+                                    },
+                                  ),
+                                );
+                              },
+                              onCancelBtnTap: () {
+                                Navigator.pop(context);
+                              },
+                            );
                           }),
                     ],
                   ),
