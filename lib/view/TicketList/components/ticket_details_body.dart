@@ -149,7 +149,7 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                             //     await getExternalStorageDirectory();
                                           }
                                           File downloadedFile = File(
-                                              '${directory?.path}/${snapshot.data!.data!.files[index].fileName}');
+                                              '${directory?.path}/${snapshot.data!.data!.files[index].fileName}${snapshot.data!.data!.files[index].ext}');
                                           var url =
                                               '${Globals.mediaBaseUrl}${snapshot.data!.data!.files[index].path}';
 
