@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tickets/models/get_ticket_model.dart';
 import 'package:tickets/services/get_ticket_services.dart';
 
 import '../../../constants.dart';
+import '../../../services/global.dart';
 
 class TicketDetailsBody extends StatefulWidget {
   final String id;
@@ -34,6 +40,7 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
     return null;
   }
 
+  String? dosyayolu;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,20 +118,73 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                       ),
                       snapshot.data!.data!.files.isEmpty
                           ? const SizedBox()
-                          : Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              margin: const EdgeInsets.all(20),
-                              child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                onTap: () {},
-                                leading: const Icon(Icons.attach_file),
-                                title: Text(
-                                    "Ek Dosya:  ${snapshot.data!.data!.files[0].fileName}"),
-                              ),
+                          : Container(
+                              margin: const EdgeInsets.all(10),
+                              height: 65 *
+                                  snapshot.data!.data!.files.length.toDouble(),
+                              child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: snapshot.data!.data!.files.length,
+                                  itemBuilder: (context, index) {
+                                    return Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: ListTile(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        onTap: () async {
+                                          final dio = Dio();
+
+                                          Directory? directory;
+                                          if (Platform.isIOS) {
+                                            directory =
+                                                await getApplicationDocumentsDirectory();
+                                          } else if (Platform.isAndroid) {
+                                            directory = Directory(
+                                                '/storage/emulated/0/Download');
+                                            // directory =
+                                            //     await getExternalStorageDirectory();
+                                          }
+                                          File downloadedFile = File(
+                                              '${directory?.path}/${snapshot.data!.data!.files[index].fileName}');
+                                          var url =
+                                              '${Globals.mediaBaseUrl}${snapshot.data!.data!.files[index].path}';
+
+                                          // final saveDir =
+                                          //     await getApplicationDocumentsDirectory();
+                                          // final savePath =
+                                          //     '${saveDir.path}/${snapshot.data!.data!.files[index].fileName}${snapshot.data!.data!.files[index].ext}';
+
+                                          try {
+                                            Response response =
+                                                await dio.download(
+                                                    url, downloadedFile.path);
+                                            if (response.statusCode == 200) {
+                                              // print(
+                                              //     "Dosya indi: ${downloadedFile.path}");
+                                              dosyayolu = downloadedFile.path;
+                                              var result = await OpenFilex.open(
+                                                  dosyayolu!);
+                                              // print(result.message);
+                                            } else {
+                                              // print("Dosya indirilemedi");
+                                            }
+                                          } catch (e) {
+                                            // print('Dosya indirme hatası: $e');
+                                          }
+                                        },
+                                        leading: const Icon(Icons.attach_file),
+                                        title: Text(
+                                          "Ek Dosya:  ${snapshot.data!.data!.files[index].fileName}",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    );
+                                  }),
                             ),
                     ],
                   ),

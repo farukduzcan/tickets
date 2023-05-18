@@ -47,6 +47,9 @@ dependencies:
   file_picker: ^5.3.0
   flutter_keyboard_visibility: ^5.4.1
   another_flushbar: ^1.12.30
+  path_provider: ^2.0.15
+  url_launcher: ^6.1.11
+  open_filex: ^4.3.2
   
 
 dev_dependencies:
