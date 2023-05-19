@@ -37,8 +37,8 @@ class _DrawerBarState extends State<DrawerBar> {
             accountName: Text(
                 "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}"),
             accountEmail: Text(UserModel.userData!.email!),
-            currentAccountPicture: Row(
-              children: const [
+            currentAccountPicture: const Row(
+              children: [
                 CircleAvatar(
                   radius: 35,
                   child: ClipOval(

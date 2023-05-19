@@ -219,9 +219,9 @@ class _TicketListBodyState extends State<TicketListBody> {
                                 color: Colors.red,
                                 borderRadius: BorderRadius.circular(15),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                children: const [
+                                children: [
                                   Text(
                                     "Talep Sil",
                                     style: TextStyle(color: Colors.white),

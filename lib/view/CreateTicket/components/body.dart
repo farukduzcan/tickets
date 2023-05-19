@@ -351,8 +351,8 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                               if (fileList.isNotEmpty) {
                                 CreateTicketServicesFileAdd fileAdd =
                                     CreateTicketServicesFileAdd();
-                                var resultFileAdd =
-                                    await fileAdd.sendFiles(fileList);
+
+                                await fileAdd.sendFiles(fileList);
                               }
                               // ignore: use_build_context_synchronously
                               QuickAlert.show(
