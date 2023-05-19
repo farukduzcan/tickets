@@ -54,9 +54,9 @@ class _TicketDownloadButtonState extends State<TicketDownloadButton> {
   Icon _leadingIcon() {
     var fileExt = widget.snapshot.data!.data!.files[widget.index].ext;
     if (fileExt == '.jpg' || fileExt == '.png' || fileExt == '.jpeg') {
-      return const Icon(
+      return Icon(
         Icons.image_outlined,
-        color: Colors.grey,
+        color: Colors.blue.shade300,
       );
     } else if (fileExt == '.mp4' ||
         fileExt == '.avi' ||
@@ -104,9 +104,8 @@ class _TicketDownloadButtonState extends State<TicketDownloadButton> {
               context: context,
               type: QuickAlertType.warning,
               title: "Dosya Mevcut",
-              text:
-                  "Dosya zaten mevcut. İndirmeyi iptal edip açmak veya yeniden indirmek istiyor musunuz?",
-              confirmBtnText: "Dosyayı Aç",
+              text: "Dosya zaten mevcut. Dosyayı açmak ister misiniz?",
+              confirmBtnText: "Aç",
               cancelBtnText: "Kapat",
               confirmBtnColor: kPrimaryColor,
               showCancelBtn: true,

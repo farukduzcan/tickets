@@ -133,3 +133,5 @@ String kCreateTicketErrorText = "Talep oluşturulurken bir hata oluştu.";
 
 String kTicketListTitle = "Taleplerim";
 String kTicketListDetailsTitle = "Talep Detayı";
+
+String kVersionTitle = "V 1.0.0";
