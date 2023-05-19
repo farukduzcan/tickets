@@ -6,7 +6,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/services/delete_ticket_services.dart';
 import 'package:tickets/services/ticket_list_services.dart';
-import 'package:tickets/view/TicketList/components/ticket_details_body.dart';
+import 'package:tickets/view/TicketList/ticket_details_body.dart';
 
 class TicketListBody extends StatefulWidget {
   const TicketListBody({super.key});

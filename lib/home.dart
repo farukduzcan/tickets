@@ -9,7 +9,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
-import 'package:tickets/view/TicketList/components/ticket_details_body.dart';
+import 'package:tickets/view/TicketList/ticket_details_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import '../../components/drawer_bar.dart';
