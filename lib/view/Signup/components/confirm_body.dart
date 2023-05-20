@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:tickets/components/background.dart';
-import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
 import 'package:pinput/pinput.dart';
 import 'package:tickets/models/register_response_model.dart';
@@ -119,15 +118,15 @@ class _ConfirmBodyState extends State<ConfirmBody> {
             ),
             Text("Kalan Süre: $_counter sn",
                 style: const TextStyle(fontSize: 20, color: Colors.red)),
-            RaundedButton(
-                buttonText: "KOD",
-                press: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        "Onay Kodunuz: ${RegisterResponseModel.confirmationCode.toString()}"),
-                    backgroundColor: Colors.red,
-                  ));
-                }),
+            // RaundedButton(
+            //     buttonText: "KOD",
+            //     press: () {
+            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            //         content: Text(
+            //             "Onay Kodunuz: ${RegisterResponseModel.confirmationCode.toString()}"),
+            //         backgroundColor: Colors.red,
+            //       ));
+            //     }),
           ],
         ),
       ),

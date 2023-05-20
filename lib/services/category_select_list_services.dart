@@ -10,7 +10,7 @@ import '../models/user_model.dart';
 class CateGorySelectListServices {
   Future<CategorySelectList?> categoryselect() async {
     try {
-      var url = Uri.parse('${Globals.apiBaseUrl}client/category/selectList');
+      var url = Uri.parse('${Globals.apiBaseUrl}ticket/CategoryList');
       var result = await http.post(url,
           body: jsonEncode({
             "Query": "",

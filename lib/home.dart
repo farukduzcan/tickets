@@ -9,6 +9,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
+import 'package:tickets/view/TicketList/ticket_details_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import '../../components/drawer_bar.dart';
@@ -34,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen>
     const DashboardBody(),
     const CreateTicketBody(),
     const TicketListBody(),
+    const TicketDetailsBody(id: "118"),
   ];
   final isActivated = [
     true,
@@ -83,6 +85,18 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       backgroundColor: kPrimaryColor,
       title: Text(kTicketListTitle),
+    ),
+    AppBar(
+      centerTitle: true,
+      shadowColor: kPrimaryColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(29),
+          bottomRight: Radius.circular(29),
+        ),
+      ),
+      backgroundColor: kPrimaryColor,
+      title: Text(kTicketListDetailsTitle),
     ),
   ];
 
@@ -181,11 +195,11 @@ class _HomeScreenState extends State<HomeScreen>
                   Row(
                     children: [
                       NavBarItem(
-                          isActive: isActivated[1],
+                          isActive: isActivated[3],
                           icon: Icons.settings_outlined,
                           title: kSettingsTitle,
                           press: () {
-                            onItemTapped(1);
+                            onItemTapped(3);
                           }),
                       NavBarItem(
                           isActive: isActivated[3],
@@ -193,30 +207,33 @@ class _HomeScreenState extends State<HomeScreen>
                           title: kLogoutTitle,
                           press: () async {
                             QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.warning,
-                                title: "Çıkış Yap",
-                                text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
-                                confirmBtnText: "Evet",
-                                cancelBtnText: "Hayır",
-                                confirmBtnColor: Colors.green,
-                                showCancelBtn: true,
-                                cancelBtnTextStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                                onConfirmBtnTap: () async {
-                                  await deleteToken();
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(builder: (context) {
+                              context: context,
+                              type: QuickAlertType.warning,
+                              title: "Çıkış Yap",
+                              text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
+                              confirmBtnText: "Evet",
+                              cancelBtnText: "Hayır",
+                              confirmBtnColor: Colors.green,
+                              showCancelBtn: true,
+                              cancelBtnTextStyle: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              onConfirmBtnTap: () async {
+                                await deleteToken();
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
                                       return const LoginScreen();
-                                    }),
-                                  );
-                                },
-                                onCancelBtnTap: () {
-                                  Navigator.pop(context);
-                                });
+                                    },
+                                  ),
+                                );
+                              },
+                              onCancelBtnTap: () {
+                                Navigator.pop(context);
+                              },
+                            );
                           }),
                     ],
                   ),

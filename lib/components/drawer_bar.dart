@@ -30,67 +30,122 @@ class _DrawerBarState extends State<DrawerBar> {
           bottomRight: Radius.circular(30),
         ),
       ),
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      child: Column(
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(
-                "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}"),
-            accountEmail: Text(UserModel.userData!.email!),
-            currentAccountPicture: Row(
-              children: const [
-                CircleAvatar(
-                  radius: 35,
-                  child: ClipOval(
-                    child: Icon(
-                      Icons.business_outlined,
-                      color: Colors.white,
-                      size: 40,
-                    ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              children: [
+                UserAccountsDrawerHeader(
+                  accountName: Text(
+                      "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}"),
+                  accountEmail: Text(UserModel.userData!.email!),
+                  currentAccountPicture: const Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 35,
+                        child: ClipOval(
+                          child: Icon(
+                            Icons.business_outlined,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                      ),
+                      Text("Company Name",
+                          style: TextStyle(color: Colors.white)),
+                    ],
                   ),
+                  decoration: const BoxDecoration(),
                 ),
-                SizedBox(
-                  width: 10,
+                DrawerItem(
+                  isSelected: true,
+                  title: kHomeTitle,
+                  press: () {
+                    widget.isActivated[0];
+                  },
+                  icon: Icons.home,
                 ),
-                Text("Company Name", style: TextStyle(color: Colors.white)),
+                DrawerItem(
+                  isSelected: false,
+                  title: kProfileTitle,
+                  press: () {
+                    widget.isActivated[2];
+                  },
+                  icon: Icons.person,
+                ),
+                DrawerItem(
+                  isSelected: false,
+                  title: kSettingsTitle,
+                  press: () {
+                    widget.isActivated[1];
+                  },
+                  icon: Icons.settings,
+                ),
+                DrawerItem(
+                  isSelected: false,
+                  title: kLogoutTitle,
+                  press: () {
+                    widget.isActivated[0];
+                  },
+                  icon: Icons.logout_outlined,
+                ),
               ],
             ),
-            decoration: const BoxDecoration(),
           ),
-          DrawerItem(
-            isSelected: true,
-            title: kHomeTitle,
-            press: () {
-              widget.isActivated[0];
-            },
-            icon: Icons.home,
-          ),
-          DrawerItem(
-            isSelected: false,
-            title: kProfileTitle,
-            press: () {
-              widget.isActivated[2];
-            },
-            icon: Icons.person,
-          ),
-          DrawerItem(
-            isSelected: false,
-            title: kSettingsTitle,
-            press: () {
-              widget.isActivated[1];
-            },
-            icon: Icons.settings,
-          ),
-          DrawerItem(
-            isSelected: false,
-            title: kLogoutTitle,
-            press: () {
-              widget.isActivated[0];
-            },
-            icon: Icons.logout_outlined,
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              kVersionTitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class CustomUserAccountsDrawerHeader extends StatelessWidget {
+  const CustomUserAccountsDrawerHeader({
+    Key? key,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
+    required this.companyName,
+  }) : super(key: key);
+
+  final String firstName;
+  final String lastName;
+  final String email;
+  final String companyName;
+
+  @override
+  Widget build(BuildContext context) {
+    return UserAccountsDrawerHeader(
+      accountName: Text("$firstName $lastName"),
+      accountEmail: Text(email),
+      currentAccountPicture: Row(
+        children: [
+          const CircleAvatar(
+            radius: 35,
+            child: ClipOval(
+              child: Icon(
+                Icons.business_outlined,
+                color: Colors.white,
+                size: 40,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            companyName,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
+      decoration: const BoxDecoration(),
     );
   }
 }

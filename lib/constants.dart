@@ -122,6 +122,7 @@ String kAlertConfirmLoadingText = "Lütfen bekleyiniz.";
 
 String kTicketTitle = "Talep Oluştur";
 String kCatocoryTitle = "Kategori Seçiniz";
+String kCustomerTitle = "Müşteri Seçiniz";
 String kCreateTicketTitle = "Konu Başlığı Giriniz";
 String kCreateTicketDescription = "Açıklama Giriniz";
 String kCreateTicketFileAdd = "Dosya Ekle";
@@ -131,3 +132,6 @@ String kCreateTicketSuccessText = "Talebiniz başarıyla oluşturuldu.";
 String kCreateTicketErrorText = "Talep oluşturulurken bir hata oluştu.";
 
 String kTicketListTitle = "Taleplerim";
+String kTicketListDetailsTitle = "Talep Detayı";
+
+String kVersionTitle = "V 1.0.0";

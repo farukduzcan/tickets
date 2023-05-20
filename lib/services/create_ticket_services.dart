@@ -12,6 +12,7 @@ class CreateTicketServices {
     required String body,
     required String subject,
     required int categoryId,
+    required int customerId,
   }) async {
     try {
       var url = Uri.parse('${Globals.apiBaseUrl}ticket/create');
@@ -20,6 +21,7 @@ class CreateTicketServices {
             "Body": body,
             "Subject": subject,
             "categoryId": categoryId,
+            "CustomerId": customerId,
           }),
           headers: {
             "Authorization": "Bearer ${UserModel.userToken}",
