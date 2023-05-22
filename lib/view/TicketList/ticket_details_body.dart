@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/models/get_ticket_model.dart';
+import 'package:tickets/models/ticket_aciton_list_model.dart';
 import 'package:tickets/services/get_ticket_services.dart';
+import 'package:tickets/services/ticket_action_list_services.dart';
 
 import '../../constants.dart';
-import 'components/download_item_card.dart';
+import 'components/ticket_details_body_ticket.dart';
 
 class TicketDetailsBody extends StatefulWidget {
-  final String id;
+  final int id;
   const TicketDetailsBody({super.key, required this.id});
 
   @override
@@ -16,17 +19,38 @@ class TicketDetailsBody extends StatefulWidget {
 
 class _TicketDetailsBodyState extends State<TicketDetailsBody> {
   Future<GetTicketModel?>? ticketDetails;
+  Future<TicketActionListModel?>? ticketActionListData;
   @override
   void initState() {
     super.initState();
     ticketDetails = getTicket();
+    ticketActionListData = getTicketList();
   }
 
   // api isteği
   Future<GetTicketModel?> getTicket() async {
     try {
       GetTicketServices ticketdetails = GetTicketServices();
-      return ticketdetails.getItem(id: widget.id);
+      return ticketdetails.getItem(id: widget.id.toString());
+    } catch (e) {
+      if (kDebugMode) {
+        print("itemler çekilirken hata oluştu");
+      }
+    }
+    return null;
+  }
+
+  // api isteği ticket action list
+  Future<TicketActionListModel?> getTicketList() async {
+    try {
+      TicketActionListServices ticketacionlist = TicketActionListServices();
+      return ticketacionlist.getTicketActionList(
+          ticketId: widget.id,
+          filter: "",
+          orderDir: "ASC",
+          orderField: "Id",
+          pageIndex: 1,
+          pageSize: 10);
     } catch (e) {
       if (kDebugMode) {
         print("itemler çekilirken hata oluştu");
@@ -50,90 +74,72 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
         backgroundColor: kPrimaryColor,
         title: Text(kTicketListDetailsTitle),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          FutureBuilder<GetTicketModel?>(
-            future: ticketDetails,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: kCardBoxShodow,
-                  ),
-                  margin: const EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              kPrimaryColor,
-                              kDarkPrimaryColor,
-                            ],
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TicketDetailsBodyTicket(ticketDetails: ticketDetails),
+            FutureBuilder<TicketActionListModel?>(
+              future: ticketActionListData,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.totalItemsCount == 0) {
+                    return const Center(
+                      child: SizedBox(),
+                    );
+                  }
+                  if (snapshot.data!.totalItemsCount! > 0) {
+                    return ListView.builder(
+                      itemExtent: 80,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 15,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.totalItemsCount!,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            title: Text(
+                                snapshot.data!.datas[index].createUserName!),
+                            subtitle: Text(snapshot.data!.datas[index].body!),
+                            trailing:
+                                Text(snapshot.data!.datas[index].actionStatus!),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Text(
-                                "Konu Başlığı:  ${snapshot.data!.data!.subject!.toUpperCase()}",
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text("Mesaj:  \n${snapshot.data!.data!.body!}"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(
-                            "Katagori:  ${snapshot.data!.data!.categoryName!}\n"
-                            "Oluşturan:  ${snapshot.data!.data!.createUserName!}"),
-                      ),
-                      snapshot.data!.data!.files.isEmpty
-                          ? const SizedBox()
-                          : Container(
-                              margin: const EdgeInsets.all(10),
-                              height: 65 *
-                                  snapshot.data!.data!.files.length.toDouble(),
-                              child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  itemCount: snapshot.data!.data!.files.length,
-                                  itemBuilder: (context, index) {
-                                    return TicketDownloadButton(
-                                      index: index,
-                                      snapshot: snapshot,
-                                    );
-                                  }),
-                            ),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text("${snapshot.error}"),
-                );
-              }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
-        ],
+                        );
+                      },
+                    );
+                  }
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("Hata Oluştu"),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: RaundedButton(
+                buttonText: "Yanıtla",
+                press: () {},
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -115,16 +115,16 @@ class _TicketListBodyState extends State<TicketListBody> {
           color: kAccentColor,
         );
       case "WORKING":
-        return const Icon(
+        return Icon(
           Icons.hourglass_top_rounded,
           size: 45,
-          color: kDarkPrimaryColor,
+          color: Colors.yellow.shade200,
         );
       case "CLOSE":
-        return const Icon(
-          Icons.lock_outline,
+        return Icon(
+          Icons.check_circle_outline,
           size: 45,
-          color: kSecondaryTextColor,
+          color: Colors.green.shade400,
         );
       case "CANCEL":
         return const Icon(
@@ -297,17 +297,26 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => TicketDetailsBody(
-                                      id: snapshot.data!.datas[index].id!
-                                          .toString(),
+                                      id: snapshot.data!.datas[index].id!,
                                     ),
                                   ),
                                 );
                               },
                               title: Text(snapshot.data!.datas[index].subject!),
-                              subtitle: Text(
-                                "${snapshot.data!.datas[index].body!} \n\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
-                                maxLines: 5,
-                                overflow: TextOverflow.ellipsis,
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data!.datas[index].body!,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
