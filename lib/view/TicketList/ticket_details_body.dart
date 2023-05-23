@@ -4,7 +4,6 @@ import 'package:tickets/components/bottom_sheet_area.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/models/get_ticket_model.dart';
 import 'package:tickets/models/ticket_aciton_list_model.dart';
-import 'package:tickets/models/user_model.dart';
 import 'package:tickets/services/get_ticket_services.dart';
 import 'package:tickets/services/ticket_action_list_services.dart';
 import 'package:tickets/view/TicketList/components/ticket_action_bottom_buton.dart';
@@ -180,91 +179,89 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                     }
                   },
                 ),
-                if (ticketStatus != "CLOSE" && UserModel.userData!.role == 2)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: RaundedButton(
-                      buttonText: "İşlem Yap",
-                      press: () {
-                        showModalBottomSheet(
-                          isScrollControlled: true,
-                          enableDrag: true,
-                          elevation: 3,
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20))),
-                          context: context,
-                          builder: (context) {
-                            return BottomSheetArea(
-                              widget: widget,
-                              bottomsheettitle: "İşlem Seçiniz",
-                              child: Column(
-                                children: [
-                                  TicketActionBottomButon(
-                                      iconColor: Colors.green,
-                                      buttonText: "Yanıtla",
-                                      icon: Icons.reply_outlined,
-                                      press: () {
-                                        showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          enableDrag: true,
-                                          elevation: 3,
-                                          backgroundColor: Colors.white,
-                                          shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight:
-                                                      Radius.circular(20))),
-                                          context: context,
-                                          builder: (context) {
-                                            return BottomSheetReplyArea(
-                                                ticketId: widget.id,
-                                                widget: widget,
-                                                textReplyFocusNode:
-                                                    _textReplyFocusNode);
-                                          },
-                                        );
-                                      }),
-                                  TicketActionBottomButon(
-                                      iconColor: Colors.yellow,
-                                      buttonText: "Yönlendir",
-                                      icon: Icons.directions_outlined,
-                                      press: () {
-                                        showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          enableDrag: true,
-                                          elevation: 3,
-                                          backgroundColor: Colors.white,
-                                          shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight:
-                                                      Radius.circular(20))),
-                                          context: context,
-                                          builder: (context) {
-                                            return BottomSheetRedirectArea(
+                //if (ticketStatus != "CLOSE" && UserModel.userData!.role == 2)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: RaundedButton(
+                    buttonText: "İşlem Yap",
+                    press: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        enableDrag: true,
+                        elevation: 3,
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20))),
+                        context: context,
+                        builder: (context) {
+                          return BottomSheetArea(
+                            widget: widget,
+                            bottomsheettitle: "İşlem Seçiniz",
+                            child: Column(
+                              children: [
+                                TicketActionBottomButon(
+                                    iconColor: Colors.green,
+                                    buttonText: "Yanıtla",
+                                    icon: Icons.reply_outlined,
+                                    press: () {
+                                      showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        enableDrag: true,
+                                        elevation: 3,
+                                        backgroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20))),
+                                        context: context,
+                                        builder: (context) {
+                                          return BottomSheetReplyArea(
                                               ticketId: widget.id,
                                               widget: widget,
-                                              size: size,
-                                              categoryDropdownData:
-                                                  categoryDropdownData,
-                                              dropdownbuttonKey:
-                                                  _dropdownbuttonKey,
-                                            );
-                                          },
-                                        );
-                                      }),
-                                  TicketActionClosedButton(widget: widget),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  )
+                                              textReplyFocusNode:
+                                                  _textReplyFocusNode);
+                                        },
+                                      );
+                                    }),
+                                TicketActionBottomButon(
+                                    iconColor: Colors.yellow,
+                                    buttonText: "Yönlendir",
+                                    icon: Icons.directions_outlined,
+                                    press: () {
+                                      showModalBottomSheet(
+                                        isScrollControlled: true,
+                                        enableDrag: true,
+                                        elevation: 3,
+                                        backgroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20))),
+                                        context: context,
+                                        builder: (context) {
+                                          return BottomSheetRedirectArea(
+                                            ticketId: widget.id,
+                                            widget: widget,
+                                            size: size,
+                                            categoryDropdownData:
+                                                categoryDropdownData,
+                                            dropdownbuttonKey:
+                                                _dropdownbuttonKey,
+                                          );
+                                        },
+                                      );
+                                    }),
+                                TicketActionClosedButton(widget: widget),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                )
               ],
             ),
           );
