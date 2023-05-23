@@ -1,13 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tickets/components/bottom_sheet_area.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/models/get_ticket_model.dart';
 import 'package:tickets/models/ticket_aciton_list_model.dart';
+import 'package:tickets/models/user_model.dart';
 import 'package:tickets/services/get_ticket_services.dart';
 import 'package:tickets/services/ticket_action_list_services.dart';
+import 'package:tickets/view/TicketList/components/ticket_action_bottom_buton.dart';
 
-import '../../components/text_field_container.dart';
 import '../../constants.dart';
+import '../../models/category_select_list.dart';
+import '../../services/category_select_list_services.dart';
+import 'components/bottom_sheet_close_button.dart';
+import 'components/bottom_sheet_redirect_area.dart';
+import 'components/bottom_sheet_reply_area.dart';
 import 'components/ticket_details_body_ticket.dart';
 
 class TicketDetailsBody extends StatefulWidget {
@@ -19,13 +26,25 @@ class TicketDetailsBody extends StatefulWidget {
 }
 
 class _TicketDetailsBodyState extends State<TicketDetailsBody> {
+  final FocusNode _textReplyFocusNode = FocusNode();
+
   Future<GetTicketModel?>? ticketDetails;
   Future<TicketActionListModel?>? ticketActionListData;
+  Future<CategorySelectList?>? categoryDropdownData;
+  final _dropdownbuttonKey = GlobalKey<FormState>();
+  int catogoryId = 0;
+  String ticketStatus = "";
   @override
   void initState() {
     super.initState();
     ticketDetails = getTicket();
     ticketActionListData = getTicketList();
+    categoryDropdownData = getDropdownData();
+    ticketDetails!.then((value) {
+      setState(() {
+        ticketStatus = value!.data!.ticketStatus!;
+      });
+    });
   }
 
   // api isteği
@@ -51,7 +70,21 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
           orderDir: "ASC",
           orderField: "Id",
           pageIndex: 1,
-          pageSize: 10);
+          pageSize: 100);
+    } catch (e) {
+      if (kDebugMode) {
+        print("itemler çekilirken hata oluştu");
+      }
+    }
+    return null;
+  }
+  // api isteği kategori için
+
+  Future<CategorySelectList?> getDropdownData() async {
+    try {
+      CateGorySelectListServices categorySelectListServices =
+          CateGorySelectListServices();
+      return categorySelectListServices.categoryselect();
     } catch (e) {
       if (kDebugMode) {
         print("itemler çekilirken hata oluştu");
@@ -62,8 +95,9 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         shadowColor: kPrimaryColor,
@@ -146,141 +180,95 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                     }
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: RaundedButton(
-                    buttonText: "İşlem Yap",
-                    press: () {
-                      showBottomSheet(
-                        elevation: 3,
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20))),
-                        context: context,
-                        builder: (context) {
-                          return BottomSheetArea(
-                            widget: widget,
-                            bottomsheettitle: "Yanıtla",
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
+                if (ticketStatus != "CLOSE" && UserModel.userData!.role == 2)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: RaundedButton(
+                      buttonText: "İşlem Yap",
+                      press: () {
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          enableDrag: true,
+                          elevation: 3,
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20))),
+                          context: context,
+                          builder: (context) {
+                            return BottomSheetArea(
+                              widget: widget,
+                              bottomsheettitle: "İşlem Seçiniz",
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const SizedBox(
-                                      //width: size.width,
-                                      ),
-                                  Form(
-                                    // key: _formKey,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: TextFieldContainer(
-                                        color: kWhiteColor,
-                                        child: TextFormField(
-                                          validator: (value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Açıklama alanı boş olamaz';
-                                            }
-                                            return null;
+                                  TicketActionBottomButon(
+                                      iconColor: Colors.green,
+                                      buttonText: "Yanıtla",
+                                      icon: Icons.reply_outlined,
+                                      press: () {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          enableDrag: true,
+                                          elevation: 3,
+                                          backgroundColor: Colors.white,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight:
+                                                      Radius.circular(20))),
+                                          context: context,
+                                          builder: (context) {
+                                            return BottomSheetReplyArea(
+                                                ticketId: widget.id,
+                                                widget: widget,
+                                                textReplyFocusNode:
+                                                    _textReplyFocusNode);
                                           },
-                                          //controller: _bodyController,
-                                          // focusNode: _bodyFocusNode,
-                                          minLines: 4,
-                                          maxLines: 5,
-                                          maxLength: 500,
-                                          scrollPhysics:
-                                              const BouncingScrollPhysics(),
-                                          keyboardType: TextInputType.multiline,
-                                          textInputAction:
-                                              TextInputAction.newline,
-                                          decoration: InputDecoration(
-                                            hintText: kCreateTicketDescription,
-                                            border: InputBorder.none,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  RaundedButton(
-                                    buttonText: "Gönder",
-                                    press: () {},
-                                  ),
+                                        );
+                                      }),
+                                  TicketActionBottomButon(
+                                      iconColor: Colors.yellow,
+                                      buttonText: "Yönlendir",
+                                      icon: Icons.directions_outlined,
+                                      press: () {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          enableDrag: true,
+                                          elevation: 3,
+                                          backgroundColor: Colors.white,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight:
+                                                      Radius.circular(20))),
+                                          context: context,
+                                          builder: (context) {
+                                            return BottomSheetRedirectArea(
+                                              ticketId: widget.id,
+                                              widget: widget,
+                                              size: size,
+                                              categoryDropdownData:
+                                                  categoryDropdownData,
+                                              dropdownbuttonKey:
+                                                  _dropdownbuttonKey,
+                                            );
+                                          },
+                                        );
+                                      }),
+                                  TicketActionClosedButton(widget: widget),
                                 ],
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                )
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  )
               ],
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class BottomSheetArea extends StatelessWidget {
-  final String bottomsheettitle;
-  final Widget child;
-  const BottomSheetArea({
-    super.key,
-    required this.widget,
-    required this.bottomsheettitle,
-    required this.child,
-  });
-
-  final TicketDetailsBody widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 2),
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 24,
-              child: Stack(
-                children: [
-                  Center(
-                    child: Divider(
-                      color: Colors.black.withOpacity(0.70),
-                      thickness: 2,
-                      indent: MediaQuery.of(context).size.width * 0.4,
-                      endIndent: MediaQuery.of(context).size.width * 0.4,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 5,
-                    height: 24,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: const Icon(Icons.close, color: Colors.black),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Text(
-              bottomsheettitle,
-              style: const TextStyle(color: Colors.black),
-            ),
-            child,
-          ],
-        ),
       ),
     );
   }

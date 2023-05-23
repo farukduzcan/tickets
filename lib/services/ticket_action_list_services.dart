@@ -9,7 +9,7 @@ import '../models/user_model.dart';
 class TicketActionListServices {
   Future<TicketActionListModel?> getTicketActionList({
     required int pageIndex,
-    int pageSize = 15,
+    int? pageSize,
     String orderField = "Id",
     String orderDir = "ASC",
     required int ticketId,
@@ -20,7 +20,7 @@ class TicketActionListServices {
       var result = await http.post(url,
           body: jsonEncode({
             "PageIndex": pageIndex,
-            "PageSize": 10,
+            "PageSize": pageSize ?? 10,
             "OrderField": orderField,
             "OrderDir": orderDir,
             "Filter": "",

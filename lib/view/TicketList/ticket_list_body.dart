@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -7,6 +6,8 @@ import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/services/delete_ticket_services.dart';
 import 'package:tickets/services/ticket_list_services.dart';
 import 'package:tickets/view/TicketList/ticket_details_body.dart';
+
+import '../../components/messenger_bar_top.dart';
 
 class TicketListBody extends StatefulWidget {
   const TicketListBody({super.key});
@@ -142,30 +143,6 @@ class _TicketListBodyState extends State<TicketListBody> {
   }
 
   //bildirim
-  void showTopMessageBar(BuildContext context) {
-    Flushbar(
-      margin: const EdgeInsets.all(10),
-      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
-      backgroundGradient: LinearGradient(
-        colors: List.of(
-          [Colors.green, Colors.green.shade400],
-        ),
-      ),
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      boxShadows: const [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      barBlur: 0.50,
-      borderRadius: const BorderRadius.all(Radius.circular(15)),
-      flushbarPosition: FlushbarPosition.TOP,
-      message: 'Öğe silindi',
-      duration: const Duration(seconds: 2),
-    ).show(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +253,9 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   .then((value) {
                                 if (value!.data == null &&
                                     value.result!.isNegative == false) {
-                                  showTopMessageBar(context);
+                                  const TopMessageBar(
+                                    message: "Öğe Silindi!",
+                                  ).showTopMessageBarsuccessful(context);
                                 }
                               });
                               setState(() {
