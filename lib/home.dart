@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen>
     const DashboardBody(),
     const CreateTicketBody(),
     const TicketListBody(),
-    const TicketDetailsBody(id: "118"),
+    const TicketDetailsBody(id: 140),
   ];
   final isActivated = [
     true,

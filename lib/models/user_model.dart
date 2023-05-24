@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserModel {
   static String? userToken;
   static UserData? userData;
+  // userdata bulunan role kodlarında 2 numaralı kod client, 3 numaralı kod customer
   UserModel({
     required this.data,
     required this.errors,

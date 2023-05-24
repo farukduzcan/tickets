@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -8,6 +7,8 @@ import 'package:tickets/services/delete_ticket_services.dart';
 import 'package:tickets/services/ticket_list_services.dart';
 import 'package:tickets/view/TicketList/ticket_details_body.dart';
 
+import '../../components/messenger_bar_top.dart';
+
 class TicketListBody extends StatefulWidget {
   const TicketListBody({super.key});
 
@@ -16,8 +17,8 @@ class TicketListBody extends StatefulWidget {
 }
 
 class _TicketListBodyState extends State<TicketListBody> {
-  Future<TicketListModel?>? ticketListData;
-  final ScrollController _scrollController = ScrollController();
+  late Future<TicketListModel?>? ticketListData;
+  late final ScrollController _scrollController = ScrollController();
   int pageIndeks = 1;
   @override
   void initState() {
@@ -115,16 +116,16 @@ class _TicketListBodyState extends State<TicketListBody> {
           color: kAccentColor,
         );
       case "WORKING":
-        return const Icon(
+        return Icon(
           Icons.hourglass_top_rounded,
           size: 45,
-          color: kDarkPrimaryColor,
+          color: Colors.orange.shade400,
         );
       case "CLOSE":
-        return const Icon(
-          Icons.lock_outline,
+        return Icon(
+          Icons.check_circle_outline,
           size: 45,
-          color: kSecondaryTextColor,
+          color: Colors.green.shade400,
         );
       case "CANCEL":
         return const Icon(
@@ -142,30 +143,6 @@ class _TicketListBodyState extends State<TicketListBody> {
   }
 
   //bildirim
-  void showTopMessageBar(BuildContext context) {
-    Flushbar(
-      margin: const EdgeInsets.all(10),
-      icon: const Icon(Icons.check_circle_outline, color: Colors.white),
-      backgroundGradient: LinearGradient(
-        colors: List.of(
-          [Colors.green, Colors.green.shade400],
-        ),
-      ),
-      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-      boxShadows: const [
-        BoxShadow(
-          color: Colors.black45,
-          offset: Offset(3, 3),
-          blurRadius: 3,
-        ),
-      ],
-      barBlur: 0.50,
-      borderRadius: const BorderRadius.all(Radius.circular(15)),
-      flushbarPosition: FlushbarPosition.TOP,
-      message: 'Öğe silindi',
-      duration: const Duration(seconds: 2),
-    ).show(context);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +253,9 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   .then((value) {
                                 if (value!.data == null &&
                                     value.result!.isNegative == false) {
-                                  showTopMessageBar(context);
+                                  const TopMessageBar(
+                                    message: "Öğe Silindi!",
+                                  ).showTopMessageBarsuccessful(context);
                                 }
                               });
                               setState(() {
@@ -297,17 +276,26 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => TicketDetailsBody(
-                                      id: snapshot.data!.datas[index].id!
-                                          .toString(),
+                                      id: snapshot.data!.datas[index].id!,
                                     ),
                                   ),
                                 );
                               },
                               title: Text(snapshot.data!.datas[index].subject!),
-                              subtitle: Text(
-                                "${snapshot.data!.datas[index].body!} \n\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
-                                maxLines: 5,
-                                overflow: TextOverflow.ellipsis,
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data!.datas[index].body!,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "\nOluşturan: ${snapshot.data!.datas[index].createUserName!}",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
