@@ -108,6 +108,13 @@ class _BottomSheetReplyAreaState extends State<BottomSheetReplyArea> {
                 await Future.delayed(const Duration(milliseconds: 1000), () {
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  // if (getUserRole() == "REPLY") {
+                  //   Navigator.pop(context);
+                  //   Navigator.pop(context);
+                  // } else {
+                  //   Navigator.pop(context);
+                  //   Navigator.pop(context);
+                  // }
 
                   // Navigator.popUntil(
                   //   context,

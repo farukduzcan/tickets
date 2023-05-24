@@ -456,7 +456,6 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                           return RaundedButton(
                               buttonText: "Yanıtla",
                               press: () async {
-                                Navigator.pop(context);
                                 await showModalBottomSheet(
                                   isScrollControlled: true,
                                   enableDrag: true,
