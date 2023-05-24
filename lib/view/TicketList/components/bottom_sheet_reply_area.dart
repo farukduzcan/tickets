@@ -14,11 +14,13 @@ class BottomSheetReplyArea extends StatefulWidget {
     required this.widget,
     required FocusNode textReplyFocusNode,
     required this.ticketId,
+    required this.userRoleId,
   }) : _textReplyFocusNode = textReplyFocusNode;
 
   final TicketDetailsBody widget;
   final FocusNode _textReplyFocusNode;
   final int ticketId;
+  final int userRoleId;
 
   @override
   State<BottomSheetReplyArea> createState() => _BottomSheetReplyAreaState();
@@ -32,6 +34,16 @@ class _BottomSheetReplyAreaState extends State<BottomSheetReplyArea> {
     setState(() {
       loading = !loading;
     });
+  }
+
+  String getUserRole() {
+    if (widget.userRoleId == 2) {
+      return "REPLY";
+    } else if (widget.userRoleId == 3) {
+      return "CUSTOMER_REPLY";
+    } else {
+      return "REPLY";
+    }
   }
 
   @override
@@ -82,9 +94,10 @@ class _BottomSheetReplyAreaState extends State<BottomSheetReplyArea> {
                     TicketActionCreateServices();
                 // ignore: unused_local_variable
                 var respons = await ticketActionCreateServices.setActionCreate(
-                    body: _replyController.text,
-                    ticketId: widget.ticketId,
-                    actionStatus: "REPLY");
+                  body: _replyController.text,
+                  ticketId: widget.ticketId,
+                  actionStatus: getUserRole(),
+                );
                 if (respons!.errors == null) {
                   // ignore: use_build_context_synchronously
                   const TopMessageBar(
