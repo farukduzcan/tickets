@@ -41,6 +41,9 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
     categoryDropdownData = getDropdownData();
   }
 
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
   // api isteği
   Future<GetTicketModel?> getTicket() async {
     try {
@@ -148,6 +151,7 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
         title: Text(kTicketListDetailsTitle),
       ),
       body: RefreshIndicator(
+        key: refreshIndicatorKey,
         onRefresh: () async {
           setState(() {
             ticketDetails = getTicket();
@@ -364,8 +368,9 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                               iconColor: Colors.green,
                                               buttonText: "Yanıtla",
                                               icon: Icons.reply_outlined,
-                                              press: () {
-                                                showModalBottomSheet(
+                                              press: () async {
+                                                Navigator.pop(context);
+                                                await showModalBottomSheet(
                                                   isScrollControlled: true,
                                                   enableDrag: true,
                                                   elevation: 3,
@@ -389,41 +394,54 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                                             _textReplyFocusNode);
                                                   },
                                                 );
+                                                refreshIndicatorKey.currentState
+                                                    ?.show();
                                               }),
                                           TicketActionBottomButon(
-                                              iconColor: Colors.orange,
-                                              buttonText: "Yönlendir",
-                                              icon: Icons.directions_outlined,
-                                              press: () {
-                                                showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  enableDrag: true,
-                                                  elevation: 3,
-                                                  backgroundColor: Colors.white,
-                                                  shape: const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(20),
-                                                              topRight: Radius
-                                                                  .circular(
-                                                                      20))),
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return BottomSheetRedirectArea(
-                                                      ticketId: widget.id,
-                                                      widget: widget,
-                                                      size: size,
-                                                      categoryDropdownData:
-                                                          categoryDropdownData,
-                                                      dropdownbuttonKey:
-                                                          _dropdownbuttonKey,
-                                                    );
-                                                  },
-                                                );
-                                              }),
+                                            iconColor: Colors.orange,
+                                            buttonText: "Yönlendir",
+                                            icon: Icons.directions_outlined,
+                                            press: () async {
+                                              Navigator.pop(context);
+                                              await showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                enableDrag: true,
+                                                elevation: 3,
+                                                backgroundColor: Colors.white,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        20))),
+                                                context: context,
+                                                builder: (context) {
+                                                  return BottomSheetRedirectArea(
+                                                    ticketId: widget.id,
+                                                    widget: widget,
+                                                    size: size,
+                                                    categoryDropdownData:
+                                                        categoryDropdownData,
+                                                    dropdownbuttonKey:
+                                                        _dropdownbuttonKey,
+                                                  );
+                                                },
+                                              );
+                                              refreshIndicatorKey.currentState
+                                                  ?.show();
+                                            },
+                                          ),
                                           TicketActionClosedButton(
-                                              widget: widget),
+                                            press: () {
+                                              refreshIndicatorKey.currentState
+                                                  ?.show();
+                                            },
+                                            widget: widget,
+                                          ),
                                         ],
                                       ),
                                     );
@@ -437,8 +455,9 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                             UserModel.userData!.role == 3) {
                           return RaundedButton(
                               buttonText: "Yanıtla",
-                              press: () {
-                                showModalBottomSheet(
+                              press: () async {
+                                Navigator.pop(context);
+                                await showModalBottomSheet(
                                   isScrollControlled: true,
                                   enableDrag: true,
                                   elevation: 3,
@@ -457,6 +476,7 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                             _textReplyFocusNode);
                                   },
                                 );
+                                refreshIndicatorKey.currentState?.show();
                               });
                         } else if (snapshot.data!.data!.ticketStatus ==
                             "CLOSE") {

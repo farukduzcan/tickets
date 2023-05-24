@@ -8,9 +8,11 @@ import '../../../components/messenger_bar_top.dart';
 import '../../../services/ticket_action_create_services.dart';
 
 class TicketActionClosedButton extends StatefulWidget {
+  final Function press;
   const TicketActionClosedButton({
     super.key,
     required this.widget,
+    required this.press,
   });
 
   final TicketDetailsBody widget;
@@ -35,8 +37,8 @@ class _TicketActionClosedButtonState extends State<TicketActionClosedButton> {
         iconColor: Colors.red,
         buttonText: "Kapat",
         icon: Icons.close_outlined,
-        press: () {
-          QuickAlert.show(
+        press: () async {
+          await QuickAlert.show(
             context: context,
             type: QuickAlertType.warning,
             title: "Emin misiniz?",
@@ -63,17 +65,14 @@ class _TicketActionClosedButtonState extends State<TicketActionClosedButton> {
                 ).showTopMessageBarsuccessful(context);
               }
               await Future.delayed(const Duration(milliseconds: 1000), () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return TicketDetailsBody(
-                      id: widget.widget.id,
-                    );
-                  }),
-                );
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
               });
             },
           );
+          widget.press();
         });
   }
 

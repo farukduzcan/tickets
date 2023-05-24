@@ -106,17 +106,30 @@ class _BottomSheetReplyAreaState extends State<BottomSheetReplyArea> {
                 }
                 _loadingBar();
                 await Future.delayed(const Duration(milliseconds: 1000), () {
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return TicketDetailsBody(
-                        id: widget.ticketId,
-                      );
-                    }),
-                  );
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+
+                  // Navigator.popUntil(
+                  //   context,
+                  //   ModalRoute.withName('/ticket_details'),
+                  // );
+                  // Navigator.pushAndRemoveUntil(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) {
+                  //     return TicketDetailsBody(
+                  //       id: widget.ticketId,
+                  //     );
+                  //   }),
+                  //   (route) => true, // Önceki tüm sayfaları kapat
+                  // );
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) {
+                  //     return TicketDetailsBody(
+                  //       id: widget.ticketId,
+                  //     );
+                  //   }),
+                  // );
                 });
               }
             },

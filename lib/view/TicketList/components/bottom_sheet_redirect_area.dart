@@ -126,14 +126,8 @@ class _BottomSheetRedirectAreaState extends State<BottomSheetRedirectArea> {
                 }
                 _loadingBar();
                 await Future.delayed(const Duration(milliseconds: 1000), () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return TicketDetailsBody(
-                        id: widget.ticketId,
-                      );
-                    }),
-                  );
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 });
               },
             ),
