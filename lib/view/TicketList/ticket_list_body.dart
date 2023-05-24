@@ -17,8 +17,8 @@ class TicketListBody extends StatefulWidget {
 }
 
 class _TicketListBodyState extends State<TicketListBody> {
-  Future<TicketListModel?>? ticketListData;
-  final ScrollController _scrollController = ScrollController();
+  late Future<TicketListModel?>? ticketListData;
+  late final ScrollController _scrollController = ScrollController();
   int pageIndeks = 1;
   @override
   void initState() {
@@ -119,7 +119,7 @@ class _TicketListBodyState extends State<TicketListBody> {
         return Icon(
           Icons.hourglass_top_rounded,
           size: 45,
-          color: Colors.yellow.shade200,
+          color: Colors.orange.shade400,
         );
       case "CLOSE":
         return Icon(

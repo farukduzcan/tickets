@@ -28,9 +28,9 @@ class TicketDetailsBody extends StatefulWidget {
 class _TicketDetailsBodyState extends State<TicketDetailsBody> {
   final FocusNode _textReplyFocusNode = FocusNode();
 
-  Future<GetTicketModel?>? ticketDetails;
-  Future<TicketActionListModel?>? ticketActionListData;
-  Future<CategorySelectList?>? categoryDropdownData;
+  late Future<GetTicketModel?>? ticketDetails;
+  late Future<TicketActionListModel?>? ticketActionListData;
+  late Future<CategorySelectList?>? categoryDropdownData;
   final _dropdownbuttonKey = GlobalKey<FormState>();
   int catogoryId = 0;
   @override
@@ -95,6 +95,41 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
     }
   }
 
+  String getActionStatus(
+      AsyncSnapshot<TicketActionListModel?> snapshot, int index) {
+    switch (snapshot.data!.datas[index].actionStatus) {
+      case "CUSTOMER_REPLY":
+        return "Müşteri Yanıtı";
+      case "REPLY":
+        return "Yanıt";
+      case "REDIRECT":
+        return "Yönlendirme";
+      case "CLOSE":
+        return "Kapatma İşlemi";
+      default:
+        return "Bilinmeyen";
+    }
+  }
+
+  Icon getActionContainerIcon(int index, String ticketStatus) {
+    if (ticketStatus == "REDIRECT") {
+      return const Icon(
+        Icons.directions_outlined,
+        color: Colors.orange,
+      );
+    } else if (ticketStatus == "CLOSE") {
+      return const Icon(
+        Icons.checklist_rounded,
+        color: Colors.green,
+      );
+    } else {
+      return const Icon(
+        Icons.reply,
+        color: Colors.transparent,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -112,75 +147,83 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
         backgroundColor: kPrimaryColor,
         title: Text(kTicketListDetailsTitle),
       ),
-      body: Builder(
-        builder: (BuildContext context) {
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TicketDetailsBodyTicket(ticketDetails: ticketDetails),
-                FutureBuilder<TicketActionListModel?>(
-                  future: ticketActionListData,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.totalItemsCount == 0) {
-                        return const Center(
-                          child: SizedBox(),
-                        );
-                      }
-                      if (snapshot.data!.totalItemsCount! > 0) {
-                        return Column(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                "Yanıtlar",
-                                style: TextStyle(fontSize: 20),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            ticketDetails = getTicket();
+            ticketActionListData = getTicketList();
+            categoryDropdownData = getDropdownData();
+          });
+        },
+        child: Builder(
+          builder: (BuildContext context) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TicketDetailsBodyTicket(ticketDetails: ticketDetails),
+                  FutureBuilder<TicketActionListModel?>(
+                    future: ticketActionListData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.totalItemsCount == 0) {
+                          return const Center(
+                            child: SizedBox(),
+                          );
+                        }
+                        if (snapshot.data!.totalItemsCount! > 0) {
+                          return Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.zero,
+                                child: Text(
+                                  "Yanıtlar",
+                                  style: TextStyle(fontSize: 20),
+                                ),
                               ),
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 0),
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data!.totalItemsCount!,
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    snapshot.data!.datas[index]
-                                                .createUserName ==
-                                            UserModel.userData!.firstName +
-                                                " " +
-                                                UserModel.userData!.lastName
-                                        ? const SizedBox(
-                                            width: 0,
-                                          )
-                                        : SizedBox(
-                                            width: size.width * 0.1,
-                                            height: size.width * 0.1,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.blueAccent.shade200,
-                                              radius: 45,
-                                              child: ClipOval(
-                                                child: Icon(
-                                                  getActionIconData(
-                                                      index,
-                                                      snapshot
-                                                          .data!
-                                                          .datas[index]
-                                                          .actionStatus!),
-                                                  color: Colors.white,
-                                                  size: 25,
+                              ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data!.totalItemsCount!,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      snapshot.data!.datas[index]
+                                                  .createUserName ==
+                                              UserModel.userData!.firstName +
+                                                  " " +
+                                                  UserModel.userData!.lastName
+                                          ? const SizedBox(
+                                              width: 0,
+                                            )
+                                          : SizedBox(
+                                              width: size.width * 0.1,
+                                              height: size.width * 0.1,
+                                              child: CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.blueAccent.shade200,
+                                                radius: 45,
+                                                child: ClipOval(
+                                                  child: Icon(
+                                                    getActionIconData(
+                                                        index,
+                                                        snapshot
+                                                            .data!
+                                                            .datas[index]
+                                                            .actionStatus!),
+                                                    color: Colors.white,
+                                                    size: 25,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                    Container(
+                                      Container(
                                         padding: const EdgeInsets.all(15),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
@@ -207,15 +250,24 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                               ? CrossAxisAlignment.start
                                               : CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              snapshot.data!.datas[index]
-                                                  .createUserName!,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  snapshot.data!.datas[index]
+                                                      .createUserName!,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                const Spacer(),
+                                                getActionContainerIcon(
+                                                    index,
+                                                    snapshot.data!.datas[index]
+                                                        .actionStatus!),
+                                              ],
                                             ),
                                             Text(
-                                              snapshot.data!.datas[index]
-                                                  .actionStatus!,
+                                              getActionStatus(snapshot, index),
                                               style: const TextStyle(
                                                   fontStyle: FontStyle.italic,
                                                   fontSize: 10,
@@ -228,236 +280,215 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                                   .data!.datas[index].body!),
                                             ),
                                           ],
-                                        )
-                                        // Card(
-                                        //   shape: RoundedRectangleBorder(
-                                        //     borderRadius:
-                                        //         BorderRadius.circular(15),
-                                        //   ),
-                                        //   margin: const EdgeInsets.symmetric(
-                                        //       vertical: 10),
-                                        //   child: ListTile(
-                                        //     tileColor: Colors.white,
-                                        //     shape: RoundedRectangleBorder(
-                                        //       borderRadius:
-                                        //           BorderRadius.circular(15),
-                                        //     ),
-                                        //     title: Text(snapshot.data!
-                                        //         .datas[index].createUserName!),
-                                        //     subtitle: Text(snapshot
-                                        //         .data!.datas[index].body!),
-                                        //     trailing: Text(snapshot.data!
-                                        //         .datas[index].actionStatus!),
-                                        //   ),
-                                        // ),
                                         ),
-                                    snapshot.data!.datas[index]
-                                                .createUserName !=
-                                            UserModel.userData!.firstName +
-                                                " " +
-                                                UserModel.userData!.lastName
-                                        ? const SizedBox(
-                                            width: 0,
-                                          )
-                                        : SizedBox(
-                                            width: size.width * 0.1,
-                                            height: size.width * 0.1,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.blueAccent.shade200,
-                                              radius: 45,
-                                              child: ClipOval(
-                                                child: Icon(
-                                                  getActionIconData(
-                                                      index,
-                                                      snapshot
-                                                          .data!
-                                                          .datas[index]
-                                                          .actionStatus!),
-                                                  color: Colors.white,
-                                                  size: 25,
+                                      ),
+                                      snapshot.data!.datas[index]
+                                                  .createUserName !=
+                                              UserModel.userData!.firstName +
+                                                  " " +
+                                                  UserModel.userData!.lastName
+                                          ? const SizedBox(
+                                              width: 0,
+                                            )
+                                          : SizedBox(
+                                              width: size.width * 0.1,
+                                              height: size.width * 0.1,
+                                              child: CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.blueAccent.shade200,
+                                                radius: 45,
+                                                child: ClipOval(
+                                                  child: Icon(
+                                                    getActionIconData(
+                                                        index,
+                                                        snapshot
+                                                            .data!
+                                                            .datas[index]
+                                                            .actionStatus!),
+                                                    color: Colors.white,
+                                                    size: 25,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                  ],
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                        return const SizedBox();
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                          child: Text("Hata Oluştu"),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
+
+                  //İşlem/Yanıt Yapma Bölümü
+
+                  FutureBuilder<GetTicketModel?>(
+                    future: ticketDetails,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.data!.ticketStatus != "CLOSE" &&
+                            UserModel.userData!.role == 2) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: RaundedButton(
+                              buttonText: "İşlem Yap",
+                              press: () {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  enableDrag: true,
+                                  elevation: 3,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20))),
+                                  context: context,
+                                  builder: (context) {
+                                    return BottomSheetArea(
+                                      widget: widget,
+                                      bottomsheettitle: "İşlem Seçiniz",
+                                      child: Column(
+                                        children: [
+                                          TicketActionBottomButon(
+                                              iconColor: Colors.green,
+                                              buttonText: "Yanıtla",
+                                              icon: Icons.reply_outlined,
+                                              press: () {
+                                                showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  enableDrag: true,
+                                                  elevation: 3,
+                                                  backgroundColor: Colors.white,
+                                                  shape: const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(20),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      20))),
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return BottomSheetReplyArea(
+                                                        userRoleId: UserModel
+                                                            .userData!.role!,
+                                                        ticketId: widget.id,
+                                                        widget: widget,
+                                                        textReplyFocusNode:
+                                                            _textReplyFocusNode);
+                                                  },
+                                                );
+                                              }),
+                                          TicketActionBottomButon(
+                                              iconColor: Colors.orange,
+                                              buttonText: "Yönlendir",
+                                              icon: Icons.directions_outlined,
+                                              press: () {
+                                                showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  enableDrag: true,
+                                                  elevation: 3,
+                                                  backgroundColor: Colors.white,
+                                                  shape: const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(20),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      20))),
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return BottomSheetRedirectArea(
+                                                      ticketId: widget.id,
+                                                      widget: widget,
+                                                      size: size,
+                                                      categoryDropdownData:
+                                                          categoryDropdownData,
+                                                      dropdownbuttonKey:
+                                                          _dropdownbuttonKey,
+                                                    );
+                                                  },
+                                                );
+                                              }),
+                                          TicketActionClosedButton(
+                                              widget: widget),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
-                          ],
-                        );
-                      }
-                      return const SizedBox();
-                    } else if (snapshot.hasError) {
-                      return const Center(
-                        child: Text("Hata Oluştu"),
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-
-                //İşlem/Yanıt Yapma Bölümü
-
-                FutureBuilder<GetTicketModel?>(
-                  future: ticketDetails,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.data!.ticketStatus != "CLOSE" &&
-                          UserModel.userData!.role == 2) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: RaundedButton(
-                            buttonText: "İşlem Yap",
-                            press: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                enableDrag: true,
-                                elevation: 3,
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20))),
-                                context: context,
-                                builder: (context) {
-                                  return BottomSheetArea(
-                                    widget: widget,
-                                    bottomsheettitle: "İşlem Seçiniz",
-                                    child: Column(
-                                      children: [
-                                        TicketActionBottomButon(
-                                            iconColor: Colors.green,
-                                            buttonText: "Yanıtla",
-                                            icon: Icons.reply_outlined,
-                                            press: () {
-                                              showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                enableDrag: true,
-                                                elevation: 3,
-                                                backgroundColor: Colors.white,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        20),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        20))),
-                                                context: context,
-                                                builder: (context) {
-                                                  return BottomSheetReplyArea(
-                                                      userRoleId: UserModel
-                                                          .userData!.role!,
-                                                      ticketId: widget.id,
-                                                      widget: widget,
-                                                      textReplyFocusNode:
-                                                          _textReplyFocusNode);
-                                                },
-                                              );
-                                            }),
-                                        TicketActionBottomButon(
-                                            iconColor: Colors.orange,
-                                            buttonText: "Yönlendir",
-                                            icon: Icons.directions_outlined,
-                                            press: () {
-                                              showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                enableDrag: true,
-                                                elevation: 3,
-                                                backgroundColor: Colors.white,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        20),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        20))),
-                                                context: context,
-                                                builder: (context) {
-                                                  return BottomSheetRedirectArea(
-                                                    ticketId: widget.id,
-                                                    widget: widget,
-                                                    size: size,
-                                                    categoryDropdownData:
-                                                        categoryDropdownData,
-                                                    dropdownbuttonKey:
-                                                        _dropdownbuttonKey,
-                                                  );
-                                                },
-                                              );
-                                            }),
-                                        TicketActionClosedButton(
-                                            widget: widget),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      }
-                      if (snapshot.data!.data!.ticketStatus != "CLOSE" &&
-                          UserModel.userData!.role == 3) {
-                        return RaundedButton(
-                            buttonText: "Yanıtla",
-                            press: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                enableDrag: true,
-                                elevation: 3,
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(20),
-                                        topRight: Radius.circular(20))),
-                                context: context,
-                                builder: (context) {
-                                  return BottomSheetReplyArea(
-                                      userRoleId: UserModel.userData!.role!,
-                                      ticketId: widget.id,
-                                      widget: widget,
-                                      textReplyFocusNode: _textReplyFocusNode);
-                                },
-                              );
-                            });
-                      } else if (snapshot.data!.data!.ticketStatus == "CLOSE") {
-                        return const Padding(
-                          padding: EdgeInsets.only(bottom: 20),
-                          child: Center(child: Text("Bu talep kapatılmıştır.")),
-                        );
-                      } else {
-                        return const Padding(
-                          padding: EdgeInsets.only(bottom: 20),
-                          child: Center(
+                          );
+                        }
+                        if (snapshot.data!.data!.ticketStatus != "CLOSE" &&
+                            UserModel.userData!.role == 3) {
+                          return RaundedButton(
+                              buttonText: "Yanıtla",
+                              press: () {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  enableDrag: true,
+                                  elevation: 3,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20))),
+                                  context: context,
+                                  builder: (context) {
+                                    return BottomSheetReplyArea(
+                                        userRoleId: UserModel.userData!.role!,
+                                        ticketId: widget.id,
+                                        widget: widget,
+                                        textReplyFocusNode:
+                                            _textReplyFocusNode);
+                                  },
+                                );
+                              });
+                        } else if (snapshot.data!.data!.ticketStatus ==
+                            "CLOSE") {
+                          return const Padding(
+                            padding: EdgeInsets.only(bottom: 20),
                             child:
-                                Text("Bu talep ile ilgili işlem yapılamıyor."),
-                          ),
+                                Center(child: Text("Bu talep kapatılmıştır.")),
+                          );
+                        } else {
+                          return const Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Center(
+                              child: Text(
+                                  "Bu talep ile ilgili işlem yapılamıyor."),
+                            ),
+                          );
+                        }
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text("${snapshot.error}"),
                         );
                       }
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text("${snapshot.error}"),
+                      return const Center(
+                        child: SizedBox(),
                       );
-                    }
-                    return const Center(
-                      child: SizedBox(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          );
-        },
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
