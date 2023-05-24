@@ -87,6 +87,14 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
     return null;
   }
 
+  IconData getActionIconData(int index, String ticketStatus) {
+    if (ticketStatus == "CUSTOMER_REPLY") {
+      return Icons.person_outline;
+    } else {
+      return Icons.business_outlined;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -138,24 +146,141 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: snapshot.data!.totalItemsCount!,
                               itemBuilder: (context, index) {
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: ListTile(
-                                    tileColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    title: Text(snapshot
-                                        .data!.datas[index].createUserName!),
-                                    subtitle:
-                                        Text(snapshot.data!.datas[index].body!),
-                                    trailing: Text(snapshot
-                                        .data!.datas[index].actionStatus!),
-                                  ),
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    snapshot.data!.datas[index]
+                                                .createUserName ==
+                                            UserModel.userData!.firstName +
+                                                " " +
+                                                UserModel.userData!.lastName
+                                        ? const SizedBox(
+                                            width: 0,
+                                          )
+                                        : SizedBox(
+                                            width: size.width * 0.1,
+                                            height: size.width * 0.1,
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.blueAccent.shade200,
+                                              radius: 45,
+                                              child: ClipOval(
+                                                child: Icon(
+                                                  getActionIconData(
+                                                      index,
+                                                      snapshot
+                                                          .data!
+                                                          .datas[index]
+                                                          .actionStatus!),
+                                                  color: Colors.white,
+                                                  size: 25,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                    Container(
+                                        padding: const EdgeInsets.all(15),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          boxShadow: kCardBoxShodow,
+                                        ),
+                                        margin: EdgeInsets.only(
+                                            left: size.width * 0.02,
+                                            right: size.width * 0.02,
+                                            bottom: 5,
+                                            top: 5),
+                                        width: size.width * 0.70,
+                                        child: Column(
+                                          crossAxisAlignment: snapshot
+                                                      .data!
+                                                      .datas[index]
+                                                      .createUserName !=
+                                                  UserModel
+                                                          .userData!.firstName +
+                                                      " " +
+                                                      UserModel
+                                                          .userData!.lastName
+                                              ? CrossAxisAlignment.start
+                                              : CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              snapshot.data!.datas[index]
+                                                  .createUserName!,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              snapshot.data!.datas[index]
+                                                  .actionStatus!,
+                                              style: const TextStyle(
+                                                  fontStyle: FontStyle.italic,
+                                                  fontSize: 10,
+                                                  color: Colors.grey),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(top: 5),
+                                              child: Text(snapshot
+                                                  .data!.datas[index].body!),
+                                            ),
+                                          ],
+                                        )
+                                        // Card(
+                                        //   shape: RoundedRectangleBorder(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(15),
+                                        //   ),
+                                        //   margin: const EdgeInsets.symmetric(
+                                        //       vertical: 10),
+                                        //   child: ListTile(
+                                        //     tileColor: Colors.white,
+                                        //     shape: RoundedRectangleBorder(
+                                        //       borderRadius:
+                                        //           BorderRadius.circular(15),
+                                        //     ),
+                                        //     title: Text(snapshot.data!
+                                        //         .datas[index].createUserName!),
+                                        //     subtitle: Text(snapshot
+                                        //         .data!.datas[index].body!),
+                                        //     trailing: Text(snapshot.data!
+                                        //         .datas[index].actionStatus!),
+                                        //   ),
+                                        // ),
+                                        ),
+                                    snapshot.data!.datas[index]
+                                                .createUserName !=
+                                            UserModel.userData!.firstName +
+                                                " " +
+                                                UserModel.userData!.lastName
+                                        ? const SizedBox(
+                                            width: 0,
+                                          )
+                                        : SizedBox(
+                                            width: size.width * 0.1,
+                                            height: size.width * 0.1,
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.blueAccent.shade200,
+                                              radius: 45,
+                                              child: ClipOval(
+                                                child: Icon(
+                                                  getActionIconData(
+                                                      index,
+                                                      snapshot
+                                                          .data!
+                                                          .datas[index]
+                                                          .actionStatus!),
+                                                  color: Colors.white,
+                                                  size: 25,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                  ],
                                 );
                               },
                             ),
@@ -174,7 +299,9 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                     }
                   },
                 ),
-                //if (ticketStatus != "CLOSE" && UserModel.userData!.role == 2)
+
+                //İşlem/Yanıt Yapma Bölümü
+
                 FutureBuilder<GetTicketModel?>(
                   future: ticketDetails,
                   builder: (context, snapshot) {
