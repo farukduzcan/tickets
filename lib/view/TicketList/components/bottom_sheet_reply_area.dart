@@ -104,39 +104,11 @@ class _BottomSheetReplyAreaState extends State<BottomSheetReplyArea> {
                     message: "Yanıtınız Başarıyla Gönderildi!",
                   ).showTopMessageBarsuccessful(context);
                 }
-                _loadingBar();
+
                 await Future.delayed(const Duration(milliseconds: 1000), () {
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  // if (getUserRole() == "REPLY") {
-                  //   Navigator.pop(context);
-                  //   Navigator.pop(context);
-                  // } else {
-                  //   Navigator.pop(context);
-                  //   Navigator.pop(context);
-                  // }
-
-                  // Navigator.popUntil(
-                  //   context,
-                  //   ModalRoute.withName('/ticket_details'),
-                  // );
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) {
-                  //     return TicketDetailsBody(
-                  //       id: widget.ticketId,
-                  //     );
-                  //   }),
-                  //   (route) => true, // Önceki tüm sayfaları kapat
-                  // );
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) {
-                  //     return TicketDetailsBody(
-                  //       id: widget.ticketId,
-                  //     );
-                  //   }),
-                  // );
+                  _loadingBar();
                 });
               }
             },

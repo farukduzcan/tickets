@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen>
           appBar: appBars[currentIndex],
           resizeToAvoidBottomInset: false,
           backgroundColor: kScaffoldBackgroundColor,
-          drawerEdgeDragWidth: 60,
+          drawerEdgeDragWidth: 233,
           drawer: DrawerBar(
             currentIndex: currentIndex,
             isActivated: isActivated,
