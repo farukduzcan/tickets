@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tickets/components/bottom_sheet_area.dart';
 import 'package:tickets/models/get_ticket_model.dart';
 import 'package:tickets/models/ticket_aciton_list_model.dart';
@@ -30,21 +31,124 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
   late Future<GetTicketModel?>? ticketDetails;
   late Future<TicketActionListModel?>? ticketActionListData;
   late Future<CategorySelectList?>? categoryDropdownData;
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   final _dropdownbuttonKey = GlobalKey<FormState>();
+  late final ScrollController _scrollController = ScrollController();
+  late int pageIndeks = 1;
   int catogoryId = 0;
   bool ticketStatus = false;
+  bool _isLoading = false;
+  late bool _isFinishedPage =
+      true; // false ise sayfa bitmemiş demektir true ise bitmiş demektir
+  int listDataPageLength = 0;
+
   @override
   void initState() {
     super.initState();
     ticketDetails = getTicket();
     ticketActionListData = getTicketList();
     categoryDropdownData = getDropdownData();
+    _scrollController.addListener(() {
+      _scrollListener();
+    });
   }
 
-  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
-  // api isteği
+  // api isteği ticket action list
+  Future<TicketActionListModel?> getTicketList() async {
+    try {
+      TicketActionListServices ticketacionlist = TicketActionListServices();
+
+      var respons = await ticketacionlist.getTicketActionList(
+          ticketId: widget.id,
+          filter: "",
+          orderDir: "DESC",
+          orderField: "Id",
+          pageIndex: pageIndeks,
+          pageSize: 10);
+      print("Total Page: ${respons!.totalPageCount}");
+      print("Current Page: ${respons.currentPageIndex}");
+      print("Page Index: $pageIndeks");
+
+      if (respons.totalPageCount! == 1) {
+        setState(() {
+          _isFinishedPage = true;
+        });
+      }
+      if (respons.totalPageCount! > 1) {
+        setState(() {
+          _isFinishedPage = false;
+        });
+      }
+      if (respons.totalPageCount == pageIndeks) {
+        setState(() {
+          _isFinishedPage = true;
+        });
+      }
+      setState(() {
+        pageIndeks++;
+      });
+      return respons;
+    } catch (e) {
+      if (kDebugMode) {
+        print("itemler çekilirken hata oluştu");
+      }
+    }
+    return null;
+  }
+
+  //scroll işlemleri
+
+  Future<void> _scrollListener() async {
+    if (_scrollController.offset >=
+            _scrollController.position.maxScrollExtent * 0.80 &&
+        !_scrollController.position.outOfRange) {
+      if (_isLoading) {
+        // print("Gereksiz istek atıldı");
+        return;
+      } else if (_isLoading == false && _isFinishedPage == false) {
+        setState(() {
+          _isLoading = true;
+        });
+        // print("Sayfa yüklendi yüklenen sayfa: $pageIndeks");
+        await _loadNextPage();
+      }
+    }
+  }
+
+  Future<void> _loadNextPage() async {
+    try {
+      TicketActionListModel? newData = await getTicketList();
+      if (newData != null && newData.totalPageCount! + 1 >= pageIndeks) {
+        setState(() {
+          // print("Current Page: $pageIndeks");
+
+          //print("TotalPage: ${newData.totalPageCount}");
+          ticketActionListData!.then((oldData) {
+            oldData!.datas.addAll(newData.datas);
+            listDataPageLength = newData.totalPageCount!;
+            return oldData;
+          });
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Yeni veriler getirilirken hata oluştu");
+      }
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  // api isteği ticket details
   Future<GetTicketModel?> getTicket() async {
     try {
       GetTicketServices ticketdetails = GetTicketServices();
@@ -63,26 +167,6 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
     return null;
   }
 
-  // api isteği ticket action list
-  Future<TicketActionListModel?> getTicketList() async {
-    try {
-      TicketActionListServices ticketacionlist = TicketActionListServices();
-
-      var respons = await ticketacionlist.getTicketActionList(
-          ticketId: widget.id,
-          filter: "",
-          orderDir: "DESC",
-          orderField: "Id",
-          pageIndex: 1,
-          pageSize: 100);
-      return respons;
-    } catch (e) {
-      if (kDebugMode) {
-        print("itemler çekilirken hata oluştu");
-      }
-    }
-    return null;
-  }
   // api isteği kategori için
 
   Future<CategorySelectList?> getDropdownData() async {
@@ -275,6 +359,8 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
         key: refreshIndicatorKey,
         onRefresh: () async {
           setState(() {
+            _isFinishedPage = true;
+            pageIndeks = 1;
             ticketDetails = getTicket();
             ticketActionListData = getTicketList();
             categoryDropdownData = getDropdownData();
@@ -283,6 +369,7 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
         child: Builder(
           builder: (BuildContext context) {
             return SingleChildScrollView(
+              controller: _scrollController,
               physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -293,8 +380,17 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if (snapshot.data!.totalItemsCount == 0) {
-                          return const Center(
-                            child: SizedBox(),
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Column(
+                              children: [
+                                const Text("Talebiniz Yanıt Bekliyor."),
+                                Lottie.asset(
+                                  'assets/lottie/ticket_action_reply_waiting.json',
+                                  width: size.width * 0.7,
+                                ),
+                              ],
+                            ),
                           );
                         }
                         if (snapshot.data!.totalItemsCount! > 0) {
@@ -312,132 +408,155 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 20, top: 0),
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data!.totalItemsCount!,
+                                itemCount: snapshot.data!.datas.length + 1,
                                 itemBuilder: (context, index) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      snapshot.data!.datas[index]
-                                                  .createUserName ==
-                                              UserModel.userData!.firstName +
-                                                  " " +
-                                                  UserModel.userData!.lastName
-                                          ? const SizedBox(
-                                              width: 0,
-                                            )
-                                          : SizedBox(
-                                              width: size.width * 0.1,
-                                              height: size.width * 0.1,
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.blueAccent.shade200,
-                                                radius: 45,
-                                                child: ClipOval(
-                                                  child: Icon(
-                                                    getActionIconData(
-                                                        index,
-                                                        snapshot
-                                                            .data!
-                                                            .datas[index]
-                                                            .actionStatus!),
-                                                    color: Colors.white,
-                                                    size: 25,
+                                  if (index < snapshot.data!.datas.length) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        snapshot.data!.datas[index]
+                                                    .createUserName ==
+                                                UserModel.userData!.firstName +
+                                                    " " +
+                                                    UserModel.userData!.lastName
+                                            ? const SizedBox(
+                                                width: 0,
+                                              )
+                                            : SizedBox(
+                                                width: size.width * 0.1,
+                                                height: size.width * 0.1,
+                                                child: CircleAvatar(
+                                                  backgroundColor: Colors
+                                                      .blueAccent.shade200,
+                                                  radius: 45,
+                                                  child: ClipOval(
+                                                    child: Icon(
+                                                      getActionIconData(
+                                                          index,
+                                                          snapshot
+                                                              .data!
+                                                              .datas[index]
+                                                              .actionStatus!),
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                      Container(
-                                        padding: const EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          boxShadow: kCardBoxShodow,
-                                        ),
-                                        margin: EdgeInsets.only(
-                                            left: size.width * 0.02,
-                                            right: size.width * 0.02,
-                                            bottom: 5,
-                                            top: 5),
-                                        width: size.width * 0.70,
-                                        child: Column(
-                                          crossAxisAlignment: snapshot
-                                                      .data!
-                                                      .datas[index]
-                                                      .createUserName !=
-                                                  UserModel
-                                                          .userData!.firstName +
-                                                      " " +
-                                                      UserModel
-                                                          .userData!.lastName
-                                              ? CrossAxisAlignment.start
-                                              : CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  snapshot.data!.datas[index]
-                                                      .createUserName!,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                const Spacer(),
-                                                getActionContainerIcon(
-                                                    index,
+                                        Container(
+                                          padding: const EdgeInsets.all(15),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: kCardBoxShodow,
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              left: size.width * 0.02,
+                                              right: size.width * 0.02,
+                                              bottom: 5,
+                                              top: 5),
+                                          width: size.width * 0.70,
+                                          child: Column(
+                                            crossAxisAlignment: snapshot
+                                                        .data!
+                                                        .datas[index]
+                                                        .createUserName !=
+                                                    UserModel.userData!
+                                                            .firstName +
+                                                        " " +
+                                                        UserModel
+                                                            .userData!.lastName
+                                                ? CrossAxisAlignment.start
+                                                : CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
                                                     snapshot.data!.datas[index]
-                                                        .actionStatus!),
-                                              ],
-                                            ),
-                                            Text(
-                                              getActionStatus(snapshot, index),
-                                              style: const TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                  fontSize: 10,
-                                                  color: Colors.grey),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.only(top: 5),
-                                              child: Text(snapshot
-                                                  .data!.datas[index].body!),
-                                            ),
-                                          ],
+                                                        .createUserName!,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  const Spacer(),
+                                                  getActionContainerIcon(
+                                                      index,
+                                                      snapshot
+                                                          .data!
+                                                          .datas[index]
+                                                          .actionStatus!),
+                                                ],
+                                              ),
+                                              Text(
+                                                getActionStatus(
+                                                    snapshot, index),
+                                                style: const TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    fontSize: 10,
+                                                    color: Colors.grey),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Text(snapshot
+                                                    .data!.datas[index].body!),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      snapshot.data!.datas[index]
-                                                  .createUserName !=
-                                              UserModel.userData!.firstName +
-                                                  " " +
-                                                  UserModel.userData!.lastName
-                                          ? const SizedBox(
-                                              width: 0,
-                                            )
-                                          : SizedBox(
-                                              width: size.width * 0.1,
-                                              height: size.width * 0.1,
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    Colors.blueAccent.shade200,
-                                                radius: 45,
-                                                child: ClipOval(
-                                                  child: Icon(
-                                                    getActionIconData(
-                                                        index,
-                                                        snapshot
-                                                            .data!
-                                                            .datas[index]
-                                                            .actionStatus!),
-                                                    color: Colors.white,
-                                                    size: 25,
+                                        snapshot.data!.datas[index]
+                                                    .createUserName !=
+                                                UserModel.userData!.firstName +
+                                                    " " +
+                                                    UserModel.userData!.lastName
+                                            ? const SizedBox(
+                                                width: 0,
+                                              )
+                                            : SizedBox(
+                                                width: size.width * 0.1,
+                                                height: size.width * 0.1,
+                                                child: CircleAvatar(
+                                                  backgroundColor: Colors
+                                                      .blueAccent.shade200,
+                                                  radius: 45,
+                                                  child: ClipOval(
+                                                    child: Icon(
+                                                      getActionIconData(
+                                                          index,
+                                                          snapshot
+                                                              .data!
+                                                              .datas[index]
+                                                              .actionStatus!),
+                                                      color: Colors.white,
+                                                      size: 25,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                    ],
-                                  );
+                                      ],
+                                    );
+                                  } else if (_isLoading) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (_isFinishedPage == true) {
+                                    if (snapshot.data!.datas.length > 3) {
+                                      return Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 30, top: 10),
+                                          child: Text(
+                                              "Tüm Yanıtlar Yüklendi ${snapshot.data!.datas.length} /${snapshot.data!.totalItemsCount}"),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                  return null;
                                 },
                               ),
                             ],

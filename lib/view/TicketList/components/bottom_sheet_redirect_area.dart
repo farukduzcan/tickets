@@ -124,10 +124,10 @@ class _BottomSheetRedirectAreaState extends State<BottomSheetRedirectArea> {
                     message: "Yönlendirme Başarıyla Gerçekleştirildi.",
                   ).showTopMessageBarsuccessful(context);
                 }
-                _loadingBar();
                 await Future.delayed(const Duration(milliseconds: 1000), () {
                   Navigator.pop(context);
                   Navigator.pop(context);
+                  _loadingBar();
                 });
               },
             ),
