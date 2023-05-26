@@ -7,6 +7,7 @@ import 'package:tickets/services/global.dart';
 import '../models/user_model.dart';
 
 class CreateTicketServices {
+  static bool isTokenValid = false;
   static int? fileUploadId;
   Future<CreateTicketModel?> create({
     required String body,
@@ -27,6 +28,18 @@ class CreateTicketServices {
             "Authorization": "Bearer ${UserModel.userToken}",
             "Content-Type": "application/json; charset=utf-8"
           });
+      //data hatasızsa bu işlemi yap
+      if (result.statusCode == 200) {
+        //print("Statü Kodu $result.statusCode");
+        isTokenValid = true;
+        //print("token valid mi $isTokenValid");
+        var resultJson = CreateTicketModel.fromJson(json.decode(result.body));
+        return resultJson;
+      }
+      if (result.statusCode == 401) {
+        isTokenValid = false;
+        //print("token valid mi $isTokenValid");
+      }
       return CreateTicketModel.fromJson(json.decode(result.body));
     } on SocketException {
       throw Exception(kLoginErrorEthernet);

@@ -5,7 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b096b86-4415-431d-85c4-0f2e60b24e32" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/category_select_list_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/category_select_list_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/create_ticket_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/create_ticket_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/ticket_list_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/ticket_list_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/user_info_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/user_info_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/view/CreateTicket/components/body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/view/CreateTicket/components/body.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/view/TicketList/ticket_details_body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/view/TicketList/ticket_details_body.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/view/TicketList/ticket_list_body.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/view/TicketList/ticket_list_body.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

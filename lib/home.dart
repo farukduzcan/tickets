@@ -209,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen>
                             QuickAlert.show(
                               context: context,
                               type: QuickAlertType.warning,
+                              barrierDismissible: false,
                               title: "Çıkış Yap",
                               text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
                               confirmBtnText: "Evet",

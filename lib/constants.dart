@@ -135,4 +135,4 @@ String kTicketListTitle = "Taleplerim";
 String kTicketListDetailsTitle = "Talep Detayı";
 String kTicketActionReply = "Yanıtla";
 
-String kVersionTitle = "V 1.0.8";
+String kVersionTitle = "V 1.1.0";

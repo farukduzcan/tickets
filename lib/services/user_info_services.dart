@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -18,13 +19,20 @@ class UserInfoServices {
       });
       //data hatasızsa bu işlemi yap
       if (result.statusCode == 200) {
+        // print("Statü Kodu $result.statusCode");
         isTokenValid = true;
+        // print("token valid mi $isTokenValid");
+        log("Kullanıcı Bilgileri Token Aktiflik Durumu $isTokenValid");
+
         var resultJson = UserModel.fromJson(json.decode(result.body));
         saveUserData(resultJson.data!);
         return resultJson;
       }
       if (result.statusCode == 401) {
         isTokenValid = false;
+        log("Kullanıcı Bilgileri Token Aktiflik Durumu $isTokenValid");
+
+        // print("token valid mi $isTokenValid");
       }
     } on SocketException {
       throw Exception(kLoginErrorEthernet);

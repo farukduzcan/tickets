@@ -72,11 +72,11 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
           orderField: "Id",
           pageIndex: pageIndeks,
           pageSize: 10);
-      print("Total Page: ${respons!.totalPageCount}");
-      print("Current Page: ${respons.currentPageIndex}");
-      print("Page Index: $pageIndeks");
+      //print("Total Page: ${respons!.totalPageCount}");
+      //print("Current Page: ${respons.currentPageIndex}");
+      //print("Page Index: $pageIndeks");
 
-      if (respons.totalPageCount! == 1) {
+      if (respons!.totalPageCount! == 1) {
         setState(() {
           _isFinishedPage = true;
         });

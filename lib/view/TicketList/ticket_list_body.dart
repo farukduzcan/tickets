@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/services/delete_ticket_services.dart';
@@ -8,6 +10,8 @@ import 'package:tickets/services/ticket_list_services.dart';
 import 'package:tickets/view/TicketList/ticket_details_body.dart';
 
 import '../../components/messenger_bar_top.dart';
+import '../../models/user_model.dart';
+import '../Login/login_screen.dart';
 
 class TicketListBody extends StatefulWidget {
   const TicketListBody({super.key});
@@ -27,9 +31,33 @@ class _TicketListBodyState extends State<TicketListBody> {
   void initState() {
     super.initState();
     ticketListData = getTicketList();
+    tokenValid();
     _scrollController.addListener(() {
       _scrollListener();
     });
+  }
+
+  tokenValid() async {
+    if (TicketListServices.isTokenValid == false) {
+      QuickAlert.show(
+        context: context,
+        barrierDismissible: false,
+        type: QuickAlertType.error,
+        title: "Uyarı",
+        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
+        confirmBtnText: kOk,
+        onConfirmBtnTap: () async {
+          await deleteToken();
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
+        },
+      );
+    }
   }
 
   // api isteği
@@ -42,11 +70,11 @@ class _TicketListBodyState extends State<TicketListBody> {
           orderField: "Id",
           pageIndex: pageIndeks,
           pageSize: 15);
-      print("Total Page: ${listinfo!.totalPageCount}");
-      print("Current Page: ${listinfo.currentPageIndex}");
-      print("Page Index: $pageIndeks");
+      // print("Total Page: ${listinfo!.totalPageCount}");
+      // print("Current Page: ${listinfo.currentPageIndex}");
+      // print("Page Index: $pageIndeks");
 
-      if (listinfo.totalPageCount! == 1) {
+      if (listinfo!.totalPageCount! == 1) {
         setState(() {
           _isFinishedPage = true;
         });

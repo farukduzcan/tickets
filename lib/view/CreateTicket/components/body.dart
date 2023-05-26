@@ -18,6 +18,7 @@ import '../../../components/raunded_button.dart';
 import '../../../models/category_select_list.dart';
 import '../../../models/user_model.dart';
 import '../../../services/create_ticket_services.dart';
+import '../../Login/login_screen.dart';
 import 'filewidget.dart';
 
 class CreateTicketBody extends StatefulWidget {
@@ -73,6 +74,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
   void initState() {
     super.initState();
     categoryDropdownData = getDropdownData();
+    tokenValid();
     UserModel.userData!.role == 2
         ? customerDropdownData = getCustomerDropdownData()
         : null;
@@ -101,6 +103,29 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
       }
     }
     return null;
+  }
+
+  tokenValid() async {
+    if (CateGorySelectListServices.isTokenValid == false) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        barrierDismissible: false,
+        title: "Uyarı",
+        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
+        confirmBtnText: kOk,
+        onConfirmBtnTap: () async {
+          await deleteToken();
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          );
+        },
+      );
+    }
   }
 
   //Controllerlar
