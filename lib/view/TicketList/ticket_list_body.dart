@@ -27,7 +27,6 @@ class _TicketListBodyState extends State<TicketListBody> {
   void initState() {
     super.initState();
     ticketListData = getTicketList();
-    pageIndeks++;
     _scrollController.addListener(() {
       _scrollListener();
     });
@@ -43,8 +42,16 @@ class _TicketListBodyState extends State<TicketListBody> {
           orderField: "Id",
           pageIndex: pageIndeks,
           pageSize: 15);
+      print("Total Page: ${listinfo!.totalPageCount}");
+      print("Current Page: ${listinfo.currentPageIndex}");
+      print("Page Index: $pageIndeks");
 
-      if (listinfo!.totalPageCount! >= 1) {
+      if (listinfo.totalPageCount! == 1) {
+        setState(() {
+          _isFinishedPage = true;
+        });
+      }
+      if (listinfo.totalPageCount! > 1) {
         setState(() {
           _isFinishedPage = false;
         });
@@ -69,7 +76,7 @@ class _TicketListBodyState extends State<TicketListBody> {
   Future<void> _loadNextPage() async {
     try {
       TicketListModel? newData = await getTicketList();
-      if (newData != null && newData.totalPageCount! >= pageIndeks) {
+      if (newData != null && newData.totalPageCount! + 1 >= pageIndeks) {
         setState(() {
           // print("Current Page: $pageIndeks");
 
@@ -187,8 +194,6 @@ class _TicketListBodyState extends State<TicketListBody> {
         _isFinishedPage = true;
         pageIndeks = 1;
         ticketListData = getTicketList();
-        pageIndeks++;
-        await _loadNextPage();
       },
       child: Column(
         children: [
