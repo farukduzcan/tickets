@@ -7,7 +7,7 @@ import 'package:tickets/services/global.dart';
 import '../models/user_model.dart';
 
 class CreateTicketServices {
-  static bool isTokenValid = false;
+  static bool? isTokenValid;
   static int? fileUploadId;
   Future<CreateTicketModel?> create({
     required String body,

@@ -116,6 +116,8 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
         confirmBtnText: kOk,
         onConfirmBtnTap: () async {
           await deleteToken();
+          CateGorySelectListServices.isTokenValid == true;
+
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(
             context,

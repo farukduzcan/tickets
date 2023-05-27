@@ -9,7 +9,7 @@ import 'package:tickets/services/global.dart';
 import '../models/user_model.dart';
 
 class UserInfoServices {
-  static bool isTokenValid = false;
+  static bool? isTokenValid;
   Future<UserModel?> user() async {
     try {
       var url = Uri.parse('${Globals.apiBaseUrl}account/info');

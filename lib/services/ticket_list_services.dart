@@ -8,7 +8,7 @@ import 'package:tickets/services/global.dart';
 import '../models/user_model.dart';
 
 class TicketListServices {
-  static bool isTokenValid = false;
+  static bool? isTokenValid;
   Future<TicketListModel?> getTicketList({
     required int pageIndex,
     int pageSize = 15,
