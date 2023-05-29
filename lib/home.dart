@@ -7,9 +7,9 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:tickets/constants.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
+import 'package:tickets/view/Customer/CustomerList/customerlist.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
-import 'package:tickets/view/TicketList/ticket_details_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import '../../components/drawer_bar.dart';
@@ -35,10 +35,11 @@ class _HomeScreenState extends State<HomeScreen>
     const DashboardBody(),
     const CreateTicketBody(),
     const TicketListBody(),
-    const TicketDetailsBody(id: 140),
+    const CustomerListBody(),
   ];
   final isActivated = [
     true,
+    false,
     false,
     false,
     false,
@@ -86,18 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
       backgroundColor: kPrimaryColor,
       title: Text(kTicketListTitle),
     ),
-    AppBar(
-      centerTitle: true,
-      shadowColor: kPrimaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(29),
-          bottomRight: Radius.circular(29),
-        ),
-      ),
-      backgroundColor: kPrimaryColor,
-      title: Text(kTicketListDetailsTitle),
-    ),
+    null,
   ];
 
   //Animasyon için
@@ -196,13 +186,13 @@ class _HomeScreenState extends State<HomeScreen>
                     children: [
                       NavBarItem(
                           isActive: isActivated[3],
-                          icon: Icons.settings_outlined,
-                          title: kSettingsTitle,
+                          icon: Icons.person_outline_outlined,
+                          title: "Müşteriler",
                           press: () {
                             onItemTapped(3);
                           }),
                       NavBarItem(
-                          isActive: isActivated[3],
+                          isActive: isActivated[4],
                           icon: Icons.logout_outlined,
                           title: kLogoutTitle,
                           press: () async {

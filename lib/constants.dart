@@ -132,6 +132,8 @@ String kCreateTicketSuccessText = "Talebiniz başarıyla oluşturuldu.";
 String kCreateTicketErrorText = "Talep oluşturulurken bir hata oluştu.";
 
 String kTicketListTitle = "Taleplerim";
+String kCustomerListTitle = "Müşterilerim";
+String kCustomerCreateTitle = "Müşteri Kayıt";
 String kTicketListDetailsTitle = "Talep Detayı";
 String kTicketActionReply = "Yanıtla";
 

@@ -45,6 +45,7 @@ class _RaundedPasswordFieldState extends State<RaundedPasswordField> {
           iconColor: kPrimaryColor,
           border: InputBorder.none,
           suffixIcon: IconButton(
+            splashRadius: 1.0,
             onPressed: () {
               setState(() {
                 _isHidden = !_isHidden;
