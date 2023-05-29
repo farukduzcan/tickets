@@ -179,6 +179,11 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                             "Müşteri Kayıt işlemi başarılı bir şekilde gerçekleşti.",
                         confirmBtnText: "Tamam",
                         onConfirmBtnTap: () {
+                          _emailController.clear();
+                          _firstNameController.clear();
+                          _lastNameController.clear();
+                          _passwordController.clear();
+                          _comfirmpasswordController.clear();
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },

@@ -4,14 +4,10 @@ import 'package:tickets/models/user_model.dart';
 import '../constants.dart';
 
 class DrawerBar extends StatefulWidget {
-  final List<bool> isActivated;
-  final int currentIndex;
-  final List<StatefulWidget> screens;
+  final String? companyName;
   const DrawerBar({
     super.key,
-    required this.isActivated,
-    required this.currentIndex,
-    required this.screens,
+    this.companyName,
   });
 
   @override
@@ -36,58 +32,96 @@ class _DrawerBarState extends State<DrawerBar> {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               children: [
-                UserAccountsDrawerHeader(
-                  accountName: Text(
-                      "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}"),
-                  accountEmail: Text(UserModel.userData!.email!),
-                  currentAccountPicture: const Row(
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 35,
-                        child: ClipOval(
-                          child: Icon(
-                            Icons.business_outlined,
-                            color: Colors.white,
-                            size: 40,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 15,
+                          top: 10,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              radius: 25,
+                              child: ClipOval(
+                                child: Icon(
+                                  UserModel.userData!.role == 2
+                                      ? Icons.business_outlined
+                                      : Icons.person,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "    ${widget.companyName}",
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text("Company Name",
-                          style: TextStyle(color: Colors.white)),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                            "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            )),
+                      ),
+                      Text(
+                        UserModel.userData!.email!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          indent: 1,
+                          endIndent: 1,
+                        ),
+                      ),
                     ],
                   ),
-                  decoration: const BoxDecoration(),
                 ),
                 DrawerItem(
                   isSelected: true,
                   title: kHomeTitle,
-                  press: () {
-                    widget.isActivated[0];
-                  },
+                  press: () {},
                   icon: Icons.home,
                 ),
                 DrawerItem(
                   isSelected: false,
                   title: kProfileTitle,
-                  press: () {
-                    widget.isActivated[2];
-                  },
+                  press: () {},
                   icon: Icons.person,
                 ),
                 DrawerItem(
                   isSelected: false,
-                  title: kSettingsTitle,
-                  press: () {
-                    widget.isActivated[1];
-                  },
-                  icon: Icons.settings,
+                  title: kCatocoryTitle,
+                  press: () {},
+                  icon: Icons.category_rounded,
                 ),
                 DrawerItem(
                   isSelected: false,
                   title: kLogoutTitle,
-                  press: () {
-                    widget.isActivated[0];
-                  },
+                  press: () {},
                   icon: Icons.logout_outlined,
                 ),
               ],
@@ -103,49 +137,6 @@ class _DrawerBarState extends State<DrawerBar> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CustomUserAccountsDrawerHeader extends StatelessWidget {
-  const CustomUserAccountsDrawerHeader({
-    Key? key,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.companyName,
-  }) : super(key: key);
-
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String companyName;
-
-  @override
-  Widget build(BuildContext context) {
-    return UserAccountsDrawerHeader(
-      accountName: Text("$firstName $lastName"),
-      accountEmail: Text(email),
-      currentAccountPicture: Row(
-        children: [
-          const CircleAvatar(
-            radius: 35,
-            child: ClipOval(
-              child: Icon(
-                Icons.business_outlined,
-                color: Colors.white,
-                size: 40,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            companyName,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-      decoration: const BoxDecoration(),
     );
   }
 }

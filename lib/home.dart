@@ -6,13 +6,15 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:tickets/constants.dart';
+import 'package:tickets/services/manage_info_services.dart';
+import 'package:tickets/view/Category/CategoryList/category_list.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
 import 'package:tickets/view/Customer/CustomerList/customerlist.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
-import '../../components/drawer_bar.dart';
+import 'components/drawer_item.dart';
 import 'components/nav_bar_item.dart';
 import 'models/user_model.dart';
 
@@ -36,9 +38,11 @@ class _HomeScreenState extends State<HomeScreen>
     const CreateTicketBody(),
     const TicketListBody(),
     const CustomerListBody(),
+    const CategoryListBody(),
   ];
   final isActivated = [
     true,
+    false,
     false,
     false,
     false,
@@ -88,15 +92,40 @@ class _HomeScreenState extends State<HomeScreen>
       title: Text(kTicketListTitle),
     ),
     null,
+    AppBar(
+      centerTitle: true,
+      shadowColor: kPrimaryColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(29),
+          bottomRight: Radius.circular(29),
+        ),
+      ),
+      backgroundColor: kPrimaryColor,
+      title: Text(kCategoryListTitle),
+    ),
+    AppBar(
+      centerTitle: true,
+      shadowColor: kPrimaryColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(29),
+          bottomRight: Radius.circular(29),
+        ),
+      ),
+      backgroundColor: kPrimaryColor,
+      title: Text(kCatocoryTitle),
+    ),
   ];
 
   //Animasyon için
 
   AnimationController? _animationController;
-
+  String? companyName;
   @override
-  void initState() {
+  initState() {
     super.initState();
+    manageInfo();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -117,6 +146,21 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+  Future<void> manageInfo() async {
+    if (UserModel.userData!.role == 2) {
+      var manageInfo = ManageInfoServices();
+      // ignore: unused_local_variable
+      var response = await manageInfo.manageinfo();
+      setState(() {
+        companyName = response!.data!.name;
+      });
+    } else {
+      setState(() {
+        companyName = "Müşteri";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
@@ -126,10 +170,175 @@ class _HomeScreenState extends State<HomeScreen>
           resizeToAvoidBottomInset: false,
           backgroundColor: kScaffoldBackgroundColor,
           drawerEdgeDragWidth: 233,
-          drawer: DrawerBar(
-            currentIndex: currentIndex,
-            isActivated: isActivated,
-            screens: screens,
+          drawer: Drawer(
+            backgroundColor: kPrimaryColor,
+            width: 233,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 15,
+                                top: 10,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 25,
+                                    child: ClipOval(
+                                      child: Icon(
+                                        UserModel.userData!.role == 2
+                                            ? Icons.business_outlined
+                                            : Icons.person,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "    $companyName",
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: Text(
+                                  "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  )),
+                            ),
+                            Text(
+                              UserModel.userData!.email!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 15),
+                              child: Divider(
+                                height: 1,
+                                thickness: 1,
+                                indent: 1,
+                                endIndent: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      DrawerItem(
+                        isSelected: isActivated[0],
+                        title: kHomeTitle,
+                        press: () {
+                          onItemTapped(0);
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.home,
+                      ),
+                      DrawerItem(
+                        isSelected: isActivated[2],
+                        title: kTicketListTitle,
+                        press: () {
+                          onItemTapped(2);
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.mail,
+                      ),
+                      DrawerItem(
+                        isSelected: isActivated[3],
+                        title: kCustomerListTitle,
+                        press: () {
+                          onItemTapped(3);
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.person,
+                      ),
+                      DrawerItem(
+                        isSelected: isActivated[4],
+                        title: kCatocoryTitle,
+                        press: () {
+                          onItemTapped(4);
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.category,
+                      ),
+                      DrawerItem(
+                        isSelected: false,
+                        title: kLogoutTitle,
+                        press: () {
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.warning,
+                            barrierDismissible: false,
+                            title: "Çıkış Yap",
+                            text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
+                            confirmBtnText: "Evet",
+                            cancelBtnText: "Hayır",
+                            confirmBtnColor: Colors.green,
+                            showCancelBtn: true,
+                            cancelBtnTextStyle: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            onConfirmBtnTap: () async {
+                              await deleteToken();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const LoginScreen();
+                                  },
+                                ),
+                              );
+                            },
+                            onCancelBtnTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                        icon: Icons.logout_outlined,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    kVersionTitle,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
           ),
           body: screens[currentIndex],
           floatingActionButtonLocation:
@@ -192,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen>
                             onItemTapped(3);
                           }),
                       NavBarItem(
-                          isActive: isActivated[4],
+                          isActive: isActivated[5],
                           icon: Icons.logout_outlined,
                           title: kLogoutTitle,
                           press: () async {

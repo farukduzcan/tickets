@@ -13,6 +13,7 @@ void main() async {
   UserInfoServices userInfoServices = UserInfoServices();
   // ignore: unused_local_variable
   var result = await userInfoServices.user();
+
   runApp(const MyApp());
 }
 
