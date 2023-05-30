@@ -4,12 +4,13 @@ import 'package:lottie/lottie.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/constants.dart';
-import 'package:tickets/services/delete_customer_services.dart';
 
 import '../../../components/messenger_bar_top.dart';
-import '../../../models/customer_list_model.dart';
+import '../../../models/category_list_model.dart';
 import '../../../models/user_model.dart';
+import '../../../services/category_list_services.dart';
 import '../../../services/customer_list_services.dart';
+import '../../../services/delete_category_services.dart';
 import '../../Login/login_screen.dart';
 
 class CategoryListBody extends StatefulWidget {
@@ -20,7 +21,7 @@ class CategoryListBody extends StatefulWidget {
 }
 
 class _CategoryListBodyState extends State<CategoryListBody> {
-  late Future<CustomerListModel?>? customerListData;
+  late Future<CategoryListModel?>? categoryListData;
   late final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -30,7 +31,7 @@ class _CategoryListBodyState extends State<CategoryListBody> {
   @override
   void initState() {
     super.initState();
-    customerListData = getCustomerList();
+    categoryListData = getCategoryList();
     tokenValid();
     _scrollController.addListener(() {
       _scrollListener();
@@ -62,10 +63,10 @@ class _CategoryListBodyState extends State<CategoryListBody> {
   }
 
   // api isteği
-  Future<CustomerListModel?> getCustomerList() async {
+  Future<CategoryListModel?> getCategoryList() async {
     try {
-      CustomerListServices ticketlist = CustomerListServices();
-      var listinfo = await ticketlist.getCustomerList(
+      CategoryListServices ticketlist = CategoryListServices();
+      var listinfo = await ticketlist.getCategoryList(
           filter: "",
           orderDir: "DESC",
           orderField: "Id",
@@ -104,13 +105,13 @@ class _CategoryListBodyState extends State<CategoryListBody> {
 
   Future<void> _loadNextPage() async {
     try {
-      CustomerListModel? newData = await getCustomerList();
+      CategoryListModel? newData = await getCategoryList();
       if (newData != null && newData.totalPageCount! + 1 >= pageIndeks) {
         setState(() {
           // print("Current Page: $pageIndeks");
 
           //print("TotalPage: ${newData.totalPageCount}");
-          customerListData!.then((oldData) {
+          categoryListData!.then((oldData) {
             oldData!.datas.addAll(newData.datas);
             listDataPageLength = newData.totalPageCount!;
             return oldData;
@@ -156,17 +157,11 @@ class _CategoryListBodyState extends State<CategoryListBody> {
   }
 
   // durum iconları
-  Icon getIcon({required String customerinfo}) {
-    switch (customerinfo) {
-      case "false":
+  Icon getIcon({required String categoryinfo}) {
+    switch (categoryinfo) {
+      case "category":
         return const Icon(
-          Icons.close_sharp,
-          size: 25,
-          color: Colors.red,
-        );
-      case "true":
-        return const Icon(
-          Icons.check_circle_outline_sharp,
+          Icons.category,
           size: 25,
           color: Colors.green,
         );
@@ -176,31 +171,12 @@ class _CategoryListBodyState extends State<CategoryListBody> {
           size: 25,
           color: Colors.green,
         );
-      case "user":
-        return const Icon(
-          Icons.person_2_outlined,
-          size: 25,
-          color: Colors.green,
-        );
       default:
         return const Icon(
           Icons.info_rounded,
           size: 25,
           color: Colors.orange,
         );
-    }
-  }
-
-  //Talep durumu
-  String getTicketStatus(
-      AsyncSnapshot<CustomerListModel?> snapshot, int index) {
-    switch (snapshot.data!.datas[index].isActive.toString()) {
-      case "true":
-        return "Aktif Kullanıcı";
-      case "false":
-        return "Aktif Olmayan Kullanıcı";
-      default:
-        return "Bilinmeyen";
     }
   }
 
@@ -242,14 +218,14 @@ class _CategoryListBodyState extends State<CategoryListBody> {
         onRefresh: () async {
           _isFinishedPage = true;
           pageIndeks = 1;
-          customerListData = getCustomerList();
+          categoryListData = getCategoryList();
         },
         child: Column(
           children: [
             Expanded(
               flex: 10,
-              child: FutureBuilder<CustomerListModel?>(
-                future: customerListData,
+              child: FutureBuilder<CategoryListModel?>(
+                future: categoryListData,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.totalItemsCount == 0) {
@@ -302,7 +278,7 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Text(
-                                        "Müşteri Sil",
+                                        "Kategoriyi Sil",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       SizedBox(
@@ -324,9 +300,9 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: const Text("Müşteriyi Sil"),
+                                          title: const Text("Kategoriyi Sil"),
                                           content: const Text(
-                                              "Bu Müşteriyi silmek istediğinize emin misiniz?"),
+                                              "Bu Kategoriyi silmek istediğinize emin misiniz?"),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>
@@ -349,11 +325,11 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                   return false;
                                 },
                                 onDismissed: (direction) async {
-                                  DeleteCustomerServices deleteCustomer =
-                                      DeleteCustomerServices();
+                                  DeleteCategoryServices deleteCustomer =
+                                      DeleteCategoryServices();
                                   // ignore: unused_local_variable
                                   var deleterespons = await deleteCustomer
-                                      .deleteCustomer(
+                                      .deleteCategory(
                                     id: snapshot.data!.datas[index].id!
                                         .toString(),
                                   )
@@ -361,8 +337,13 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                     if (value!.data == null &&
                                         value.result!.isNegative == false) {
                                       const TopMessageBar(
-                                        message: "Öğe Silindi!",
+                                        message: "Kategori Silindi!",
                                       ).showTopMessageBarsuccessful(context);
+                                    } else {
+                                      const TopMessageBar(
+                                        message:
+                                            "Kategori Silinemedi Sonra Tekrar Deneyiniz!",
+                                      ).showTopMessageBarError(context);
                                     }
                                   });
                                   setState(() {
@@ -388,16 +369,16 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                         Row(
                                           children: [
                                             getIcon(
-                                              customerinfo: "user",
+                                              categoryinfo: "category",
                                             ),
                                             const Text(
-                                              "  Kullanıcı adı:",
+                                              "  Kategori Adı:",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             Text(
-                                              " ${snapshot.data!.datas[index].firstName!} ${snapshot.data!.datas[index].lastName!}",
+                                              " ${snapshot.data!.datas[index].name!} ",
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
                                               style: const TextStyle(
@@ -408,7 +389,7 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                         Row(
                                           children: [
                                             getIcon(
-                                              customerinfo: "mail",
+                                              categoryinfo: "mail",
                                             ),
                                             const Text(
                                               "  E-Mail:",
@@ -420,26 +401,6 @@ class _CategoryListBodyState extends State<CategoryListBody> {
                                               " ${snapshot.data!.datas[index].email!}",
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            getIcon(
-                                              customerinfo: snapshot
-                                                  .data!.datas[index].isActive!
-                                                  .toString(),
-                                            ),
-                                            const Text(
-                                              "  Durum:",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Text(
-                                              " ${getTicketStatus(snapshot, index)}",
                                               style: const TextStyle(
                                                   color: Colors.black),
                                             ),

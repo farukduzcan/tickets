@@ -7,8 +7,10 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 import 'package:tickets/constants.dart';
 import 'package:tickets/services/manage_info_services.dart';
+import 'package:tickets/view/Category/CategoryCreate/category_create.dart';
 import 'package:tickets/view/Category/CategoryList/category_list.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
+import 'package:tickets/view/Customer/CustomerCreate/customer_create_body.dart';
 import 'package:tickets/view/Customer/CustomerList/customerlist.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
@@ -60,63 +62,174 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  Future<void> navigateToCreateCategory(BuildContext context) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateCategoryBody(),
+      ),
+    );
+  }
+
+  List<AppBar?>? appBarFunction() {
+    return [
+      AppBar(
+        backgroundColor: kPrimaryColor,
+        elevation: 0,
+        title: Text(kHomeTitle),
+      ),
+      AppBar(
+        centerTitle: true,
+        shadowColor: kPrimaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(29),
+            bottomRight: Radius.circular(29),
+          ),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: Text(kTicketTitle),
+      ),
+      AppBar(
+        centerTitle: true,
+        shadowColor: kPrimaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(29),
+            bottomRight: Radius.circular(29),
+          ),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: Text(kTicketListTitle),
+      ),
+      AppBar(
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateCustomerBody(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.person_add_alt),
+              color: Colors.white,
+            ),
+          )
+        ],
+        centerTitle: true,
+        shadowColor: kPrimaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(29),
+            bottomRight: Radius.circular(29),
+          ),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: Text(kCustomerListTitle),
+      ),
+      AppBar(
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateCategoryBody(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add))
+        ],
+        centerTitle: true,
+        shadowColor: kPrimaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(29),
+            bottomRight: Radius.circular(29),
+          ),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: Text(kCategoryListTitle),
+      ),
+      AppBar(
+        centerTitle: true,
+        shadowColor: kPrimaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(29),
+            bottomRight: Radius.circular(29),
+          ),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: Text(kCategoryCreateTitle),
+      ),
+    ];
+  }
+
   //App Bar İçin
-  final appBars = [
-    AppBar(
-      backgroundColor: kPrimaryColor,
-      elevation: 0,
-      title: Text(kHomeTitle),
-    ),
-    AppBar(
-      centerTitle: true,
-      shadowColor: kPrimaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(29),
-          bottomRight: Radius.circular(29),
-        ),
-      ),
-      backgroundColor: kPrimaryColor,
-      title: Text(kTicketTitle),
-    ),
-    AppBar(
-      centerTitle: true,
-      shadowColor: kPrimaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(29),
-          bottomRight: Radius.circular(29),
-        ),
-      ),
-      backgroundColor: kPrimaryColor,
-      title: Text(kTicketListTitle),
-    ),
-    null,
-    AppBar(
-      centerTitle: true,
-      shadowColor: kPrimaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(29),
-          bottomRight: Radius.circular(29),
-        ),
-      ),
-      backgroundColor: kPrimaryColor,
-      title: Text(kCategoryListTitle),
-    ),
-    AppBar(
-      centerTitle: true,
-      shadowColor: kPrimaryColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(29),
-          bottomRight: Radius.circular(29),
-        ),
-      ),
-      backgroundColor: kPrimaryColor,
-      title: Text(kCatocoryTitle),
-    ),
-  ];
+  // final appBars = [
+  //   AppBar(
+  //     backgroundColor: kPrimaryColor,
+  //     elevation: 0,
+  //     title: Text(kHomeTitle),
+  //   ),
+  //   AppBar(
+  //     centerTitle: true,
+  //     shadowColor: kPrimaryColor,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.only(
+  //         bottomLeft: Radius.circular(29),
+  //         bottomRight: Radius.circular(29),
+  //       ),
+  //     ),
+  //     backgroundColor: kPrimaryColor,
+  //     title: Text(kTicketTitle),
+  //   ),
+  //   AppBar(
+  //     centerTitle: true,
+  //     shadowColor: kPrimaryColor,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.only(
+  //         bottomLeft: Radius.circular(29),
+  //         bottomRight: Radius.circular(29),
+  //       ),
+  //     ),
+  //     backgroundColor: kPrimaryColor,
+  //     title: Text(kTicketListTitle),
+  //   ),
+  //   null,
+  //   AppBar(
+  //     actions: [
+  //       IconButton(onPressed: () async {}, icon: const Icon(Icons.add))
+  //     ],
+  //     centerTitle: true,
+  //     shadowColor: kPrimaryColor,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.only(
+  //         bottomLeft: Radius.circular(29),
+  //         bottomRight: Radius.circular(29),
+  //       ),
+  //     ),
+  //     backgroundColor: kPrimaryColor,
+  //     title: Text(kCategoryListTitle),
+  //   ),
+  //   AppBar(
+  //     centerTitle: true,
+  //     shadowColor: kPrimaryColor,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.only(
+  //         bottomLeft: Radius.circular(29),
+  //         bottomRight: Radius.circular(29),
+  //       ),
+  //     ),
+  //     backgroundColor: kPrimaryColor,
+  //     title: Text(kCategoryCreateTitle),
+  //   ),
+  // ];
 
   //Animasyon için
 
@@ -166,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen>
     return KeyboardVisibilityBuilder(
       builder: (context, isKeyboardVisible) {
         return Scaffold(
-          appBar: appBars[currentIndex],
+          appBar: appBarFunction()![currentIndex],
           resizeToAvoidBottomInset: false,
           backgroundColor: kScaffoldBackgroundColor,
           drawerEdgeDragWidth: 233,
@@ -283,7 +396,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       DrawerItem(
                         isSelected: isActivated[4],
-                        title: kCatocoryTitle,
+                        title: kCategoryListTitle,
                         press: () {
                           onItemTapped(4);
                           Navigator.pop(context);

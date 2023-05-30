@@ -4,6 +4,8 @@ import 'package:tickets/components/text_field_container.dart';
 import '../constants.dart';
 
 class InputField extends StatelessWidget {
+  final String? validateInputMessage;
+  final bool isValidator;
   final Color color;
   final FocusNode? focusnode;
   final TextEditingController? controller;
@@ -26,6 +28,8 @@ class InputField extends StatelessWidget {
     this.controller,
     this.focusnode,
     this.color = kPrimaryLightColor,
+    this.validateInputMessage,
+    this.isValidator = true,
   });
 
   @override
@@ -35,8 +39,13 @@ class InputField extends StatelessWidget {
       boxshodow: kFieldBoxShodow,
       child: TextFormField(
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return validateMessage;
+          if (isValidator == false) {
+            return null;
+          }
+          if (isValidator == true) {
+            if (value == null || value.isEmpty) {
+              return validateInputMessage ?? validateMessage;
+            }
           }
           return null;
         },

@@ -11,7 +11,6 @@ import '../../../models/customer_list_model.dart';
 import '../../../models/user_model.dart';
 import '../../../services/customer_list_services.dart';
 import '../../Login/login_screen.dart';
-import '../CustomerCreate/customer_create_body.dart';
 
 class CustomerListBody extends StatefulWidget {
   const CustomerListBody({super.key});
@@ -23,7 +22,7 @@ class CustomerListBody extends StatefulWidget {
 class _CustomerListBodyState extends State<CustomerListBody> {
   late Future<CustomerListModel?>? customerListData;
   late final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorCustomerListKey =
       GlobalKey<RefreshIndicatorState>();
   late int pageIndeks = 1;
   int listDataPageLength = 0;
@@ -208,38 +207,8 @@ class _CustomerListBodyState extends State<CustomerListBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateCustomerBody(),
-                  ),
-                );
-                refreshIndicatorKey.currentState?.show();
-              },
-              icon: const Icon(Icons.person_add_alt),
-              color: Colors.white,
-            ),
-          )
-        ],
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kCustomerListTitle),
-      ),
       body: RefreshIndicator(
-        key: refreshIndicatorKey,
+        key: refreshIndicatorCustomerListKey,
         onRefresh: () async {
           _isFinishedPage = true;
           pageIndeks = 1;

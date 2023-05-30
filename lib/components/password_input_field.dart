@@ -3,6 +3,8 @@ import 'package:tickets/components/text_field_container.dart';
 import '../constants.dart';
 
 class RaundedPasswordField extends StatefulWidget {
+  final String? validateInputMessage;
+  final bool isValidator;
   final TextEditingController? controller;
   final FocusNode? focusnode;
   final TextInputAction textInputAction;
@@ -15,6 +17,8 @@ class RaundedPasswordField extends StatefulWidget {
     this.textInputAction = TextInputAction.done,
     this.controller,
     this.focusnode,
+    this.isValidator = true,
+    this.validateInputMessage,
   });
 
   @override
@@ -30,8 +34,13 @@ class _RaundedPasswordFieldState extends State<RaundedPasswordField> {
         textInputAction: widget.textInputAction,
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return validateMessage;
+          if (widget.isValidator == false) {
+            return null;
+          }
+          if (widget.isValidator == true) {
+            if (value == null || value.isEmpty) {
+              return widget.validateInputMessage ?? validateMessage;
+            }
           }
           return null;
         },
