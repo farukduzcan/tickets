@@ -103,3 +103,8 @@ Future<String?> getToken() async {
 Future<void> deleteToken() async {
   await storage.delete(key: "token");
 }
+
+Future<void> deleteUserData() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.remove('user');
+}

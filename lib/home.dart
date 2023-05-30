@@ -14,6 +14,7 @@ import 'package:tickets/view/Customer/CustomerCreate/customer_create_body.dart';
 import 'package:tickets/view/Customer/CustomerList/customerlist.dart';
 import 'package:tickets/view/Dashboard/components/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
+import 'package:tickets/view/Profile/ProfileScreen/profile_screen_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import 'components/drawer_item.dart';
@@ -21,6 +22,8 @@ import 'components/nav_bar_item.dart';
 import 'models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
+  static String? companyName;
+
   const HomeScreen({
     Key? key,
   }) : super(key: key);
@@ -39,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
     const DashboardBody(),
     const CreateTicketBody(),
     const TicketListBody(),
+    const ProfileScreenBody(),
     const CustomerListBody(),
     const CategoryListBody(),
   ];
@@ -103,10 +107,23 @@ class _HomeScreenState extends State<HomeScreen>
         title: Text(kTicketListTitle),
       ),
       AppBar(
+        centerTitle: true,
+        shadowColor: kPrimaryColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(29),
+            bottomRight: Radius.circular(29),
+          ),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: const Text("Profil"),
+      ),
+      AppBar(
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
+              splashRadius: 20,
               onPressed: () async {
                 await Navigator.push(
                   context,
@@ -133,16 +150,20 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       AppBar(
         actions: [
-          IconButton(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateCategoryBody(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.add))
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+                splashRadius: 15,
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CreateCategoryBody(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.add)),
+          )
         ],
         centerTitle: true,
         shadowColor: kPrimaryColor,
@@ -306,7 +327,7 @@ class _HomeScreenState extends State<HomeScreen>
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                bottom: 15,
+                                bottom: 20,
                                 top: 10,
                               ),
                               child: Row(
@@ -387,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       DrawerItem(
                         isSelected: isActivated[3],
-                        title: kCustomerListTitle,
+                        title: kProfileTitle,
                         press: () {
                           onItemTapped(3);
                           Navigator.pop(context);
@@ -396,9 +417,18 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       DrawerItem(
                         isSelected: isActivated[4],
-                        title: kCategoryListTitle,
+                        title: kCustomerListTitle,
                         press: () {
                           onItemTapped(4);
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.people_alt_rounded,
+                      ),
+                      DrawerItem(
+                        isSelected: isActivated[5],
+                        title: kCategoryListTitle,
+                        press: () {
+                          onItemTapped(5);
                           Navigator.pop(context);
                         },
                         icon: Icons.category,
@@ -486,8 +516,10 @@ class _HomeScreenState extends State<HomeScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       NavBarItem(
+                        width: size.width * 0.10,
                         isActive: isActivated[0],
                         icon: Icons.home_outlined,
                         title: kHomeTitle,
@@ -496,6 +528,7 @@ class _HomeScreenState extends State<HomeScreen>
                         },
                       ),
                       NavBarItem(
+                          width: size.width * 0.10,
                           isActive: isActivated[2],
                           icon: Icons.mail_outline_outlined,
                           title: kTicketListTitle,
@@ -507,14 +540,16 @@ class _HomeScreenState extends State<HomeScreen>
                   Row(
                     children: [
                       NavBarItem(
+                          width: size.width * 0.10,
                           isActive: isActivated[3],
                           icon: Icons.person_outline_outlined,
-                          title: "Müşteriler",
+                          title: kProfileTitle,
                           press: () {
                             onItemTapped(3);
                           }),
                       NavBarItem(
-                          isActive: isActivated[5],
+                          width: size.width * 0.10,
+                          isActive: false,
                           icon: Icons.logout_outlined,
                           title: kLogoutTitle,
                           press: () async {

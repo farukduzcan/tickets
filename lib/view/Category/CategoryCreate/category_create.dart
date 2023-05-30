@@ -41,10 +41,6 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
   final TextEditingController _emailPasswordController =
       TextEditingController();
   final TextEditingController _emailSSLController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _comfirmpasswordController =
-      TextEditingController();
 
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _categoryNameFocusNode = FocusNode();
@@ -211,8 +207,8 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
             ),
             RaundedButton(
               isLoading: loading,
-              loadingText: kRegisterLoadingText,
-              buttonText: kRegisterButtonTitle,
+              loadingText: "Kategori Oluşturuluyor...",
+              buttonText: "Kategori Oluştur",
               press: () async {
                 if (_formKey.currentState?.validate() ?? false) {
                   try {

@@ -139,4 +139,4 @@ String kCategoryCreateTitle = "Kategori Oluştur";
 String kTicketListDetailsTitle = "Talep Detayı";
 String kTicketActionReply = "Yanıtla";
 
-String kVersionTitle = "V 1.1.2";
+String kVersionTitle = "V 1.1.3";
