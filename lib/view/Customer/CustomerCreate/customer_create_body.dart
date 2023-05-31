@@ -72,18 +72,6 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
   Widget build(BuildContext context) {
     //  Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kCustomerCreateTitle),
-      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -105,6 +93,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                 children: [
                   //Email
                   InputField(
+                      color: Colors.white,
                       controller: _emailController,
                       focusnode: _emailFocusNode,
                       autofillHints: const [AutofillHints.email],
@@ -115,6 +104,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                       onChanged: (value) {}),
                   //İsim
                   InputField(
+                      color: Colors.white,
                       controller: _firstNameController,
                       focusnode: _firstNameFocusNode,
                       autofillHints: const [AutofillHints.name],
@@ -124,6 +114,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                       onChanged: (value) {}),
                   //Soyisim
                   InputField(
+                      color: Colors.white,
                       controller: _lastNameController,
                       focusnode: _lastNameFocusNode,
                       autofillHints: const [AutofillHints.familyName],
@@ -134,6 +125,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
 
                   //Şifre
                   RaundedPasswordField(
+                    color: Colors.white,
                     controller: _passwordController,
                     focusnode: _passwordFocusNode,
                     textInputAction: TextInputAction.next,
@@ -142,6 +134,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                   ),
                   //Şifre Tekrar
                   RaundedPasswordField(
+                    color: Colors.white,
                     controller: _comfirmpasswordController,
                     focusnode: _comfirmpasswordFocusNode,
                     onChanged: (value) {},
@@ -152,8 +145,8 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
             ),
             RaundedButton(
               isLoading: loading,
-              loadingText: kRegisterLoadingText,
-              buttonText: kRegisterButtonTitle,
+              loadingText: "Kaydediliyor...",
+              buttonText: "Kaydet",
               press: () async {
                 if (_formKey.currentState?.validate() ?? false) {
                   try {

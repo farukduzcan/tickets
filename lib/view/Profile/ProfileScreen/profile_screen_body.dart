@@ -56,6 +56,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
               top: 10,
             ),
             child: CircleAvatar(
+              backgroundColor: kPrimaryColor,
               radius: 45,
               child: ClipOval(
                 child: Icon(

@@ -3,6 +3,7 @@ import 'package:tickets/components/text_field_container.dart';
 import '../constants.dart';
 
 class RaundedPasswordField extends StatefulWidget {
+  final Color? color;
   final String? validateInputMessage;
   final bool isValidator;
   final TextEditingController? controller;
@@ -19,6 +20,7 @@ class RaundedPasswordField extends StatefulWidget {
     this.focusnode,
     this.isValidator = true,
     this.validateInputMessage,
+    this.color = kPrimaryLightColor,
   });
 
   @override
@@ -30,6 +32,7 @@ class _RaundedPasswordFieldState extends State<RaundedPasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
+      color: widget.color,
       child: TextFormField(
         textInputAction: widget.textInputAction,
         keyboardType: TextInputType.visiblePassword,

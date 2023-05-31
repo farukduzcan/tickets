@@ -35,24 +35,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   Size get size => MediaQuery.of(context).size;
+  bool isExpandedDrawer = false;
   //Navigasyon Barı İçin
   bool isKeyboardActived = false;
   int currentIndex = 0;
   final screens = [
-    const DashboardBody(),
-    const CreateTicketBody(),
-    const TicketListBody(),
-    const ProfileScreenBody(),
-    const CustomerListBody(),
-    const CategoryListBody(),
+    const DashboardBody(), //anasayfa 0. İndex
+    const CreateTicketBody(), //ticket oluşturma 1. İndex
+    const TicketListBody(), //ticket listesi 2. İndex
+    const ProfileScreenBody(), //profil 3. İndex
+    const CustomerListBody(), //müşteri listesi 4. İndex
+    const CreateCustomerBody(), //müşteri oluşturma 5. İndex
+    const CategoryListBody(), //kategori listesi 6. İndex
+    const CreateCategoryBody(), //kategori oluşturma 7. İndex
   ];
   final isActivated = [
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
+    true, //anasayfa 0. İndex
+    false, //ticket oluşturma 1. İndex
+    false, //ticket listesi 2. İndex
+    false, //profil 3. İndex
+    false, //müşteri listesi 4. İndex
+    false, //müşteri oluşturma 5. İndex
+    false, //kategori listesi 6. İndex
+    false, //kategori oluşturma 7. İndex
   ];
 
   void onItemTapped(int index) {
@@ -66,60 +71,21 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  Future<void> navigateToCreateCategory(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CreateCategoryBody(),
-      ),
-    );
-  }
+  List<String> appBarTitle = [
+    kHomeTitle, //anasayfa 0. İndex
+    kTicketTitle, //ticket oluşturma 1. İndex
+    kTicketListTitle, //ticket listesi 2. İndex
+    kProfileTitle, //profil 3. İndex
+    kCustomerListTitle, //müşteri listesi 4. İndex
+    kCustomerCreateTitle, //müşteri oluşturma 5. İndex
+    kCategoryListTitle, //kategori listesi 6. İndex
+    kCategoryCreateTitle, //kategori oluşturma 7. İndex
+  ];
 
-  List<AppBar?>? appBarFunction() {
-    return [
-      AppBar(
-        backgroundColor: kPrimaryColor,
-        elevation: 0,
-        title: Text(kHomeTitle),
-      ),
-      AppBar(
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kTicketTitle),
-      ),
-      AppBar(
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kTicketListTitle),
-      ),
-      AppBar(
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: const Text("Profil"),
-      ),
-      AppBar(
-        actions: [
+  List<Widget>? appBarActions(int index) {
+    switch (index) {
+      case 4:
+        return [
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
@@ -136,122 +102,30 @@ class _HomeScreenState extends State<HomeScreen>
               color: Colors.white,
             ),
           )
-        ],
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kCustomerListTitle),
-      ),
-      AppBar(
-        actions: [
+        ];
+      case 5:
+        return [
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
-                splashRadius: 15,
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CreateCategoryBody(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.add)),
+              splashRadius: 20,
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CreateCategoryBody(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add),
+              color: Colors.white,
+            ),
           )
-        ],
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kCategoryListTitle),
-      ),
-      AppBar(
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kCategoryCreateTitle),
-      ),
-    ];
+        ];
+      default:
+        return null;
+    }
   }
-
-  //App Bar İçin
-  // final appBars = [
-  //   AppBar(
-  //     backgroundColor: kPrimaryColor,
-  //     elevation: 0,
-  //     title: Text(kHomeTitle),
-  //   ),
-  //   AppBar(
-  //     centerTitle: true,
-  //     shadowColor: kPrimaryColor,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //         bottomLeft: Radius.circular(29),
-  //         bottomRight: Radius.circular(29),
-  //       ),
-  //     ),
-  //     backgroundColor: kPrimaryColor,
-  //     title: Text(kTicketTitle),
-  //   ),
-  //   AppBar(
-  //     centerTitle: true,
-  //     shadowColor: kPrimaryColor,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //         bottomLeft: Radius.circular(29),
-  //         bottomRight: Radius.circular(29),
-  //       ),
-  //     ),
-  //     backgroundColor: kPrimaryColor,
-  //     title: Text(kTicketListTitle),
-  //   ),
-  //   null,
-  //   AppBar(
-  //     actions: [
-  //       IconButton(onPressed: () async {}, icon: const Icon(Icons.add))
-  //     ],
-  //     centerTitle: true,
-  //     shadowColor: kPrimaryColor,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //         bottomLeft: Radius.circular(29),
-  //         bottomRight: Radius.circular(29),
-  //       ),
-  //     ),
-  //     backgroundColor: kPrimaryColor,
-  //     title: Text(kCategoryListTitle),
-  //   ),
-  //   AppBar(
-  //     centerTitle: true,
-  //     shadowColor: kPrimaryColor,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //         bottomLeft: Radius.circular(29),
-  //         bottomRight: Radius.circular(29),
-  //       ),
-  //     ),
-  //     backgroundColor: kPrimaryColor,
-  //     title: Text(kCategoryCreateTitle),
-  //   ),
-  // ];
-
   //Animasyon için
 
   AnimationController? _animationController;
@@ -300,7 +174,19 @@ class _HomeScreenState extends State<HomeScreen>
     return KeyboardVisibilityBuilder(
       builder: (context, isKeyboardVisible) {
         return Scaffold(
-          appBar: appBarFunction()![currentIndex],
+          appBar: AppBar(
+            actions: appBarActions(currentIndex),
+            centerTitle: true,
+            shadowColor: kPrimaryColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(29),
+                bottomRight: Radius.circular(29),
+              ),
+            ),
+            backgroundColor: kPrimaryColor,
+            title: Text(appBarTitle[currentIndex]),
+          ),
           resizeToAvoidBottomInset: false,
           backgroundColor: kScaffoldBackgroundColor,
           drawerEdgeDragWidth: 233,
@@ -315,79 +201,80 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             child: Column(
               children: [
-                Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        padding: const EdgeInsets.only(
+                          bottom: 2,
+                          top: 30,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 20,
-                                top: 10,
+                            CircleAvatar(
+                              radius: 25,
+                              child: ClipOval(
+                                child: Icon(
+                                  UserModel.userData!.role == 2
+                                      ? Icons.business_outlined
+                                      : Icons.person,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 25,
-                                    child: ClipOval(
-                                      child: Icon(
-                                        UserModel.userData!.role == 2
-                                            ? Icons.business_outlined
-                                            : Icons.person,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    "    $companyName",
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: Text(
-                                  "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  )),
                             ),
                             Text(
-                              UserModel.userData!.email!,
+                              "    $companyName",
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                                 color: Colors.white,
-                                fontSize: 15,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              maxLines: 1,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15),
-                              child: Divider(
-                                height: 1,
-                                thickness: 1,
-                                indent: 1,
-                                endIndent: 1,
+                                fontSize: 20,
                               ),
                             ),
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: Text(
+                            "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            )),
+                      ),
+                      Text(
+                        UserModel.userData!.email!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 15, bottom: 2),
+                        child: Divider(
+                          height: 1,
+                          thickness: 1,
+                          indent: 1,
+                          endIndent: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                    children: [
                       DrawerItem(
                         isSelected: isActivated[0],
                         title: kHomeTitle,
@@ -415,24 +302,80 @@ class _HomeScreenState extends State<HomeScreen>
                         },
                         icon: Icons.person,
                       ),
-                      DrawerItem(
-                        isSelected: isActivated[4],
-                        title: kCustomerListTitle,
-                        press: () {
-                          onItemTapped(4);
-                          Navigator.pop(context);
-                        },
-                        icon: Icons.people_alt_rounded,
-                      ),
-                      DrawerItem(
-                        isSelected: isActivated[5],
-                        title: kCategoryListTitle,
-                        press: () {
-                          onItemTapped(5);
-                          Navigator.pop(context);
-                        },
-                        icon: Icons.category,
-                      ),
+                      ExpansionTile(
+                          onExpansionChanged: (value) {
+                            setState(() {
+                              isExpandedDrawer = value;
+                            });
+                          },
+                          initiallyExpanded: isExpandedDrawer,
+                          collapsedIconColor: Colors.white,
+                          childrenPadding: const EdgeInsets.only(left: 20),
+                          leading: const Icon(
+                            Icons.person_search_rounded,
+                            color: Colors.white,
+                          ),
+                          iconColor: Colors.white,
+                          shape: const StadiumBorder(),
+                          title: const Text("Müşteri İşlemleri",
+                              style: TextStyle(color: Colors.white)),
+                          children: [
+                            DrawerItem(
+                              isSelected: isActivated[4],
+                              title: kCustomerListTitle,
+                              press: () {
+                                onItemTapped(4);
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.people_alt_rounded,
+                            ),
+                            DrawerItem(
+                              isSelected: isActivated[5],
+                              title: "Müşteri Oluştur",
+                              press: () {
+                                onItemTapped(5);
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.person_add_alt_1,
+                            ),
+                          ]),
+                      ExpansionTile(
+                          onExpansionChanged: (value) {
+                            setState(() {
+                              isExpandedDrawer = value;
+                            });
+                          },
+                          initiallyExpanded: isExpandedDrawer,
+                          collapsedIconColor: Colors.white,
+                          childrenPadding: const EdgeInsets.only(left: 20),
+                          leading: const Icon(
+                            Icons.category,
+                            color: Colors.white,
+                          ),
+                          iconColor: Colors.white,
+                          shape: const StadiumBorder(),
+                          title: const Text("Kategori İşlemleri",
+                              style: TextStyle(color: Colors.white)),
+                          children: [
+                            DrawerItem(
+                              isSelected: isActivated[6],
+                              title: kCategoryListTitle,
+                              press: () {
+                                onItemTapped(6);
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.list_alt_outlined,
+                            ),
+                            DrawerItem(
+                              isSelected: isActivated[7],
+                              title: kCategoryCreateTitle,
+                              press: () {
+                                onItemTapped(7);
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.add_box,
+                            ),
+                          ]),
                       DrawerItem(
                         isSelected: false,
                         title: kLogoutTitle,

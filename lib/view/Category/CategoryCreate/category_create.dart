@@ -79,18 +79,6 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
   Widget build(BuildContext context) {
     //  Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        shadowColor: kPrimaryColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(29),
-            bottomRight: Radius.circular(29),
-          ),
-        ),
-        backgroundColor: kPrimaryColor,
-        title: Text(kCategoryCreateTitle),
-      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -113,6 +101,7 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
                 children: [
                   //Hata ismi
                   InputField(
+                      color: Colors.white,
                       isValidator: true,
                       validateInputMessage: "Lütfen Kategori İsmi Giriniz",
                       controller: _categoryNameController,
@@ -124,6 +113,7 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
                       onChanged: (value) {}),
                   //Email
                   InputField(
+                      color: Colors.white,
                       isValidator: true,
                       validateInputMessage: "Lütfen E-Mail Giriniz",
                       controller: _emailController,
@@ -136,6 +126,7 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
                       onChanged: (value) {}),
                   //Email host
                   InputField(
+                      color: Colors.white,
                       isValidator: false,
                       controller: _emailHostController,
                       focusnode: _emailHostFocusNode,
@@ -148,6 +139,7 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
 
                   //Email Port
                   InputField(
+                      color: Colors.white,
                       isValidator: false,
                       controller: _emailPortController,
                       focusnode: _emailPortFocusNode,
@@ -158,6 +150,7 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
                       onChanged: (value) {}),
                   //Email username
                   InputField(
+                      color: Colors.white,
                       isValidator: false,
                       controller: _emailUserNameController,
                       focusnode: _emailUserNameFocusNode,
@@ -170,6 +163,7 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
 
                   //Email Şifre
                   RaundedPasswordField(
+                    color: Colors.white,
                     isValidator: false,
                     controller: _emailPasswordController,
                     focusnode: _emailPasswordFocusNode,
@@ -205,69 +199,72 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
                 ],
               ),
             ),
-            RaundedButton(
-              isLoading: loading,
-              loadingText: "Kategori Oluşturuluyor...",
-              buttonText: "Kategori Oluştur",
-              press: () async {
-                if (_formKey.currentState?.validate() ?? false) {
-                  try {
-                    port = int.tryParse(_emailPortController.text) ?? 0;
-                    _loadingBar();
-                    CreateCategoryListServices createCustomerServices =
-                        CreateCategoryListServices();
-                    var result = await createCustomerServices.createCategory(
-                      eMail: _emailController.text,
-                      categoryName: _categoryNameController.text,
-                      eMailHost: _emailHostController.text,
-                      eMailPort: port,
-                      eMailUserName: _emailUserNameController.text,
-                      eMailPassword: _emailPasswordController.text,
-                      eMailSsl: _emailSSL,
-                    );
-                    if (result!.result! > 0 && result.data == null) {
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: RaundedButton(
+                isLoading: loading,
+                loadingText: "Kategori Oluşturuluyor...",
+                buttonText: "Oluştur",
+                press: () async {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    try {
+                      port = int.tryParse(_emailPortController.text) ?? 0;
                       _loadingBar();
-
-                      // ignore: use_build_context_synchronously
-                      QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.success,
-                        title: "Başarılı",
-                        text:
-                            "Kategori Oluşturma işlemi başarılı bir şekilde gerçekleşti.",
-                        confirmBtnText: "Tamam",
-                        onConfirmBtnTap: () {
-                          _emailController.clear();
-                          _categoryNameController.clear();
-                          _emailHostController.clear();
-                          _emailPortController.clear();
-                          _emailUserNameController.clear();
-                          _emailPasswordController.clear();
-                          _emailSSLController.clear();
-
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
+                      CreateCategoryListServices createCustomerServices =
+                          CreateCategoryListServices();
+                      var result = await createCustomerServices.createCategory(
+                        eMail: _emailController.text,
+                        categoryName: _categoryNameController.text,
+                        eMailHost: _emailHostController.text,
+                        eMailPort: port,
+                        eMailUserName: _emailUserNameController.text,
+                        eMailPassword: _emailPasswordController.text,
+                        eMailSsl: _emailSSL,
                       );
-                    } else {
-                      _loadingBar();
-                      // ignore: use_build_context_synchronously
-                      QuickAlert.show(
-                          confirmBtnText: kOk,
+                      if (result!.result! > 0 && result.data == null) {
+                        _loadingBar();
+
+                        // ignore: use_build_context_synchronously
+                        QuickAlert.show(
                           context: context,
-                          type: QuickAlertType.error,
-                          title: "Hata",
-                          text: result.errors.errorToString());
+                          type: QuickAlertType.success,
+                          title: "Başarılı",
+                          text:
+                              "Kategori Oluşturma işlemi başarılı bir şekilde gerçekleşti.",
+                          confirmBtnText: "Tamam",
+                          onConfirmBtnTap: () {
+                            _emailController.clear();
+                            _categoryNameController.clear();
+                            _emailHostController.clear();
+                            _emailPortController.clear();
+                            _emailUserNameController.clear();
+                            _emailPasswordController.clear();
+                            _emailSSLController.clear();
+
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
+                      } else {
+                        _loadingBar();
+                        // ignore: use_build_context_synchronously
+                        QuickAlert.show(
+                            confirmBtnText: kOk,
+                            context: context,
+                            type: QuickAlertType.error,
+                            title: "Hata",
+                            text: result.errors.errorToString());
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(e.toString()),
+                        ),
+                      );
                     }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(e.toString()),
-                      ),
-                    );
                   }
-                }
-              },
+                },
+              ),
             ),
             const Divider(
               height: 0,
