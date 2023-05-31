@@ -178,7 +178,6 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                           _passwordController.clear();
                           _comfirmpasswordController.clear();
                           Navigator.pop(context);
-                          Navigator.pop(context);
                         },
                       );
                     } else {

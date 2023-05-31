@@ -35,7 +35,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   Size get size => MediaQuery.of(context).size;
-  bool isExpandedDrawer = false;
+  bool isExpandedDrawerCustomer = false;
+  bool isExpandedDrawerCategory = false;
+
   //Navigasyon Barı İçin
   bool isKeyboardActived = false;
   int currentIndex = 0;
@@ -85,43 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
   List<Widget>? appBarActions(int index) {
     switch (index) {
       case 4:
-        return [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              splashRadius: 20,
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateCustomerBody(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.person_add_alt),
-              color: Colors.white,
-            ),
-          )
-        ];
-      case 5:
-        return [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              splashRadius: 20,
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CreateCategoryBody(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.add),
-              color: Colors.white,
-            ),
-          )
-        ];
+        return [];
       default:
         return null;
     }
@@ -304,12 +270,10 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                       UserModel.userData!.role == 2
                           ? ExpansionTile(
-                              onExpansionChanged: (value) {
-                                setState(() {
-                                  isExpandedDrawer = value;
-                                });
-                              },
-                              initiallyExpanded: isExpandedDrawer,
+                              initiallyExpanded:
+                                  isActivated[4] || isActivated[5]
+                                      ? true
+                                      : false,
                               collapsedIconColor: Colors.white,
                               childrenPadding: const EdgeInsets.only(left: 20),
                               leading: const Icon(
@@ -343,12 +307,10 @@ class _HomeScreenState extends State<HomeScreen>
                           : const SizedBox(),
                       UserModel.userData!.role == 2
                           ? ExpansionTile(
-                              onExpansionChanged: (value) {
-                                setState(() {
-                                  isExpandedDrawer = value;
-                                });
-                              },
-                              initiallyExpanded: isExpandedDrawer,
+                              initiallyExpanded:
+                                  isActivated[6] || isActivated[7]
+                                      ? true
+                                      : false,
                               collapsedIconColor: Colors.white,
                               childrenPadding: const EdgeInsets.only(left: 20),
                               leading: const Icon(

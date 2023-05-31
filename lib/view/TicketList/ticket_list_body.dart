@@ -256,7 +256,9 @@ class _TicketListBodyState extends State<TicketListBody> {
                         horizontal: 10,
                         vertical: 15,
                       ),
-                      physics: const BouncingScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics(),
+                      ),
                       itemCount: snapshot.data!.datas.length + 1,
                       itemBuilder: (context, index) {
                         if (index < snapshot.data!.datas.length) {

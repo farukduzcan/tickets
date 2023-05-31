@@ -242,7 +242,6 @@ class _CreateCategoryBodyState extends State<CreateCategoryBody> {
                             _emailSSLController.clear();
 
                             Navigator.pop(context);
-                            Navigator.pop(context);
                           },
                         );
                       } else {
