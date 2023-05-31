@@ -302,80 +302,84 @@ class _HomeScreenState extends State<HomeScreen>
                         },
                         icon: Icons.person,
                       ),
-                      ExpansionTile(
-                          onExpansionChanged: (value) {
-                            setState(() {
-                              isExpandedDrawer = value;
-                            });
-                          },
-                          initiallyExpanded: isExpandedDrawer,
-                          collapsedIconColor: Colors.white,
-                          childrenPadding: const EdgeInsets.only(left: 20),
-                          leading: const Icon(
-                            Icons.person_search_rounded,
-                            color: Colors.white,
-                          ),
-                          iconColor: Colors.white,
-                          shape: const StadiumBorder(),
-                          title: const Text("Müşteri İşlemleri",
-                              style: TextStyle(color: Colors.white)),
-                          children: [
-                            DrawerItem(
-                              isSelected: isActivated[4],
-                              title: kCustomerListTitle,
-                              press: () {
-                                onItemTapped(4);
-                                Navigator.pop(context);
+                      UserModel.userData!.role == 2
+                          ? ExpansionTile(
+                              onExpansionChanged: (value) {
+                                setState(() {
+                                  isExpandedDrawer = value;
+                                });
                               },
-                              icon: Icons.people_alt_rounded,
-                            ),
-                            DrawerItem(
-                              isSelected: isActivated[5],
-                              title: "Müşteri Oluştur",
-                              press: () {
-                                onItemTapped(5);
-                                Navigator.pop(context);
+                              initiallyExpanded: isExpandedDrawer,
+                              collapsedIconColor: Colors.white,
+                              childrenPadding: const EdgeInsets.only(left: 20),
+                              leading: const Icon(
+                                Icons.person_search_rounded,
+                                color: Colors.white,
+                              ),
+                              iconColor: Colors.white,
+                              shape: const StadiumBorder(),
+                              title: const Text("Müşteri İşlemleri",
+                                  style: TextStyle(color: Colors.white)),
+                              children: [
+                                  DrawerItem(
+                                    isSelected: isActivated[4],
+                                    title: kCustomerListTitle,
+                                    press: () {
+                                      onItemTapped(4);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.people_alt_rounded,
+                                  ),
+                                  DrawerItem(
+                                    isSelected: isActivated[5],
+                                    title: "Müşteri Oluştur",
+                                    press: () {
+                                      onItemTapped(5);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.person_add_alt_1,
+                                  ),
+                                ])
+                          : const SizedBox(),
+                      UserModel.userData!.role == 2
+                          ? ExpansionTile(
+                              onExpansionChanged: (value) {
+                                setState(() {
+                                  isExpandedDrawer = value;
+                                });
                               },
-                              icon: Icons.person_add_alt_1,
-                            ),
-                          ]),
-                      ExpansionTile(
-                          onExpansionChanged: (value) {
-                            setState(() {
-                              isExpandedDrawer = value;
-                            });
-                          },
-                          initiallyExpanded: isExpandedDrawer,
-                          collapsedIconColor: Colors.white,
-                          childrenPadding: const EdgeInsets.only(left: 20),
-                          leading: const Icon(
-                            Icons.category,
-                            color: Colors.white,
-                          ),
-                          iconColor: Colors.white,
-                          shape: const StadiumBorder(),
-                          title: const Text("Kategori İşlemleri",
-                              style: TextStyle(color: Colors.white)),
-                          children: [
-                            DrawerItem(
-                              isSelected: isActivated[6],
-                              title: kCategoryListTitle,
-                              press: () {
-                                onItemTapped(6);
-                                Navigator.pop(context);
-                              },
-                              icon: Icons.list_alt_outlined,
-                            ),
-                            DrawerItem(
-                              isSelected: isActivated[7],
-                              title: kCategoryCreateTitle,
-                              press: () {
-                                onItemTapped(7);
-                                Navigator.pop(context);
-                              },
-                              icon: Icons.add_box,
-                            ),
-                          ]),
+                              initiallyExpanded: isExpandedDrawer,
+                              collapsedIconColor: Colors.white,
+                              childrenPadding: const EdgeInsets.only(left: 20),
+                              leading: const Icon(
+                                Icons.category,
+                                color: Colors.white,
+                              ),
+                              iconColor: Colors.white,
+                              shape: const StadiumBorder(),
+                              title: const Text("Kategori İşlemleri",
+                                  style: TextStyle(color: Colors.white)),
+                              children: [
+                                  DrawerItem(
+                                    isSelected: isActivated[6],
+                                    title: kCategoryListTitle,
+                                    press: () {
+                                      onItemTapped(6);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.list_alt_outlined,
+                                  ),
+                                  DrawerItem(
+                                    isSelected: isActivated[7],
+                                    title: kCategoryCreateTitle,
+                                    press: () {
+                                      onItemTapped(7);
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.add_box,
+                                  ),
+                                ])
+                          : const SizedBox(),
                       DrawerItem(
                         isSelected: false,
                         title: kLogoutTitle,
@@ -415,12 +419,14 @@ class _HomeScreenState extends State<HomeScreen>
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    kVersionTitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white),
+                Container(
+                  color: kPrimaryColor,
+                  child: Center(
+                    child: Text(
+                      kVersionTitle,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ],
