@@ -167,17 +167,16 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 2,
-                          top: 30,
-                        ),
-                        child: Row(
+                Container(
+                  width: 233,
+                  color: kPrimaryColor,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 15, right: 15, left: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CircleAvatar(
@@ -204,40 +203,44 @@ class _HomeScreenState extends State<HomeScreen>
                             ),
                           ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10, top: 10),
-                        child: Text(
-                            "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            )),
-                      ),
-                      Text(
-                        UserModel.userData!.email!,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          overflow: TextOverflow.ellipsis,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, top: 10),
+                          child: Text(
+                              "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              )),
                         ),
-                        maxLines: 1,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 15, bottom: 2),
-                        child: Divider(
-                          height: 1,
-                          thickness: 1,
-                          indent: 1,
-                          endIndent: 1,
+                        Text(
+                          UserModel.userData!.email!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          maxLines: 1,
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: double.infinity,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 15),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            indent: 1,
+                            endIndent: 1,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(
+                      vertical: 10,
                       horizontal: 10,
                     ),
                     children: [
