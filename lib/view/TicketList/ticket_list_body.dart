@@ -172,7 +172,7 @@ class _TicketListBodyState extends State<TicketListBody> {
         );
       case "WORKING":
         return Icon(
-          Icons.hourglass_top_rounded,
+          Icons.pending_actions_rounded,
           size: 30,
           color: Colors.orange.shade400,
         );

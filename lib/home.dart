@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
@@ -18,7 +17,6 @@ import 'package:tickets/view/Profile/ProfileScreen/profile_screen_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import 'components/drawer_item.dart';
-import 'components/nav_bar_item.dart';
 import 'models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,10 +32,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
-  Size get size => MediaQuery.of(context).size;
-  bool isExpandedDrawerCustomer = false;
-  bool isExpandedDrawerCategory = false;
-
   //Navigasyon Barı İçin
   bool isKeyboardActived = false;
   int currentIndex = 0;
@@ -69,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen>
       }
       currentIndex = index;
       isActivated[index] = true;
-      _toggleRotation();
+      //    _toggleRotation();
     });
   }
 
@@ -94,31 +88,31 @@ class _HomeScreenState extends State<HomeScreen>
   }
   //Animasyon için
 
-  AnimationController? _animationController;
+  // AnimationController? _animationController;
   String? companyName;
   @override
   initState() {
     super.initState();
     manageInfo();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
+    // _animationController = AnimationController(
+    //   duration: const Duration(milliseconds: 300),
+    //   vsync: this,
+    // );
   }
 
   @override
   void dispose() {
-    _animationController?.dispose();
+    //  _animationController?.dispose();
     super.dispose();
   }
 
-  void _toggleRotation() {
-    if (currentIndex == 1) {
-      _animationController?.forward();
-    } else {
-      _animationController?.reverse();
-    }
-  }
+  // void _toggleRotation() {
+  //   if (currentIndex == 1) {
+  //     _animationController?.forward();
+  //   } else {
+  //     _animationController?.reverse();
+  //   }
+  // }
 
   Future<void> manageInfo() async {
     if (UserModel.userData!.role == 2) {
@@ -398,111 +392,151 @@ class _HomeScreenState extends State<HomeScreen>
             ),
           ),
           body: screens[currentIndex],
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              currentIndex == 1 ? onItemTapped(0) : onItemTapped(1);
-            },
-            backgroundColor: kPrimaryColor,
-            child: AnimatedBuilder(
-              animation: _animationController!,
-              builder: (context, child) {
-                return Transform.rotate(
-                  angle: _animationController!.value * 1.23 * pi,
-                  child: child,
-                );
-              },
-              child: const Icon(
-                Icons.add,
-                size: 30,
-              ),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerDocked,
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     currentIndex == 1 ? onItemTapped(0) : onItemTapped(1);
+          //   },
+          //   backgroundColor: kPrimaryColor,
+          //   child: AnimatedBuilder(
+          //     animation: _animationController!,
+          //     builder: (context, child) {
+          //       return Transform.rotate(
+          //         angle: _animationController!.value * 1.23 * pi,
+          //         child: child,
+          //       );
+          //     },
+          //     child: const Icon(
+          //       Icons.add,
+          //       size: 30,
+          //     ),
+          //   ),
+          // ),
+
+          bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+              color: kPrimaryColor,
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 5,
+                  color: kPrimaryColor,
+                )
+              ],
             ),
+            padding: const EdgeInsets.all(10),
+            child: GNav(
+                padding: const EdgeInsets.all(16),
+                backgroundColor: kPrimaryColor,
+                color: Colors.white,
+                activeColor: Colors.white,
+                tabBackgroundColor: Colors.white24,
+                gap: 8,
+                tabs: [
+                  const GButton(
+                    icon: Icons.home_outlined,
+                    text: 'Home',
+                  ),
+                  GButton(
+                    icon: Icons.mail_outline_outlined,
+                    text: kTicketListTitle,
+                  ),
+                  GButton(
+                    icon: Icons.person_outline_outlined,
+                    text: kProfileTitle,
+                  ),
+                  const GButton(
+                    icon: Icons.logout_rounded,
+                    text: 'Profile',
+                  )
+                ]),
           ),
 
           // navigation bar
-          bottomNavigationBar: BottomAppBar(
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 10,
-            child: SizedBox(
-              height: isKeyboardVisible ? size.height * 0 : size.height * 0.08,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      NavBarItem(
-                        width: size.width * 0.10,
-                        isActive: isActivated[0],
-                        icon: Icons.home_outlined,
-                        title: kHomeTitle,
-                        press: () {
-                          onItemTapped(0);
-                        },
-                      ),
-                      NavBarItem(
-                          width: size.width * 0.10,
-                          isActive: isActivated[2],
-                          icon: Icons.mail_outline_outlined,
-                          title: kTicketListTitle,
-                          press: () {
-                            onItemTapped(2);
-                          }),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      NavBarItem(
-                          width: size.width * 0.10,
-                          isActive: isActivated[3],
-                          icon: Icons.person_outline_outlined,
-                          title: kProfileTitle,
-                          press: () {
-                            onItemTapped(3);
-                          }),
-                      NavBarItem(
-                          width: size.width * 0.10,
-                          isActive: false,
-                          icon: Icons.logout_outlined,
-                          title: kLogoutTitle,
-                          press: () async {
-                            QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.warning,
-                              barrierDismissible: false,
-                              title: "Çıkış Yap",
-                              text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
-                              confirmBtnText: "Evet",
-                              cancelBtnText: "Hayır",
-                              confirmBtnColor: Colors.green,
-                              showCancelBtn: true,
-                              cancelBtnTextStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                              onConfirmBtnTap: () async {
-                                await deleteToken();
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const LoginScreen();
-                                    },
-                                  ),
-                                );
-                              },
-                              onCancelBtnTap: () {
-                                Navigator.pop(context);
-                              },
-                            );
-                          }),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // bottomNavigationBar: BottomAppBar(
+          //   shape: const CircularNotchedRectangle(),
+          //   notchMargin: 10,
+          //   child: SizedBox(
+          //     height: isKeyboardVisible ? size.height * 0 : size.height * 0.08,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Row(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: [
+          //             NavBarItem(
+          //               width: size.width * 0.10,
+          //               isActive: isActivated[0],
+          //               icon: Icons.home_outlined,
+          //               title: kHomeTitle,
+          //               press: () {
+          //                 onItemTapped(0);
+          //               },
+          //             ),
+          //             NavBarItem(
+          //                 width: size.width * 0.10,
+          //                 isActive: isActivated[2],
+          //                 icon: Icons.mail_outline_outlined,
+          //                 title: kTicketListTitle,
+          //                 press: () {
+          //                   onItemTapped(2);
+          //                 }),
+          //           ],
+          //         ),
+          //         Row(
+          //           children: [
+          //             NavBarItem(
+          //                 width: size.width * 0.10,
+          //                 isActive: isActivated[3],
+          //                 icon: Icons.person_outline_outlined,
+          //                 title: kProfileTitle,
+          //                 press: () {
+          //                   onItemTapped(3);
+          //                 }),
+          //             NavBarItem(
+          //                 width: size.width * 0.10,
+          //                 isActive: false,
+          //                 icon: Icons.logout_outlined,
+          //                 title: kLogoutTitle,
+          //                 press: () async {
+          //                   QuickAlert.show(
+          //                     context: context,
+          //                     type: QuickAlertType.warning,
+          //                     barrierDismissible: false,
+          //                     title: "Çıkış Yap",
+          //                     text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
+          //                     confirmBtnText: "Evet",
+          //                     cancelBtnText: "Hayır",
+          //                     confirmBtnColor: Colors.green,
+          //                     showCancelBtn: true,
+          //                     cancelBtnTextStyle: const TextStyle(
+          //                         color: Colors.black,
+          //                         fontWeight: FontWeight.bold),
+          //                     onConfirmBtnTap: () async {
+          //                       await deleteToken();
+          //                       // ignore: use_build_context_synchronously
+          //                       Navigator.pushReplacement(
+          //                         context,
+          //                         MaterialPageRoute(
+          //                           builder: (context) {
+          //                             return const LoginScreen();
+          //                           },
+          //                         ),
+          //                       );
+          //                     },
+          //                     onCancelBtnTap: () {
+          //                       Navigator.pop(context);
+          //                     },
+          //                   );
+          //                 }),
+          //           ],
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         );
       },
     );
