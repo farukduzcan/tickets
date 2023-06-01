@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen>
                   color: kPrimaryColor,
                   child: Padding(
                     padding:
-                        const EdgeInsets.only(top: 15, right: 15, left: 15),
+                        const EdgeInsets.only(top: 40, right: 15, left: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -51,6 +51,7 @@ dependencies:
   url_launcher: ^6.1.11
   open_filex: ^4.3.2
   flutter_launcher_icons: ^0.13.1
+  syncfusion_flutter_charts: ^21.2.8
   
 
 dev_dependencies:
