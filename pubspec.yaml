@@ -52,6 +52,7 @@ dependencies:
   open_filex: ^4.3.2
   flutter_launcher_icons: ^0.13.1
   syncfusion_flutter_charts: ^21.2.8
+  google_nav_bar: ^5.0.6
   
 
 dev_dependencies:

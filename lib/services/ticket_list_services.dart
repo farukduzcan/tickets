@@ -24,7 +24,7 @@ class TicketListServices {
             "PageSize": pageSize,
             "OrderField": orderField,
             "OrderDir": orderDir,
-            "Filter": ""
+            "Filter": "",
           }),
           headers: {
             "Authorization": "Bearer ${UserModel.userToken}",

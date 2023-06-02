@@ -78,6 +78,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(width: double.infinity),
             Padding(
               padding: const EdgeInsets.only(top: 40),
               child: Text(kCustomerCreateTitle, style: kTitleStyle),
@@ -199,12 +200,6 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
                   }
                 }
               },
-            ),
-            const Divider(
-              height: 0,
-              thickness: 0,
-              indent: 20,
-              endIndent: 20,
             ),
           ],
         ),
