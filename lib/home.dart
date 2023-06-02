@@ -78,6 +78,21 @@ class _HomeScreenState extends State<HomeScreen>
     kCategoryCreateTitle, //kategori oluşturma 7. İndex
   ];
 
+  int navbarIndex(int index) {
+    switch (index) {
+      case 0:
+        return 0;
+
+      case 2:
+        return 1;
+
+      case 3:
+        return 2;
+      default:
+        return -1;
+    }
+  }
+
   List<Widget>? appBarActions(int index) {
     switch (index) {
       case 4:
@@ -86,33 +101,13 @@ class _HomeScreenState extends State<HomeScreen>
         return null;
     }
   }
-  //Animasyon için
 
-  // AnimationController? _animationController;
   String? companyName;
   @override
   initState() {
     super.initState();
     manageInfo();
-    // _animationController = AnimationController(
-    //   duration: const Duration(milliseconds: 300),
-    //   vsync: this,
-    // );
   }
-
-  @override
-  void dispose() {
-    //  _animationController?.dispose();
-    super.dispose();
-  }
-
-  // void _toggleRotation() {
-  //   if (currentIndex == 1) {
-  //     _animationController?.forward();
-  //   } else {
-  //     _animationController?.reverse();
-  //   }
-  // }
 
   Future<void> manageInfo() async {
     if (UserModel.userData!.role == 2) {
@@ -166,15 +161,17 @@ class _HomeScreenState extends State<HomeScreen>
                   color: kPrimaryColor,
                   child: Padding(
                     padding:
-                        const EdgeInsets.only(top: 40, right: 15, left: 15),
+                        const EdgeInsets.only(top: 50, right: 15, left: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CircleAvatar(
-                              radius: 25,
+                              radius: 30,
                               child: ClipOval(
                                 child: Icon(
                                   UserModel.userData!.role == 2
@@ -185,35 +182,30 @@ class _HomeScreenState extends State<HomeScreen>
                                 ),
                               ),
                             ),
-                            Text(
-                              "    $companyName",
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                            Column(
+                              children: [
+                                Text(
+                                  "$companyName",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Text(
+                                      "  ${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      )),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10, top: 10),
-                          child: Text(
-                              "${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              )),
-                        ),
-                        Text(
-                          UserModel.userData!.email!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          maxLines: 1,
                         ),
                         const SizedBox(
                           width: double.infinity,
@@ -248,15 +240,6 @@ class _HomeScreenState extends State<HomeScreen>
                         icon: Icons.home,
                       ),
                       DrawerItem(
-                        isSelected: isActivated[2],
-                        title: kTicketListTitle,
-                        press: () {
-                          onItemTapped(2);
-                          Navigator.pop(context);
-                        },
-                        icon: Icons.mail,
-                      ),
-                      DrawerItem(
                         isSelected: isActivated[3],
                         title: kProfileTitle,
                         press: () {
@@ -265,6 +248,39 @@ class _HomeScreenState extends State<HomeScreen>
                         },
                         icon: Icons.person,
                       ),
+                      ExpansionTile(
+                          initiallyExpanded:
+                              isActivated[1] || isActivated[2] ? true : false,
+                          collapsedIconColor: Colors.white,
+                          childrenPadding: const EdgeInsets.only(left: 20),
+                          leading: const Icon(
+                            Icons.outgoing_mail,
+                            color: Colors.white,
+                          ),
+                          iconColor: Colors.white,
+                          shape: const StadiumBorder(),
+                          title: const Text("Talep İşlemleri",
+                              style: TextStyle(color: Colors.white)),
+                          children: [
+                            DrawerItem(
+                              isSelected: isActivated[2],
+                              title: kTicketListTitle,
+                              press: () {
+                                onItemTapped(2);
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.mail,
+                            ),
+                            DrawerItem(
+                              isSelected: isActivated[1],
+                              title: kTicketTitle,
+                              press: () {
+                                onItemTapped(1);
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.add_box,
+                            ),
+                          ]),
                       UserModel.userData!.role == 2
                           ? ExpansionTile(
                               initiallyExpanded:
@@ -379,6 +395,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ),
                 Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   color: kPrimaryColor,
                   child: Center(
                     child: Text(
@@ -423,12 +440,6 @@ class _HomeScreenState extends State<HomeScreen>
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25)),
                     color: kPrimaryColor,
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     blurRadius: 5,
-                    //     color: kPrimaryColor,
-                    //   )
-                    // ],
                   ),
                   padding: const EdgeInsets.all(10),
                   child: GNav(
@@ -438,6 +449,8 @@ class _HomeScreenState extends State<HomeScreen>
                       activeColor: Colors.white,
                       tabBackgroundColor: Colors.white24,
                       gap: 8,
+                      rippleColor: Colors.white,
+                      selectedIndex: navbarIndex(currentIndex),
                       tabs: [
                         GButton(
                           icon: Icons.home_outlined,
@@ -447,14 +460,14 @@ class _HomeScreenState extends State<HomeScreen>
                             onItemTapped(0);
                           },
                         ),
-                        GButton(
-                          icon: Icons.people_alt_rounded,
-                          text: 'Müşteri Listesi',
-                          active: isActivated[4],
-                          onPressed: () {
-                            onItemTapped(4);
-                          },
-                        ),
+                        // GButton(
+                        //   icon: Icons.people_alt_rounded,
+                        //   text: 'Müşteri Listesi',
+                        //   active: isActivated[4],
+                        //   onPressed: () {
+                        //     onItemTapped(4);
+                        //   },
+                        // ),
                         GButton(
                           icon: Icons.mail_outline_outlined,
                           text: kTicketListTitle,
@@ -464,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen>
                           },
                         ),
                         GButton(
-                          icon: Icons.person_outline_outlined,
+                          icon: Icons.person,
                           text: kProfileTitle,
                           active: isActivated[3],
                           onPressed: () {

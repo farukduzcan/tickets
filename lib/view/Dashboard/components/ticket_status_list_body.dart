@@ -14,8 +14,10 @@ import '../../../models/user_model.dart';
 import '../../Login/login_screen.dart';
 
 class TicketStatusListBody extends StatefulWidget {
+  final String ticketListTitle;
   final String filter;
-  const TicketStatusListBody({super.key, required this.filter});
+  const TicketStatusListBody(
+      {super.key, required this.filter, required this.ticketListTitle});
 
   @override
   State<TicketStatusListBody> createState() => _TicketStatusListBodyState();
@@ -67,7 +69,7 @@ class _TicketStatusListBodyState extends State<TicketStatusListBody> {
     try {
       TicketListServices ticketlist = TicketListServices();
       var listinfo = await ticketlist.getTicketList(
-          filter: "ticketStatus.contains(\"${widget.filter}\")",
+          filter: "TicketStatus eq ${widget.filter}",
           orderDir: "DESC",
           orderField: "Id",
           pageIndex: pageIndeks,
@@ -167,7 +169,7 @@ class _TicketStatusListBodyState extends State<TicketStatusListBody> {
         );
       case "WORKING":
         return Icon(
-          Icons.hourglass_top_rounded,
+          Icons.pending_actions_rounded,
           size: 30,
           color: Colors.orange.shade400,
         );
@@ -223,7 +225,7 @@ class _TicketStatusListBodyState extends State<TicketStatusListBody> {
           ),
         ),
         backgroundColor: kPrimaryColor,
-        title: const Text("Yeni Talepler"),
+        title: Text(widget.ticketListTitle),
       ),
       body: RefreshIndicator(
         key: refreshIndicatorKey,

@@ -14,7 +14,7 @@ class TicketListServices {
     int pageSize = 15,
     String orderField = "Id",
     String orderDir = "DESC",
-    required String filter,
+    String filter = "",
   }) async {
     try {
       var url = Uri.parse('${Globals.apiBaseUrl}ticket/list');
@@ -24,7 +24,7 @@ class TicketListServices {
             "PageSize": pageSize,
             "OrderField": orderField,
             "OrderDir": orderDir,
-            "Filter": "",
+            "Filter": filter,
           }),
           headers: {
             "Authorization": "Bearer ${UserModel.userToken}",

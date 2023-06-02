@@ -5,7 +5,6 @@ import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/view/Dashboard/components/ticket_status_list_body.dart';
 
 import '../../../constants.dart';
-import '../../../newhome.dart';
 import '../../../services/ticket_list_services.dart';
 
 class DashboardBody extends StatefulWidget {
@@ -23,6 +22,9 @@ class _DashboardBodyState extends State<DashboardBody> {
   late int pendingTicket = 0;
   late int completedTicket = 0;
   late int pageIndeks = 1;
+  late int totalTicket = 0;
+  late int totalTicketCount = 0;
+  late bool isDataLoaded = false;
 
   @override
   void initState() {
@@ -41,7 +43,10 @@ class _DashboardBodyState extends State<DashboardBody> {
     for (int i = 1; i < pageIndeks + 1; i++) {
       var listinfo = await listApi(i);
       pageIndeks = listinfo!.totalPageCount!;
+      totalTicket = listinfo.totalItemsCount!;
       for (var item in listinfo.datas) {
+        totalTicketCount++;
+
         if (item.ticketStatus == "NEW") {
           setState(() {
             newTicket++;
@@ -55,6 +60,11 @@ class _DashboardBodyState extends State<DashboardBody> {
             completedTicket++;
           });
         }
+      }
+      if (totalTicketCount >= totalTicket) {
+        setState(() {
+          isDataLoaded = true;
+        });
       }
     }
   }
@@ -89,27 +99,30 @@ class _DashboardBodyState extends State<DashboardBody> {
         height: size.height * 0.8,
         child: Column(
           children: [
-            SfCircularChart(
-              title: ChartTitle(text: 'Talep Durumları'),
-              legend: Legend(
-                  isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-              tooltipBehavior: _tooltipBehavior,
-              series: <CircularSeries>[
-                DoughnutSeries<GDPData, String>(
-                  radius: '80%',
-                  explode: true,
-                  explodeOffset: '10%',
-                  dataSource: _chartData,
-                  xValueMapper: (GDPData data, _) => data.status,
-                  yValueMapper: (GDPData data, _) => data.count,
-                  pointColorMapper: (GDPData data, _) => data.color,
-                  dataLabelSettings: const DataLabelSettings(
-                    isVisible: true,
-                  ),
-                  enableTooltip: true,
-                )
-              ],
-            ),
+            isDataLoaded
+                ? SfCircularChart(
+                    title: ChartTitle(text: 'Talep Durumları'),
+                    legend: Legend(
+                        isVisible: true,
+                        overflowMode: LegendItemOverflowMode.wrap),
+                    tooltipBehavior: _tooltipBehavior,
+                    series: <CircularSeries>[
+                      DoughnutSeries<GDPData, String>(
+                        radius: '80%',
+                        explode: true,
+                        explodeOffset: '10%',
+                        dataSource: _chartData,
+                        xValueMapper: (GDPData data, _) => data.status,
+                        yValueMapper: (GDPData data, _) => data.count,
+                        pointColorMapper: (GDPData data, _) => data.color,
+                        dataLabelSettings: const DataLabelSettings(
+                          isVisible: true,
+                        ),
+                        enableTooltip: true,
+                      )
+                    ],
+                  )
+                : const Center(child: CircularProgressIndicator()),
             DashBoardListButton(
               icon: Icon(
                 Icons.fiber_new_rounded,
@@ -122,7 +135,8 @@ class _DashboardBodyState extends State<DashboardBody> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const TicketStatusListBody(
-                            filter: "NEW",
+                            ticketListTitle: "Yeni Talepler",
+                            filter: "0",
                           )),
                 );
               },
@@ -134,11 +148,14 @@ class _DashboardBodyState extends State<DashboardBody> {
                 color: Colors.orange.shade400,
               ),
               title: "İşlemde Bekleyen Talepler",
-              press: () {
-                Navigator.push(
+              press: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const NewHomeScreen()),
+                      builder: (context) => const TicketStatusListBody(
+                            ticketListTitle: "İşlemde Bekleyen Talepler",
+                            filter: "50",
+                          )),
                 );
               },
             ),
@@ -149,7 +166,16 @@ class _DashboardBodyState extends State<DashboardBody> {
                 color: Colors.green.shade400,
               ),
               title: "Tamamlanan Talepler",
-              press: () {},
+              press: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TicketStatusListBody(
+                            ticketListTitle: "Tamamlanan Talepler",
+                            filter: "100",
+                          )),
+                );
+              },
             ),
           ],
         ),
