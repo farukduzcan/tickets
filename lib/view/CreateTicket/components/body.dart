@@ -178,7 +178,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                             color: kWhiteColor,
                             child: DropdownButtonFormField2(
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  if (value == null) {
                                     return 'Lütfen Kullanıcı Seçiniz';
                                   }
                                   return null;
@@ -232,7 +232,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                         color: kWhiteColor,
                         child: DropdownButtonFormField2(
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if (value == null) {
                                 return 'Lütfen Kategori Seçiniz';
                               }
                               return null;

@@ -141,4 +141,4 @@ String kTicketActionReply = "Yanıtla";
 
 String kUpdateProfileTitle = "Profil Düzenle";
 
-String kVersionTitle = "V 1.1.9";
+String kVersionTitle = "V 1.2.0";

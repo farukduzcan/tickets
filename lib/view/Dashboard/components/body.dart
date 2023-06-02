@@ -15,6 +15,8 @@ class DashboardBody extends StatefulWidget {
 }
 
 class _DashboardBodyState extends State<DashboardBody> {
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   late List<GDPData> _chartData = <GDPData>[];
   late TooltipBehavior _tooltipBehavior =
       TooltipBehavior(enable: true, format: 'point.x : point.y');
@@ -35,8 +37,10 @@ class _DashboardBodyState extends State<DashboardBody> {
   Future<void> initializeData() async {
     await totalTicketStatus();
     _chartData = getChartData();
-    _tooltipBehavior =
-        TooltipBehavior(enable: true, format: 'point.x : point.y');
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+      format: 'point.x : point.y',
+    );
   }
 
   Future<void> totalTicketStatus() async {
@@ -82,9 +86,24 @@ class _DashboardBodyState extends State<DashboardBody> {
 
   List<GDPData> getChartData() {
     final List<GDPData> chartData = [
-      GDPData('Yeni Talep', newTicket, Colors.blue.shade400),
-      GDPData('İşlemde Bekleyen', pendingTicket, Colors.orange.shade400),
-      GDPData('Tamamlanan', completedTicket, Colors.green.shade400),
+      GDPData(
+        'Yeni Talep',
+        newTicket,
+        Colors.blue.shade400,
+        "$newTicket ",
+      ),
+      GDPData(
+        'İşlemde Bekleyen',
+        pendingTicket,
+        Colors.orange.shade400,
+        "$pendingTicket ",
+      ),
+      GDPData(
+        'Tamamlanan',
+        completedTicket,
+        Colors.green.shade400,
+        "$completedTicket ",
+      ),
     ];
     return chartData;
   }
@@ -92,92 +111,128 @@ class _DashboardBodyState extends State<DashboardBody> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      physics:
-          const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-      child: SizedBox(
-        height: size.height * 0.8,
-        child: Column(
-          children: [
-            isDataLoaded
-                ? SfCircularChart(
-                    title: ChartTitle(text: 'Talep Durumları'),
-                    legend: Legend(
-                        isVisible: true,
-                        overflowMode: LegendItemOverflowMode.wrap),
-                    tooltipBehavior: _tooltipBehavior,
-                    series: <CircularSeries>[
-                      DoughnutSeries<GDPData, String>(
-                        radius: '80%',
-                        explode: true,
-                        explodeOffset: '10%',
-                        dataSource: _chartData,
-                        xValueMapper: (GDPData data, _) => data.status,
-                        yValueMapper: (GDPData data, _) => data.count,
-                        pointColorMapper: (GDPData data, _) => data.color,
-                        dataLabelSettings: const DataLabelSettings(
-                          isVisible: true,
+    return RefreshIndicator(
+      key: refreshIndicatorKey,
+      onRefresh: () async {
+        setState(() {
+          newTicket = 0;
+          pendingTicket = 0;
+          completedTicket = 0;
+          totalTicketCount = 0;
+          pageIndeks = 1;
+          isDataLoaded = false;
+        });
+        await initializeData();
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics()),
+        child: SizedBox(
+          height: size.height * 0.8,
+          child: Column(
+            children: [
+              isDataLoaded
+                  ? SfCircularChart(
+                      annotations: [
+                        CircularChartAnnotation(
+                          widget: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                "$totalTicketCount",
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              )),
                         ),
-                        enableTooltip: true,
-                      )
-                    ],
-                  )
-                : const Center(child: CircularProgressIndicator()),
-            DashBoardListButton(
-              icon: Icon(
-                Icons.fiber_new_rounded,
-                size: 35,
-                color: Colors.blue.shade400,
+                      ],
+                      title: ChartTitle(text: 'Talep Durumları'),
+                      legend: Legend(
+                          isVisible: true,
+                          overflowMode: LegendItemOverflowMode.wrap),
+                      tooltipBehavior: _tooltipBehavior,
+                      series: <CircularSeries>[
+                        DoughnutSeries<GDPData, String>(
+                          emptyPointSettings: EmptyPointSettings(
+                            mode: EmptyPointMode.gap,
+                            borderWidth: 1,
+                            borderColor: Colors.black,
+                            color: Colors.grey,
+                          ),
+                          radius: '80%',
+                          explode: true,
+                          explodeOffset: '10%',
+                          dataSource: _chartData,
+                          strokeColor: Colors.black,
+                          xValueMapper: (GDPData data, _) => data.status,
+                          yValueMapper: (GDPData data, _) => data.count,
+                          pointColorMapper: (GDPData data, _) => data.color,
+                          dataLabelMapper: (GDPData data, _) => data.text,
+                          dataLabelSettings: const DataLabelSettings(
+                            isVisible: true,
+                          ),
+                          enableTooltip: true,
+                        )
+                      ],
+                    )
+                  : const Center(child: CircularProgressIndicator()),
+              DashBoardListButton(
+                icon: Icon(
+                  Icons.fiber_new_rounded,
+                  size: 35,
+                  color: Colors.blue.shade400,
+                ),
+                title: "Yeni Talepler",
+                press: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TicketStatusListBody(
+                              ticketListTitle: "Yeni Talepler",
+                              filter: "0",
+                            )),
+                  );
+                  refreshIndicatorKey.currentState?.show();
+                },
               ),
-              title: "Yeni Talepler",
-              press: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TicketStatusListBody(
-                            ticketListTitle: "Yeni Talepler",
-                            filter: "0",
-                          )),
-                );
-              },
-            ),
-            DashBoardListButton(
-              icon: Icon(
-                Icons.pending_actions_rounded,
-                size: 35,
-                color: Colors.orange.shade400,
+              DashBoardListButton(
+                icon: Icon(
+                  Icons.pending_actions_rounded,
+                  size: 35,
+                  color: Colors.orange.shade400,
+                ),
+                title: "İşlemde Bekleyen Talepler",
+                press: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TicketStatusListBody(
+                              ticketListTitle: "İşlemde Bekleyen Talepler",
+                              filter: "50",
+                            )),
+                  );
+                  refreshIndicatorKey.currentState?.show();
+                },
               ),
-              title: "İşlemde Bekleyen Talepler",
-              press: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TicketStatusListBody(
-                            ticketListTitle: "İşlemde Bekleyen Talepler",
-                            filter: "50",
-                          )),
-                );
-              },
-            ),
-            DashBoardListButton(
-              icon: Icon(
-                Icons.check_circle_rounded,
-                size: 35,
-                color: Colors.green.shade400,
+              DashBoardListButton(
+                icon: Icon(
+                  Icons.check_circle_rounded,
+                  size: 35,
+                  color: Colors.green.shade400,
+                ),
+                title: "Tamamlanan Talepler",
+                press: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TicketStatusListBody(
+                              ticketListTitle: "Tamamlanan Talepler",
+                              filter: "100",
+                            )),
+                  );
+                  refreshIndicatorKey.currentState?.show();
+                },
               ),
-              title: "Tamamlanan Talepler",
-              press: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TicketStatusListBody(
-                            ticketListTitle: "Tamamlanan Talepler",
-                            filter: "100",
-                          )),
-                );
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -225,8 +280,9 @@ class DashBoardListButton extends StatelessWidget {
 }
 
 class GDPData {
+  final String text;
   final Color color;
   final String status;
   final int count;
-  GDPData(this.status, this.count, this.color);
+  GDPData(this.status, this.count, this.color, this.text);
 }

@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen>
       });
     } else {
       setState(() {
-        companyName = "Müşteri";
+        companyName = "  Müşteri";
       });
     }
   }
@@ -408,31 +408,7 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
           ),
-
           body: screens[currentIndex],
-
-          // floatingActionButtonLocation:
-          //     FloatingActionButtonLocation.centerDocked,
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {
-          //     currentIndex == 1 ? onItemTapped(0) : onItemTapped(1);
-          //   },
-          //   backgroundColor: kPrimaryColor,
-          //   child: AnimatedBuilder(
-          //     animation: _animationController!,
-          //     builder: (context, child) {
-          //       return Transform.rotate(
-          //         angle: _animationController!.value * 1.23 * pi,
-          //         child: child,
-          //       );
-          //     },
-          //     child: const Icon(
-          //       Icons.add,
-          //       size: 30,
-          //     ),
-          //   ),
-          // ),
-
           bottomNavigationBar: isKeyboardVisible == false
               ? Container(
                   decoration: const BoxDecoration(
@@ -460,14 +436,6 @@ class _HomeScreenState extends State<HomeScreen>
                             onItemTapped(0);
                           },
                         ),
-                        // GButton(
-                        //   icon: Icons.people_alt_rounded,
-                        //   text: 'Müşteri Listesi',
-                        //   active: isActivated[4],
-                        //   onPressed: () {
-                        //     onItemTapped(4);
-                        //   },
-                        // ),
                         GButton(
                           icon: Icons.mail_outline_outlined,
                           text: kTicketListTitle,
@@ -487,90 +455,6 @@ class _HomeScreenState extends State<HomeScreen>
                       ]),
                 )
               : const SizedBox(),
-
-          // navigation bar
-          // bottomNavigationBar: BottomAppBar(
-          //   shape: const CircularNotchedRectangle(),
-          //   notchMargin: 10,
-          //   child: SizedBox(
-          //     height: isKeyboardVisible ? size.height * 0 : size.height * 0.08,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         Row(
-          //           mainAxisSize: MainAxisSize.min,
-          //           children: [
-          //             NavBarItem(
-          //               width: size.width * 0.10,
-          //               isActive: isActivated[0],
-          //               icon: Icons.home_outlined,
-          //               title: kHomeTitle,
-          //               press: () {
-          //                 onItemTapped(0);
-          //               },
-          //             ),
-          //             NavBarItem(
-          //                 width: size.width * 0.10,
-          //                 isActive: isActivated[2],
-          //                 icon: Icons.mail_outline_outlined,
-          //                 title: kTicketListTitle,
-          //                 press: () {
-          //                   onItemTapped(2);
-          //                 }),
-          //           ],
-          //         ),
-          //         Row(
-          //           children: [
-          //             NavBarItem(
-          //                 width: size.width * 0.10,
-          //                 isActive: isActivated[3],
-          //                 icon: Icons.person_outline_outlined,
-          //                 title: kProfileTitle,
-          //                 press: () {
-          //                   onItemTapped(3);
-          //                 }),
-          //             NavBarItem(
-          //                 width: size.width * 0.10,
-          //                 isActive: false,
-          //                 icon: Icons.logout_outlined,
-          //                 title: kLogoutTitle,
-          //                 press: () async {
-          //                   QuickAlert.show(
-          //                     context: context,
-          //                     type: QuickAlertType.warning,
-          //                     barrierDismissible: false,
-          //                     title: "Çıkış Yap",
-          //                     text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
-          //                     confirmBtnText: "Evet",
-          //                     cancelBtnText: "Hayır",
-          //                     confirmBtnColor: Colors.green,
-          //                     showCancelBtn: true,
-          //                     cancelBtnTextStyle: const TextStyle(
-          //                         color: Colors.black,
-          //                         fontWeight: FontWeight.bold),
-          //                     onConfirmBtnTap: () async {
-          //                       await deleteToken();
-          //                       // ignore: use_build_context_synchronously
-          //                       Navigator.pushReplacement(
-          //                         context,
-          //                         MaterialPageRoute(
-          //                           builder: (context) {
-          //                             return const LoginScreen();
-          //                           },
-          //                         ),
-          //                       );
-          //                     },
-          //                     onCancelBtnTap: () {
-          //                       Navigator.pop(context);
-          //                     },
-          //                   );
-          //                 }),
-          //           ],
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         );
       },
     );
