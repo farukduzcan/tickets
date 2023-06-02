@@ -391,7 +391,9 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
           ),
+
           body: screens[currentIndex],
+
           // floatingActionButtonLocation:
           //     FloatingActionButtonLocation.centerDocked,
           // floatingActionButton: FloatingActionButton(
@@ -414,45 +416,64 @@ class _HomeScreenState extends State<HomeScreen>
           //   ),
           // ),
 
-          bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-              color: kPrimaryColor,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 5,
-                  color: kPrimaryColor,
+          bottomNavigationBar: isKeyboardVisible == false
+              ? Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25)),
+                    color: kPrimaryColor,
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     blurRadius: 5,
+                    //     color: kPrimaryColor,
+                    //   )
+                    // ],
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: GNav(
+                      padding: const EdgeInsets.all(16),
+                      backgroundColor: kPrimaryColor,
+                      color: Colors.white,
+                      activeColor: Colors.white,
+                      tabBackgroundColor: Colors.white24,
+                      gap: 8,
+                      tabs: [
+                        GButton(
+                          icon: Icons.home_outlined,
+                          text: 'Home',
+                          active: isActivated[0],
+                          onPressed: () {
+                            onItemTapped(0);
+                          },
+                        ),
+                        GButton(
+                          icon: Icons.people_alt_rounded,
+                          text: 'Müşteri Listesi',
+                          active: isActivated[4],
+                          onPressed: () {
+                            onItemTapped(4);
+                          },
+                        ),
+                        GButton(
+                          icon: Icons.mail_outline_outlined,
+                          text: kTicketListTitle,
+                          active: isActivated[2],
+                          onPressed: () {
+                            onItemTapped(2);
+                          },
+                        ),
+                        GButton(
+                          icon: Icons.person_outline_outlined,
+                          text: kProfileTitle,
+                          active: isActivated[3],
+                          onPressed: () {
+                            onItemTapped(3);
+                          },
+                        ),
+                      ]),
                 )
-              ],
-            ),
-            padding: const EdgeInsets.all(10),
-            child: GNav(
-                padding: const EdgeInsets.all(16),
-                backgroundColor: kPrimaryColor,
-                color: Colors.white,
-                activeColor: Colors.white,
-                tabBackgroundColor: Colors.white24,
-                gap: 8,
-                tabs: [
-                  const GButton(
-                    icon: Icons.home_outlined,
-                    text: 'Home',
-                  ),
-                  GButton(
-                    icon: Icons.mail_outline_outlined,
-                    text: kTicketListTitle,
-                  ),
-                  GButton(
-                    icon: Icons.person_outline_outlined,
-                    text: kProfileTitle,
-                  ),
-                  const GButton(
-                    icon: Icons.logout_rounded,
-                    text: 'Profile',
-                  )
-                ]),
-          ),
+              : const SizedBox(),
 
           // navigation bar
           // bottomNavigationBar: BottomAppBar(

@@ -81,13 +81,13 @@ class _DashboardBodyState extends State<DashboardBody> {
 
   @override
   Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics()),
+    Size size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      physics:
+          const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+      child: SizedBox(
+        height: size.height * 0.8,
         child: Column(
-          mainAxisSize: MainAxisSize.max,
           children: [
             SfCircularChart(
               title: ChartTitle(text: 'Talep Durumları'),
