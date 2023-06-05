@@ -44,10 +44,6 @@ class _TicketListBodyState extends State<TicketListBody> {
           orderField: "Id",
           pageIndex: pageIndeks,
           pageSize: 15);
-      // print("Total Page: ${listinfo!.totalPageCount}");
-      // print("Current Page: ${listinfo.currentPageIndex}");
-      // print("Page Index: $pageIndeks");
-
       if (listinfo!.totalPageCount! == 1) {
         setState(() {
           _isFinishedPage = true;

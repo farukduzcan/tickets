@@ -22,11 +22,11 @@ class TokenValidation {
             await deleteToken();
             TicketListServices.isTokenValid = null;
             // ignore: use_build_context_synchronously
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(
-                builder: (context) => const LoginScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (route) =>
+                  false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
             );
           },
         );

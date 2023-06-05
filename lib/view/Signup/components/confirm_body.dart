@@ -35,6 +35,7 @@ class _ConfirmBodyState extends State<ConfirmBody> {
   );
 
   int _counter = 120;
+  late Timer _timersingupconfirm;
 
   void _timerCounter() {
     setState(() {
@@ -45,9 +46,16 @@ class _ConfirmBodyState extends State<ConfirmBody> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timersingupconfirm = Timer.periodic(const Duration(seconds: 1), (timer) {
       _timerCounter();
     });
+  }
+
+  @override
+  void dispose() {
+    _timersingupconfirm.cancel();
+    _timerCounter();
+    super.dispose();
   }
 
   @override

@@ -403,13 +403,12 @@ class _HomeScreenState extends State<HomeScreen>
                             onConfirmBtnTap: () async {
                               await deleteToken();
                               // ignore: use_build_context_synchronously
-                              Navigator.pushReplacement(
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) {
-                                    return const LoginScreen();
-                                  },
-                                ),
+                                    builder: (context) => const LoginScreen()),
+                                (route) =>
+                                    false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
                               );
                             },
                             onCancelBtnTap: () {
