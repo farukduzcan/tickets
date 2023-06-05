@@ -17,6 +17,7 @@ import 'package:tickets/view/Profile/ProfileScreen/profile_screen_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
 
 import 'components/drawer_item.dart';
+import 'components/page_control.dart';
 import 'models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  PageControl pageControl = PageControl();
   //Navigasyon Barı İçin
   bool isKeyboardActived = false;
   int currentIndex = 0;
@@ -140,7 +142,9 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ),
             backgroundColor: kPrimaryColor,
-            title: Text(appBarTitle[currentIndex]),
+            title: Text(
+              pageControl.getCurrentPageData().appBarTitle,
+            ),
           ),
           resizeToAvoidBottomInset: false,
           backgroundColor: kScaffoldBackgroundColor,
@@ -231,26 +235,32 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     children: [
                       DrawerItem(
-                        isSelected: isActivated[0],
+                        isSelected: pageControl.pages[0].isActivated,
                         title: kHomeTitle,
                         press: () {
-                          onItemTapped(0);
+                          setState(() {
+                            pageControl.onItemTapped(0);
+                          });
                           Navigator.pop(context);
                         },
                         icon: Icons.home,
                       ),
                       DrawerItem(
-                        isSelected: isActivated[3],
+                        isSelected: pageControl.pages[3].isActivated,
                         title: kProfileTitle,
                         press: () {
-                          onItemTapped(3);
+                          setState(() {
+                            pageControl.onItemTapped(3);
+                          });
                           Navigator.pop(context);
                         },
                         icon: Icons.person,
                       ),
                       ExpansionTile(
-                          initiallyExpanded:
-                              isActivated[1] || isActivated[2] ? true : false,
+                          initiallyExpanded: pageControl.pages[1].isActivated ||
+                                  pageControl.pages[2].isActivated
+                              ? true
+                              : false,
                           collapsedIconColor: Colors.white,
                           childrenPadding: const EdgeInsets.only(left: 20),
                           leading: const Icon(
@@ -263,19 +273,23 @@ class _HomeScreenState extends State<HomeScreen>
                               style: TextStyle(color: Colors.white)),
                           children: [
                             DrawerItem(
-                              isSelected: isActivated[2],
+                              isSelected: pageControl.pages[2].isActivated,
                               title: kTicketListTitle,
                               press: () {
-                                onItemTapped(2);
+                                setState(() {
+                                  pageControl.onItemTapped(2);
+                                });
                                 Navigator.pop(context);
                               },
                               icon: Icons.mail,
                             ),
                             DrawerItem(
-                              isSelected: isActivated[1],
+                              isSelected: pageControl.pages[1].isActivated,
                               title: kTicketTitle,
                               press: () {
-                                onItemTapped(1);
+                                setState(() {
+                                  pageControl.onItemTapped(1);
+                                });
                                 Navigator.pop(context);
                               },
                               icon: Icons.add_box,
@@ -284,7 +298,8 @@ class _HomeScreenState extends State<HomeScreen>
                       UserModel.userData!.role == 2
                           ? ExpansionTile(
                               initiallyExpanded:
-                                  isActivated[4] || isActivated[5]
+                                  pageControl.pages[3].isActivated ||
+                                          pageControl.pages[4].isActivated
                                       ? true
                                       : false,
                               collapsedIconColor: Colors.white,
@@ -299,19 +314,25 @@ class _HomeScreenState extends State<HomeScreen>
                                   style: TextStyle(color: Colors.white)),
                               children: [
                                   DrawerItem(
-                                    isSelected: isActivated[4],
+                                    isSelected:
+                                        pageControl.pages[4].isActivated,
                                     title: kCustomerListTitle,
                                     press: () {
-                                      onItemTapped(4);
+                                      setState(() {
+                                        pageControl.onItemTapped(4);
+                                      });
                                       Navigator.pop(context);
                                     },
                                     icon: Icons.people_alt_rounded,
                                   ),
                                   DrawerItem(
-                                    isSelected: isActivated[5],
+                                    isSelected:
+                                        pageControl.pages[5].isActivated,
                                     title: "Müşteri Oluştur",
                                     press: () {
-                                      onItemTapped(5);
+                                      setState(() {
+                                        pageControl.onItemTapped(5);
+                                      });
                                       Navigator.pop(context);
                                     },
                                     icon: Icons.person_add_alt_1,
@@ -321,7 +342,8 @@ class _HomeScreenState extends State<HomeScreen>
                       UserModel.userData!.role == 2
                           ? ExpansionTile(
                               initiallyExpanded:
-                                  isActivated[6] || isActivated[7]
+                                  pageControl.pages[6].isActivated ||
+                                          pageControl.pages[7].isActivated
                                       ? true
                                       : false,
                               collapsedIconColor: Colors.white,
@@ -336,19 +358,25 @@ class _HomeScreenState extends State<HomeScreen>
                                   style: TextStyle(color: Colors.white)),
                               children: [
                                   DrawerItem(
-                                    isSelected: isActivated[6],
+                                    isSelected:
+                                        pageControl.pages[6].isActivated,
                                     title: kCategoryListTitle,
                                     press: () {
-                                      onItemTapped(6);
+                                      setState(() {
+                                        pageControl.onItemTapped(6);
+                                      });
                                       Navigator.pop(context);
                                     },
                                     icon: Icons.list_alt_outlined,
                                   ),
                                   DrawerItem(
-                                    isSelected: isActivated[7],
+                                    isSelected:
+                                        pageControl.pages[7].isActivated,
                                     title: kCategoryCreateTitle,
                                     press: () {
-                                      onItemTapped(7);
+                                      setState(() {
+                                        pageControl.onItemTapped(7);
+                                      });
                                       Navigator.pop(context);
                                     },
                                     icon: Icons.add_box,
@@ -408,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
           ),
-          body: screens[currentIndex],
+          body: pageControl.getCurrentPageData().screen,
           bottomNavigationBar: isKeyboardVisible == false
               ? Container(
                   decoration: const BoxDecoration(
@@ -426,30 +454,36 @@ class _HomeScreenState extends State<HomeScreen>
                       tabBackgroundColor: Colors.white24,
                       gap: 8,
                       rippleColor: Colors.white,
-                      selectedIndex: navbarIndex(currentIndex),
+                      selectedIndex: navbarIndex(PageControl.currentIndex),
                       tabs: [
                         GButton(
                           icon: Icons.home_outlined,
                           text: 'Home',
-                          active: isActivated[0],
+                          active: pageControl.pages[0].isActivated,
                           onPressed: () {
-                            onItemTapped(0);
+                            setState(() {
+                              pageControl.onItemTapped(0);
+                            });
                           },
                         ),
                         GButton(
                           icon: Icons.mail_outline_outlined,
                           text: kTicketListTitle,
-                          active: isActivated[2],
+                          active: pageControl.pages[2].isActivated,
                           onPressed: () {
-                            onItemTapped(2);
+                            setState(() {
+                              pageControl.onItemTapped(2);
+                            });
                           },
                         ),
                         GButton(
                           icon: Icons.person,
                           text: kProfileTitle,
-                          active: isActivated[3],
+                          active: pageControl.pages[3].isActivated,
                           onPressed: () {
-                            onItemTapped(3);
+                            setState(() {
+                              pageControl.onItemTapped(3);
+                            });
                           },
                         ),
                       ]),
