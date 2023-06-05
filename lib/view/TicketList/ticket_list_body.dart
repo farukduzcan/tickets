@@ -28,7 +28,7 @@ class _TicketListBodyState extends State<TicketListBody> {
   void initState() {
     super.initState();
     ticketListData = getTicketList();
-    TokenValidation().tokenValid(context, TicketListServices.isTokenValid!);
+    TokenValidation().tokenValid(context, TicketListServices.isTokenValid);
     _scrollController.addListener(() {
       _scrollListener();
     });

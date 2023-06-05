@@ -1,16 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/services/delete_customer_services.dart';
 
 import '../../../components/messenger_bar_top.dart';
+import '../../../components/token_valid.dart';
 import '../../../models/customer_list_model.dart';
-import '../../../models/user_model.dart';
 import '../../../services/customer_list_services.dart';
-import '../../Login/login_screen.dart';
 
 class CustomerListBody extends StatefulWidget {
   const CustomerListBody({super.key});
@@ -31,34 +28,11 @@ class _CustomerListBodyState extends State<CustomerListBody> {
   void initState() {
     super.initState();
     customerListData = getCustomerList();
-    tokenValid();
+    TokenValidation().tokenValid(context, CustomerListServices.isTokenValid);
+
     _scrollController.addListener(() {
       _scrollListener();
     });
-  }
-
-  tokenValid() async {
-    if (CustomerListServices.isTokenValid == false) {
-      QuickAlert.show(
-        context: context,
-        barrierDismissible: false,
-        type: QuickAlertType.error,
-        title: "Uyarı",
-        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
-        confirmBtnText: kOk,
-        onConfirmBtnTap: () async {
-          await deleteToken();
-          CustomerListServices.isTokenValid = null;
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        },
-      );
-    }
   }
 
   // api isteği

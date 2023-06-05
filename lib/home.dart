@@ -298,8 +298,8 @@ class _HomeScreenState extends State<HomeScreen>
                       UserModel.userData!.role == 2
                           ? ExpansionTile(
                               initiallyExpanded:
-                                  pageControl.pages[3].isActivated ||
-                                          pageControl.pages[4].isActivated
+                                  pageControl.pages[4].isActivated ||
+                                          pageControl.pages[5].isActivated
                                       ? true
                                       : false,
                               collapsedIconColor: Colors.white,

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/components/text_field_container.dart';
-import 'package:tickets/components/token_valid.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/extensions/error_extensions.dart';
 import 'package:tickets/models/customer_selectlist_model.dart';
@@ -73,8 +72,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
   void initState() {
     super.initState();
     categoryDropdownData = getDropdownData();
-    TokenValidation()
-        .tokenValid(context, CateGorySelectListServices.isTokenValid!);
+
     UserModel.userData!.role == 2
         ? customerDropdownData = getCustomerDropdownData()
         : null;

@@ -5,9 +5,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/extensions/error_extensions.dart';
 import '../../../components/input_field.dart';
 import '../../../components/password_input_field.dart';
-import '../../../models/user_model.dart';
 import '../../../services/create_customer_services.dart';
-import '../../Login/login_screen.dart';
 
 class CreateCustomerBody extends StatefulWidget {
   const CreateCustomerBody({super.key});
@@ -26,7 +24,6 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
 
   @override
   void initState() {
-    tokenValid();
     super.initState();
   }
 
@@ -43,30 +40,6 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
   final FocusNode _lastNameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _comfirmpasswordFocusNode = FocusNode();
-
-  tokenValid() async {
-    if (CreateCustomerServices.isTokenValid == false) {
-      QuickAlert.show(
-        context: context,
-        barrierDismissible: false,
-        type: QuickAlertType.error,
-        title: "Uyarı",
-        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
-        confirmBtnText: kOk,
-        onConfirmBtnTap: () async {
-          await deleteToken();
-          CreateCustomerServices.isTokenValid = null;
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        },
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
