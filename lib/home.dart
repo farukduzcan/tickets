@@ -11,7 +11,7 @@ import 'package:tickets/view/Category/CategoryList/category_list.dart';
 import 'package:tickets/view/CreateTicket/components/body.dart';
 import 'package:tickets/view/Customer/CustomerCreate/customer_create_body.dart';
 import 'package:tickets/view/Customer/CustomerList/customerlist.dart';
-import 'package:tickets/view/Dashboard/components/body.dart';
+import 'package:tickets/view/Dashboard/body.dart';
 import 'package:tickets/view/Login/login_screen.dart';
 import 'package:tickets/view/Profile/ProfileScreen/profile_screen_body.dart';
 import 'package:tickets/view/TicketList/ticket_list_body.dart';
@@ -391,10 +391,10 @@ class _HomeScreenState extends State<HomeScreen>
                             context: context,
                             type: QuickAlertType.warning,
                             barrierDismissible: false,
-                            title: "Çıkış Yap",
-                            text: "Çıkış Yapmak İstediğinize Emin Misiniz?",
-                            confirmBtnText: "Evet",
-                            cancelBtnText: "Hayır",
+                            title: QuickAlertConstant.logout,
+                            text: QuickAlertConstant.logoutMessage,
+                            confirmBtnText: QuickAlertConstant.yes,
+                            cancelBtnText: QuickAlertConstant.no,
                             confirmBtnColor: Colors.green,
                             showCancelBtn: true,
                             cancelBtnTextStyle: const TextStyle(

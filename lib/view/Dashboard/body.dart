@@ -4,8 +4,10 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/view/Dashboard/components/ticket_status_list_body.dart';
 
-import '../../../constants.dart';
-import '../../../services/ticket_list_services.dart';
+import '../../constants.dart';
+import '../../services/ticket_list_services.dart';
+import 'components/dashboard_list_button.dart';
+import 'components/gdp_data.dart';
 
 class DashboardBody extends StatefulWidget {
   const DashboardBody({super.key});
@@ -87,19 +89,19 @@ class _DashboardBodyState extends State<DashboardBody> {
   List<GDPData> getChartData() {
     final List<GDPData> chartData = [
       GDPData(
-        'Yeni Talep',
+        TicketConstant.newTicket,
         newTicket,
         Colors.blue.shade400,
         "$newTicket ",
       ),
       GDPData(
-        'İşlemde Bekleyen',
+        TicketConstant.inProgressTicket,
         pendingTicket,
         Colors.orange.shade400,
         "$pendingTicket ",
       ),
       GDPData(
-        'Tamamlanan',
+        TicketConstant.completedTicket,
         completedTicket,
         Colors.green.shade400,
         "$completedTicket ",
@@ -144,7 +146,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                               )),
                         ),
                       ],
-                      title: ChartTitle(text: 'Talep Durumları'),
+                      title: ChartTitle(text: TicketConstant.ticketsStatus),
                       legend: Legend(
                           isVisible: true,
                           overflowMode: LegendItemOverflowMode.wrap),
@@ -180,13 +182,13 @@ class _DashboardBodyState extends State<DashboardBody> {
                   size: 35,
                   color: Colors.blue.shade400,
                 ),
-                title: "Yeni Talepler",
+                title: TicketConstant.newTickets,
                 press: () async {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const TicketStatusListBody(
-                              ticketListTitle: "Yeni Talepler",
+                              ticketListTitle: TicketConstant.newTickets,
                               filter: "0",
                             )),
                   );
@@ -199,13 +201,13 @@ class _DashboardBodyState extends State<DashboardBody> {
                   size: 35,
                   color: Colors.orange.shade400,
                 ),
-                title: "İşlemde Bekleyen Talepler",
+                title: TicketConstant.inProgressTickets,
                 press: () async {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const TicketStatusListBody(
-                              ticketListTitle: "İşlemde Bekleyen Talepler",
+                              ticketListTitle: TicketConstant.inProgressTickets,
                               filter: "50",
                             )),
                   );
@@ -218,13 +220,13 @@ class _DashboardBodyState extends State<DashboardBody> {
                   size: 35,
                   color: Colors.green.shade400,
                 ),
-                title: "Tamamlanan Talepler",
+                title: TicketConstant.closedTickets,
                 press: () async {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const TicketStatusListBody(
-                              ticketListTitle: "Tamamlanan Talepler",
+                              ticketListTitle: TicketConstant.closedTickets,
                               filter: "100",
                             )),
                   );
@@ -237,52 +239,4 @@ class _DashboardBodyState extends State<DashboardBody> {
       ),
     );
   }
-}
-
-class DashBoardListButton extends StatelessWidget {
-  final Function press;
-  final String title;
-  final Icon icon;
-  const DashBoardListButton({
-    super.key,
-    required this.press,
-    required this.title,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: kCardBoxShodow,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(10),
-          trailing: const Icon(Icons.arrow_forward_ios),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          onTap: () {
-            press();
-          },
-          title: Text(title),
-          leading: icon,
-        ),
-      ),
-    );
-  }
-}
-
-class GDPData {
-  final String text;
-  final Color color;
-  final String status;
-  final int count;
-  GDPData(this.status, this.count, this.color, this.text);
 }

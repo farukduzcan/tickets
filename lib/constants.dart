@@ -142,3 +142,63 @@ String kTicketActionReply = "Yanıtla";
 String kUpdateProfileTitle = "Profil Düzenle";
 
 String kVersionTitle = "V 1.2.0";
+
+class QuickAlertConstant {
+  static const String success = "Başarılı";
+  static const String error = "Hata";
+  static const String warning = "Uyarı";
+  static const String info = "Bilgi";
+  static const String confirm = "Onay";
+
+  static const String logout = "Çıkış Yap";
+  static const String cancel = "İptal";
+  static const String ok = "Tamam";
+  static const String yes = "Evet";
+  static const String no = "Hayır";
+  static const String logoutMessage = "Çıkış yapmak istediğinize emin misiniz?";
+  static const String logoutTimeoutMessage =
+      "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapınız.";
+  static const String deleteItemMessage =
+      "Bu öğeyi silmek istediğinize emin misiniz?";
+  static const String deleteItemSuccessMessage = "Öğe başarıyla silindi.";
+  static const String deleteItemErrorMessage =
+      "Öğe silinirken bir hata oluştu.";
+  static const String deleteItemErrorTitle = "Öğeyi Sil";
+  static const String delete = "Sil";
+  static const String createTicketMessage = "Talebiniz başarıyla oluşturuldu.";
+}
+
+class AssetsConstant {
+  static const String loginPage = "assets/lottie/login_page.json";
+  static const String emptyList = "assets/lottie/isemptylist.json";
+}
+
+class TicketConstant {
+  static const String ticketsStatus = "Talep Durumları";
+  static const String newTickets = "Yeni Talepler";
+  static const String inProgressTickets = "İşlem Bekleyen Talepler";
+  static const String closedTickets = "Tamamlanan Talopler";
+  static const String newTicket = "Yeni Talep";
+  static const String inProgressTicket = "İşlem Bekleyen";
+  static const String completedTicket = "Tamamlanan";
+  static const String approvedTicket = "Onaylanan";
+  static const String workingTicket = "İşlemde";
+  static const String canceledTicket = "İptal Edildi";
+  static const String unknownTicket = "Bilinmeyen";
+  static const String ticketDetails = "Talep Detayı";
+  static const String deleteTicket = "Talebi Sil";
+  static const String createdUser = "Oluşturan";
+}
+
+class ErrorMessagesConstant {
+  static const String itemsNotFound = "İtemler bulunamadı";
+  static const String emptyList = "Buralar Boş Sanırım :)";
+  static const String endPage = "Sayfa Sonu";
+  static const String error = "Hata Oluştu";
+}
+
+class EmptyErrorMessagesConstant {
+  static const String emptyCategory = "Kategori Alanı Boş Olamaz";
+  static const String emptyTitle = "Konu Alanı Boş Olamaz";
+  static const String emptyDescription = "Açıklama Alanı Boş Olamaz";
+}

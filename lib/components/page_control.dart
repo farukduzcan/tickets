@@ -6,7 +6,7 @@ import '../view/Category/CategoryList/category_list.dart';
 import '../view/CreateTicket/components/body.dart';
 import '../view/Customer/CustomerCreate/customer_create_body.dart';
 import '../view/Customer/CustomerList/customerlist.dart';
-import '../view/Dashboard/components/body.dart';
+import '../view/Dashboard/body.dart';
 import '../view/Profile/ProfileScreen/profile_screen_body.dart';
 import '../view/TicketList/ticket_list_body.dart';
 
