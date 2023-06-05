@@ -73,7 +73,8 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
   void initState() {
     super.initState();
     categoryDropdownData = getDropdownData();
-    TokenValidation().tokenValid(context);
+    TokenValidation()
+        .tokenValid(context, CateGorySelectListServices.isTokenValid!);
     UserModel.userData!.role == 2
         ? customerDropdownData = getCustomerDropdownData()
         : null;
@@ -156,7 +157,8 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                             child: DropdownButtonFormField2(
                                 validator: (value) {
                                   if (value == null) {
-                                    return 'Lütfen Kullanıcı Seçiniz';
+                                    return EmptyErrorMessagesConstant
+                                        .emptyCustomer;
                                   }
                                   return null;
                                 },

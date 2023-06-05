@@ -8,8 +8,8 @@ import '../services/ticket_list_services.dart';
 import '../view/Login/login_screen.dart';
 
 class TokenValidation {
-  tokenValid(BuildContext context) async {
-    if (TicketListServices.isTokenValid == false) {
+  tokenValid(BuildContext context, bool isTokenValid) async {
+    if (isTokenValid == false) {
       QuickAlert.show(
         context: context,
         barrierDismissible: false,

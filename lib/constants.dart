@@ -201,4 +201,5 @@ class EmptyErrorMessagesConstant {
   static const String emptyCategory = "Kategori Alanı Boş Olamaz";
   static const String emptyTitle = "Konu Alanı Boş Olamaz";
   static const String emptyDescription = "Açıklama Alanı Boş Olamaz";
+  static const String emptyCustomer = "Kullanıcı alanı boş bıralamaz";
 }
