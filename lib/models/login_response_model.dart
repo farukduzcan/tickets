@@ -1,6 +1,8 @@
+import 'package:tickets/models/fogetpass_mail_model.dart';
+
 class LoginResponseModel {
   UserToken? data;
-  List<LoginError>? errors;
+  List<ApiError>? errors;
   int result;
 
   LoginResponseModel({
@@ -16,9 +18,9 @@ class LoginResponseModel {
           : UserToken.fromJson(json[
               "data"]), //data null değilse UserToken.fromJson ile json'ı UserToken'a çevirdik. null ise null döndürdük.
       errors: json["errors"] == null
-          ? null
-          : List<LoginError>.from(
-              json["errors"].map((x) => LoginError.fromJson(x))),
+          ? []
+          : List<ApiError>.from(
+              json["errors"]!.map((x) => ApiError.fromJson(x))),
       result: json["result"],
     );
   }

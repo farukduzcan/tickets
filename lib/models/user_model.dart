@@ -102,6 +102,7 @@ Future<String?> getToken() async {
 
 Future<void> deleteToken() async {
   await storage.delete(key: "token");
+  await deleteUserData();
 }
 
 Future<void> deleteUserData() async {

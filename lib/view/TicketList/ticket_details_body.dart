@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/components/bottom_sheet_area.dart';
 import 'package:tickets/models/get_ticket_model.dart';
 import 'package:tickets/models/ticket_aciton_list_model.dart';
@@ -10,11 +8,11 @@ import 'package:tickets/services/get_ticket_services.dart';
 import 'package:tickets/services/ticket_action_list_services.dart';
 import 'package:tickets/view/TicketList/components/ticket_action_bottom_buton.dart';
 
+import '../../components/token_valid.dart';
 import '../../constants.dart';
 import '../../models/category_select_list.dart';
 import '../../models/user_model.dart';
 import '../../services/category_select_list_services.dart';
-import '../Login/login_screen.dart';
 import 'components/bottom_sheet_close_button.dart';
 import 'components/bottom_sheet_redirect_area.dart';
 import 'components/bottom_sheet_reply_area.dart';
@@ -52,34 +50,12 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
     ticketDetails = getTicket();
     ticketActionListData = getTicketList();
     categoryDropdownData = getDropdownData();
-    tokenValid();
+    TokenValidation()
+        .tokenValid(context, CateGorySelectListServices.isTokenValid);
+
     _scrollController.addListener(() {
       _scrollListener();
     });
-  }
-
-  tokenValid() async {
-    if (CateGorySelectListServices.isTokenValid == false) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        barrierDismissible: false,
-        title: "Uyarı",
-        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
-        confirmBtnText: kOk,
-        onConfirmBtnTap: () async {
-          await deleteToken();
-          CateGorySelectListServices.isTokenValid == null;
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        },
-      );
-    }
   }
 
   @override
@@ -602,177 +578,6 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                       }
                     },
                   ),
-
-                  //İşlem/Yanıt Yapma Bölümü
-
-                  // FutureBuilder<GetTicketModel?>(
-                  //   future: ticketDetails,
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.hasData) {
-                  //       if (snapshot.data!.data!.ticketStatus != "CLOSE" &&
-                  //           UserModel.userData!.role == 2) {
-                  //         return Padding(
-                  //           padding: const EdgeInsets.only(bottom: 20),
-                  //           child: RaundedButton(
-                  //             buttonText: "İşlem Yap",
-                  //             press: () {
-                  //               showModalBottomSheet(
-                  //                 isScrollControlled: true,
-                  //                 enableDrag: true,
-                  //                 elevation: 3,
-                  //                 backgroundColor: Colors.white,
-                  //                 shape: const RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.only(
-                  //                     topLeft: Radius.circular(20),
-                  //                     topRight: Radius.circular(20),
-                  //                   ),
-                  //                 ),
-                  //                 context: context,
-                  //                 builder: (context) {
-                  //                   return BottomSheetArea(
-                  //                     widget: widget,
-                  //                     bottomsheettitle: "İşlem Seçiniz",
-                  //                     child: Column(
-                  //                       children: [
-                  //                         TicketActionBottomButon(
-                  //                             iconColor: Colors.green,
-                  //                             buttonText: "Yanıtla",
-                  //                             icon: Icons.reply_outlined,
-                  //                             press: () async {
-                  //                               Navigator.pop(context);
-                  //                               await showModalBottomSheet(
-                  //                                 isScrollControlled: true,
-                  //                                 enableDrag: true,
-                  //                                 elevation: 3,
-                  //                                 backgroundColor: Colors.white,
-                  //                                 shape: const RoundedRectangleBorder(
-                  //                                     borderRadius:
-                  //                                         BorderRadius.only(
-                  //                                             topLeft: Radius
-                  //                                                 .circular(20),
-                  //                                             topRight: Radius
-                  //                                                 .circular(
-                  //                                                     20))),
-                  //                                 context: context,
-                  //                                 builder: (context) {
-                  //                                   return BottomSheetReplyArea(
-                  //                                       userRoleId: UserModel
-                  //                                           .userData!.role!,
-                  //                                       ticketId: widget.id,
-                  //                                       widget: widget,
-                  //                                       textReplyFocusNode:
-                  //                                           _textReplyFocusNode);
-                  //                                 },
-                  //                               );
-                  //                               refreshIndicatorKey.currentState
-                  //                                   ?.show();
-                  //                             }),
-                  //                         TicketActionBottomButon(
-                  //                           iconColor: Colors.orange,
-                  //                           buttonText: "Yönlendir",
-                  //                           icon: Icons.directions_outlined,
-                  //                           press: () async {
-                  //                             Navigator.pop(context);
-                  //                             await showModalBottomSheet(
-                  //                               isScrollControlled: true,
-                  //                               enableDrag: true,
-                  //                               elevation: 3,
-                  //                               backgroundColor: Colors.white,
-                  //                               shape:
-                  //                                   const RoundedRectangleBorder(
-                  //                                       borderRadius:
-                  //                                           BorderRadius.only(
-                  //                                               topLeft: Radius
-                  //                                                   .circular(
-                  //                                                       20),
-                  //                                               topRight: Radius
-                  //                                                   .circular(
-                  //                                                       20))),
-                  //                               context: context,
-                  //                               builder: (context) {
-                  //                                 return BottomSheetRedirectArea(
-                  //                                   ticketId: widget.id,
-                  //                                   widget: widget,
-                  //                                   size: size,
-                  //                                   categoryDropdownData:
-                  //                                       categoryDropdownData,
-                  //                                   dropdownbuttonKey:
-                  //                                       _dropdownbuttonKey,
-                  //                                 );
-                  //                               },
-                  //                             );
-                  //                             refreshIndicatorKey.currentState
-                  //                                 ?.show();
-                  //                           },
-                  //                         ),
-                  //                         TicketActionClosedButton(
-                  //                           press: () {
-                  //                             refreshIndicatorKey.currentState
-                  //                                 ?.show();
-                  //                           },
-                  //                           widget: widget,
-                  //                         ),
-                  //                       ],
-                  //                     ),
-                  //                   );
-                  //                 },
-                  //               );
-                  //             },
-                  //           ),
-                  //         );
-                  //       }
-                  //       if (snapshot.data!.data!.ticketStatus != "CLOSE" &&
-                  //           UserModel.userData!.role == 3) {
-                  //         return RaundedButton(
-                  //             buttonText: "Yanıtla",
-                  //             press: () async {
-                  //               await showModalBottomSheet(
-                  //                 isScrollControlled: true,
-                  //                 enableDrag: true,
-                  //                 elevation: 3,
-                  //                 backgroundColor: Colors.white,
-                  //                 shape: const RoundedRectangleBorder(
-                  //                     borderRadius: BorderRadius.only(
-                  //                         topLeft: Radius.circular(20),
-                  //                         topRight: Radius.circular(20))),
-                  //                 context: context,
-                  //                 builder: (context) {
-                  //                   return BottomSheetReplyArea(
-                  //                       userRoleId: UserModel.userData!.role!,
-                  //                       ticketId: widget.id,
-                  //                       widget: widget,
-                  //                       textReplyFocusNode:
-                  //                           _textReplyFocusNode);
-                  //                 },
-                  //               );
-                  //               refreshIndicatorKey.currentState?.show();
-                  //             });
-                  //       } else if (snapshot.data!.data!.ticketStatus ==
-                  //           "CLOSE") {
-                  //         return const Padding(
-                  //           padding: EdgeInsets.only(bottom: 20),
-                  //           child:
-                  //               Center(child: Text("Bu talep kapatılmıştır.")),
-                  //         );
-                  //       } else {
-                  //         return const Padding(
-                  //           padding: EdgeInsets.only(bottom: 20),
-                  //           child: Center(
-                  //             child: Text(
-                  //                 "Bu talep ile ilgili işlem yapılamıyor."),
-                  //           ),
-                  //         );
-                  //       }
-                  //     } else if (snapshot.hasError) {
-                  //       return Center(
-                  //         child: Text("${snapshot.error}"),
-                  //       );
-                  //     }
-                  //     return const Center(
-                  //       child: SizedBox(),
-                  //     );
-                  //   },
-                  // ),
                 ],
               ),
             );

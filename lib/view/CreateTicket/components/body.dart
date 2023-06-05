@@ -17,7 +17,6 @@ import '../../../components/raunded_button.dart';
 import '../../../models/category_select_list.dart';
 import '../../../models/user_model.dart';
 import '../../../services/create_ticket_services.dart';
-import '../../Login/login_screen.dart';
 import 'filewidget.dart';
 
 class CreateTicketBody extends StatefulWidget {
@@ -73,7 +72,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
   void initState() {
     super.initState();
     categoryDropdownData = getDropdownData();
-    tokenValid();
+
     UserModel.userData!.role == 2
         ? customerDropdownData = getCustomerDropdownData()
         : null;
@@ -85,7 +84,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
       return customerList.customerList();
     } catch (e) {
       if (kDebugMode) {
-        print("itemler çekilirken hata oluştu");
+        print(ErrorMessagesConstant.itemsNotFound);
       }
     }
     return null;
@@ -98,34 +97,10 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
       return categorySelectListServices.categoryselect();
     } catch (e) {
       if (kDebugMode) {
-        print("itemler çekilirken hata oluştu");
+        print(ErrorMessagesConstant.itemsNotFound);
       }
     }
     return null;
-  }
-
-  tokenValid() async {
-    if (CateGorySelectListServices.isTokenValid == false) {
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        barrierDismissible: false,
-        title: "Uyarı",
-        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
-        confirmBtnText: kOk,
-        onConfirmBtnTap: () async {
-          await deleteToken();
-          CateGorySelectListServices.isTokenValid == null;
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        },
-      );
-    }
   }
 
   //Controllerlar
@@ -172,14 +147,16 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                                 child: CircularProgressIndicator());
                           }
                           if (snapshot.hasError) {
-                            return const Center(child: Text("Hata oluştu."));
+                            return const Center(
+                                child: Text(ErrorMessagesConstant.error));
                           }
                           return TextFieldContainer(
                             color: kWhiteColor,
                             child: DropdownButtonFormField2(
                                 validator: (value) {
                                   if (value == null) {
-                                    return 'Lütfen Kullanıcı Seçiniz';
+                                    return EmptyErrorMessagesConstant
+                                        .emptyCustomer;
                                   }
                                   return null;
                                 },
@@ -226,14 +203,15 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                         return const Center(child: CircularProgressIndicator());
                       }
                       if (snapshot.hasError) {
-                        return const Center(child: Text("Hata oluştu."));
+                        return const Center(
+                            child: Text(ErrorMessagesConstant.error));
                       }
                       return TextFieldContainer(
                         color: kWhiteColor,
                         child: DropdownButtonFormField2(
                             validator: (value) {
                               if (value == null) {
-                                return 'Lütfen Kategori Seçiniz';
+                                return EmptyErrorMessagesConstant.emptyCategory;
                               }
                               return null;
                             },
@@ -278,7 +256,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Konu alanı boş olamaz';
+                          return EmptyErrorMessagesConstant.emptyTitle;
                         }
                         return null;
                       },
@@ -298,7 +276,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Açıklama alanı boş olamaz';
+                          return EmptyErrorMessagesConstant.emptyDescription;
                         }
                         return null;
                       },
@@ -390,7 +368,7 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                             }
                             // ignore: use_build_context_synchronously
                             QuickAlert.show(
-                              confirmBtnText: kOk,
+                              confirmBtnText: QuickAlertConstant.ok,
                               onConfirmBtnTap: () {
                                 _bodyController.clear();
                                 _subjectController.clear();
@@ -403,20 +381,20 @@ class _CreateTicketBodyState extends State<CreateTicketBody> {
                               },
                               context: context,
                               type: QuickAlertType.success,
-                              title: "Başarılı",
+                              title: QuickAlertConstant.success,
                               text: CreateTicketBody.isComplated
-                                  ? "Bilet oluşturuldu. Görselleriniz gönderildi."
-                                  : "Bilet Oluşturuldu (Görsel yok)",
+                                  ? QuickAlertConstant.createTicketMessage
+                                  : QuickAlertConstant.createTicketMessage,
                             );
                           } else {
                             // ignore: use_build_context_synchronously
                             QuickAlert.show(
-                                confirmBtnText: kOk,
+                                confirmBtnText: QuickAlertConstant.ok,
                                 context: context,
                                 type: QuickAlertType.error,
-                                title: "Hata",
+                                title: QuickAlertConstant.error,
                                 text: result?.errors.errorToString() ??
-                                    "Beklenmeyen bir hata oluştu!.");
+                                    ErrorMessagesConstant.error);
                           }
                           _loadingBar();
                         } catch (e) {

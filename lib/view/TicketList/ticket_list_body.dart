@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:tickets/components/token_valid.dart';
 import 'package:tickets/constants.dart';
 import 'package:tickets/models/ticket_list_model.dart';
 import 'package:tickets/services/delete_ticket_services.dart';
@@ -10,8 +9,6 @@ import 'package:tickets/services/ticket_list_services.dart';
 import 'package:tickets/view/TicketList/ticket_details_body.dart';
 
 import '../../components/messenger_bar_top.dart';
-import '../../models/user_model.dart';
-import '../Login/login_screen.dart';
 
 class TicketListBody extends StatefulWidget {
   const TicketListBody({super.key});
@@ -31,34 +28,10 @@ class _TicketListBodyState extends State<TicketListBody> {
   void initState() {
     super.initState();
     ticketListData = getTicketList();
-    tokenValid();
+    TokenValidation().tokenValid(context, TicketListServices.isTokenValid);
     _scrollController.addListener(() {
       _scrollListener();
     });
-  }
-
-  tokenValid() async {
-    if (TicketListServices.isTokenValid == false) {
-      QuickAlert.show(
-        context: context,
-        barrierDismissible: false,
-        type: QuickAlertType.error,
-        title: "Uyarı",
-        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
-        confirmBtnText: kOk,
-        onConfirmBtnTap: () async {
-          await deleteToken();
-          TicketListServices.isTokenValid = null;
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        },
-      );
-    }
   }
 
   // api isteği
@@ -71,10 +44,6 @@ class _TicketListBodyState extends State<TicketListBody> {
           orderField: "Id",
           pageIndex: pageIndeks,
           pageSize: 15);
-      // print("Total Page: ${listinfo!.totalPageCount}");
-      // print("Current Page: ${listinfo.currentPageIndex}");
-      // print("Page Index: $pageIndeks");
-
       if (listinfo!.totalPageCount! == 1) {
         setState(() {
           _isFinishedPage = true;
@@ -96,7 +65,7 @@ class _TicketListBodyState extends State<TicketListBody> {
       return listinfo;
     } catch (e) {
       if (kDebugMode) {
-        print("itemler çekilirken hata oluştu");
+        print(ErrorMessagesConstant.emptyList);
       }
     }
     return null;
@@ -119,7 +88,7 @@ class _TicketListBodyState extends State<TicketListBody> {
       }
     } catch (e) {
       if (kDebugMode) {
-        print("Yeni veriler getirilirken hata oluştu");
+        print(ErrorMessagesConstant.error);
       }
     } finally {
       setState(() {
@@ -137,13 +106,11 @@ class _TicketListBodyState extends State<TicketListBody> {
             _scrollController.position.maxScrollExtent * 0.60 &&
         !_scrollController.position.outOfRange) {
       if (_isLoading) {
-        // print("Gereksiz istek atıldı");
         return;
       } else if (_isLoading == false && _isFinishedPage == false) {
         setState(() {
           _isLoading = true;
         });
-        // print("Sayfa yüklendi yüklenen sayfa: $pageIndeks");
         await _loadNextPage();
       }
     }
@@ -201,17 +168,17 @@ class _TicketListBodyState extends State<TicketListBody> {
   String getTicketStatus(AsyncSnapshot<TicketListModel?> snapshot, int index) {
     switch (snapshot.data!.datas[index].ticketStatus) {
       case "NEW":
-        return "Yeni Talep";
+        return TicketConstant.newTicket;
       case "APPROVED":
-        return "Onaylı";
+        return TicketConstant.approvedTicket;
       case "WORKING":
-        return "İşlemde";
+        return TicketConstant.workingTicket;
       case "CLOSE":
-        return "Tamamlandı";
+        return TicketConstant.completedTicket;
       case "CANCEL":
-        return "İptal Edildi";
+        return TicketConstant.canceledTicket;
       default:
-        return "Bilinmeyen";
+        return TicketConstant.unknownTicket;
     }
   }
 
@@ -238,11 +205,11 @@ class _TicketListBodyState extends State<TicketListBody> {
                         children: [
                           SizedBox(
                             child: Lottie.asset(
-                              'assets/lottie/isemptylist.json',
+                              AssetsConstant.emptyList,
                             ),
                           ),
                           const Text(
-                            "Buralar Boş Sanırım :)",
+                            ErrorMessagesConstant.emptyList,
                             style: TextStyle(color: kDividerColor),
                           )
                         ],
@@ -284,7 +251,7 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "Talep Sil",
+                                      TicketConstant.deleteTicket,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     SizedBox(
@@ -305,20 +272,24 @@ class _TicketListBodyState extends State<TicketListBody> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text("Öğeyi Sil"),
+                                        title: const Text(QuickAlertConstant
+                                            .deleteItemErrorTitle),
                                         content: const Text(
-                                            "Bu öğeyi silmek istediğinize emin misiniz?"),
+                                          QuickAlertConstant.deleteItemMessage,
+                                        ),
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context)
                                                     .pop(false),
-                                            child: const Text("İptal"),
+                                            child: const Text(
+                                                QuickAlertConstant.cancel),
                                           ),
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
-                                            child: const Text("Sil"),
+                                            child: const Text(
+                                                QuickAlertConstant.delete),
                                           ),
                                         ],
                                       );
@@ -341,7 +312,8 @@ class _TicketListBodyState extends State<TicketListBody> {
                                   if (value!.data == null &&
                                       value.result!.isNegative == false) {
                                     const TopMessageBar(
-                                      message: "Öğe Silindi!",
+                                      message: QuickAlertConstant
+                                          .deleteItemSuccessMessage,
                                     ).showTopMessageBarsuccessful(context);
                                   }
                                 });

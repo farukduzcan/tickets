@@ -48,6 +48,7 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
   @override
   void dispose() {
     super.dispose();
+    _timerCounter();
     _timerconfirm.cancel();
   }
 

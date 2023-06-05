@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:tickets/constants.dart';
 
 import '../../../components/messenger_bar_top.dart';
+import '../../../components/token_valid.dart';
 import '../../../models/category_list_model.dart';
-import '../../../models/user_model.dart';
 import '../../../services/category_list_services.dart';
 import '../../../services/customer_list_services.dart';
 import '../../../services/delete_category_services.dart';
-import '../../Login/login_screen.dart';
 
 class CategoryListBody extends StatefulWidget {
   const CategoryListBody({super.key});
@@ -32,34 +29,11 @@ class _CategoryListBodyState extends State<CategoryListBody> {
   void initState() {
     super.initState();
     categoryListData = getCategoryList();
-    tokenValid();
+    TokenValidation().tokenValid(context, CustomerListServices.isTokenValid);
+
     _scrollController.addListener(() {
       _scrollListener();
     });
-  }
-
-  tokenValid() async {
-    if (CustomerListServices.isTokenValid == false) {
-      QuickAlert.show(
-        context: context,
-        barrierDismissible: false,
-        type: QuickAlertType.error,
-        title: "Uyarı",
-        text: "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
-        confirmBtnText: kOk,
-        onConfirmBtnTap: () async {
-          await deleteToken();
-          CustomerListServices.isTokenValid = null;
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const LoginScreen(),
-            ),
-          );
-        },
-      );
-    }
   }
 
   // api isteği

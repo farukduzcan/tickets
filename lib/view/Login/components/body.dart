@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tickets/components/already_account.dart';
 import 'package:tickets/components/input_field.dart';
+import 'package:tickets/components/messenger_bar_top.dart';
 import 'package:tickets/components/password_input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
+import 'package:tickets/extensions/error_extensions.dart';
 import 'package:tickets/home.dart';
 import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Login/forgetpass_screen.dart';
@@ -44,7 +46,7 @@ class _LoginBodyState extends State<LoginBody> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(kLoginTitle, style: kTitleStyle),
-          Lottie.asset('assets/lottie/login_page.json',
+          Lottie.asset(AssetsConstant.loginPage,
               width: size.width * 0.50, repeat: false),
           Form(
             key: _formKey,
@@ -110,10 +112,9 @@ class _LoginBodyState extends State<LoginBody> {
 
                       if (result?.errors != null) {
                         // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(result!.errors![0].error),
-                          backgroundColor: Colors.red,
-                        ));
+                        TopMessageBar(
+                          message: result!.errors.errorToString(),
+                        ).showTopMessageBarError(context);
                       }
 
                       if (result != null && result.data != null) {
@@ -133,10 +134,9 @@ class _LoginBodyState extends State<LoginBody> {
                       }
                       _loadingBar();
                     } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(e.toString()),
-                        backgroundColor: Colors.red,
-                      ));
+                      TopMessageBar(
+                        message: e.toString(),
+                      ).showTopMessageBarError(context);
                     }
                   }
                 }
