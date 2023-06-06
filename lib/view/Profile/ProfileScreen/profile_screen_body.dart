@@ -201,6 +201,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                         onConfirmBtnTap: () async {
                           await deleteToken();
                           await deleteUserData();
+                          UserModel.userData = null;
+                          UserModel.userCompany = null;
                           // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                             context,

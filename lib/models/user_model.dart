@@ -66,8 +66,8 @@ class UserData {
       };
 }
 
-Future<String> manageInfo() async {
-  if (UserModel.userData!.role == 2) {
+Future<String> manageInfo(UserData user) async {
+  if (user.role == 2) {
     var manageInfo = ManageInfoServices();
     // ignore: unused_local_variable
     var response = await manageInfo.manageinfo();
@@ -85,7 +85,7 @@ Future<void> saveUserData(UserData user) async {
   final prefs = await SharedPreferences.getInstance();
   final userData = jsonEncode(user.toJson());
   prefs.setString('user', userData);
-  prefs.setString('companyname', await manageInfo());
+  prefs.setString('companyname', await manageInfo(user));
   await loadUserData();
 }
 

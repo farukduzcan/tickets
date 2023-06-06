@@ -108,7 +108,9 @@ class _HomeScreenState extends State<HomeScreen>
   String? companyName;
   @override
   initState() {
-    pageControl.onItemTapped(0);
+    setState(() {
+      pageControl.onItemTapped(0);
+    });
     super.initState();
     // manageInfo();
   }
@@ -132,374 +134,364 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(
       builder: (context, isKeyboardVisible) {
-        return RefreshIndicator(
-          key: homeRefreshIndicatorKey,
-          onRefresh: () async {
-            setState(() {});
-          },
-          child: Scaffold(
-            appBar: AppBar(
-              actions: appBarActions(currentIndex),
-              centerTitle: true,
-              shadowColor: kPrimaryColor,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(29),
-                  bottomRight: Radius.circular(29),
-                ),
-              ),
-              backgroundColor: kPrimaryColor,
-              title: Text(
-                pageControl.getCurrentPageData().appBarTitle,
+        return Scaffold(
+          appBar: AppBar(
+            actions: appBarActions(currentIndex),
+            centerTitle: true,
+            shadowColor: kPrimaryColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(29),
+                bottomRight: Radius.circular(29),
               ),
             ),
-            resizeToAvoidBottomInset: false,
-            backgroundColor: kScaffoldBackgroundColor,
-            drawerEdgeDragWidth: 233,
-            drawer: Drawer(
-              backgroundColor: kPrimaryColor,
-              width: 233,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+            backgroundColor: kPrimaryColor,
+            title: Text(
+              pageControl.getCurrentPageData().appBarTitle,
+            ),
+          ),
+          resizeToAvoidBottomInset: false,
+          backgroundColor: kScaffoldBackgroundColor,
+          drawerEdgeDragWidth: 233,
+          drawer: Drawer(
+            backgroundColor: kPrimaryColor,
+            width: 233,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
-              child: Column(
-                children: [
-                  Container(
-                    width: 233,
-                    color: kPrimaryColor,
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 50, right: 15, left: 15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                child: ClipOval(
-                                  child: Icon(
-                                    UserModel.userData!.role == 2
-                                        ? Icons.business_outlined
-                                        : Icons.person,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "${UserModel.userCompany}",
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10),
-                                    child: Text(
-                                        "  ${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                        )),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: double.infinity,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 15),
-                            child: Divider(
-                              height: 1,
-                              thickness: 1,
-                              indent: 1,
-                              endIndent: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 233,
+                  color: kPrimaryColor,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 50, right: 15, left: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        DrawerItem(
-                          isSelected: pageControl.pages[0].isActivated,
-                          title: kHomeTitle,
-                          press: () {
-                            setState(() {
-                              pageControl.onItemTapped(0);
-                            });
-                            Navigator.pop(context);
-                          },
-                          icon: Icons.home,
-                        ),
-                        DrawerItem(
-                          isSelected: pageControl.pages[3].isActivated,
-                          title: kProfileTitle,
-                          press: () {
-                            setState(() {
-                              pageControl.onItemTapped(3);
-                            });
-                            Navigator.pop(context);
-                          },
-                          icon: Icons.person,
-                        ),
-                        ExpansionTile(
-                            initiallyExpanded:
-                                pageControl.pages[1].isActivated ||
-                                        pageControl.pages[2].isActivated
-                                    ? true
-                                    : false,
-                            collapsedIconColor: Colors.white,
-                            childrenPadding: const EdgeInsets.only(left: 20),
-                            leading: const Icon(
-                              Icons.outgoing_mail,
-                              color: Colors.white,
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              child: ClipOval(
+                                child: Icon(
+                                  UserModel.userData!.role == 2
+                                      ? Icons.business_outlined
+                                      : Icons.person,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                              ),
                             ),
-                            iconColor: Colors.white,
-                            shape: const StadiumBorder(),
-                            title: const Text("Talep İşlemleri",
-                                style: TextStyle(color: Colors.white)),
-                            children: [
-                              DrawerItem(
-                                isSelected: pageControl.pages[2].isActivated,
-                                title: kTicketListTitle,
-                                press: () {
-                                  setState(() {
-                                    pageControl.onItemTapped(2);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                icon: Icons.mail,
-                              ),
-                              DrawerItem(
-                                isSelected: pageControl.pages[1].isActivated,
-                                title: kTicketTitle,
-                                press: () {
-                                  setState(() {
-                                    pageControl.onItemTapped(1);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                icon: Icons.add_box,
-                              ),
-                            ]),
-                        UserModel.userData!.role == 2
-                            ? ExpansionTile(
-                                initiallyExpanded:
-                                    pageControl.pages[4].isActivated ||
-                                            pageControl.pages[5].isActivated
-                                        ? true
-                                        : false,
-                                collapsedIconColor: Colors.white,
-                                childrenPadding:
-                                    const EdgeInsets.only(left: 20),
-                                leading: const Icon(
-                                  Icons.person_search_rounded,
-                                  color: Colors.white,
+                            Column(
+                              children: [
+                                Text(
+                                  "${UserModel.userCompany}",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
                                 ),
-                                iconColor: Colors.white,
-                                shape: const StadiumBorder(),
-                                title: const Text("Müşteri İşlemleri",
-                                    style: TextStyle(color: Colors.white)),
-                                children: [
-                                    DrawerItem(
-                                      isSelected:
-                                          pageControl.pages[4].isActivated,
-                                      title: kCustomerListTitle,
-                                      press: () {
-                                        setState(() {
-                                          pageControl.onItemTapped(4);
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icons.people_alt_rounded,
-                                    ),
-                                    DrawerItem(
-                                      isSelected:
-                                          pageControl.pages[5].isActivated,
-                                      title: "Müşteri Oluştur",
-                                      press: () {
-                                        setState(() {
-                                          pageControl.onItemTapped(5);
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icons.person_add_alt_1,
-                                    ),
-                                  ])
-                            : const SizedBox(),
-                        UserModel.userData!.role == 2
-                            ? ExpansionTile(
-                                initiallyExpanded:
-                                    pageControl.pages[6].isActivated ||
-                                            pageControl.pages[7].isActivated
-                                        ? true
-                                        : false,
-                                collapsedIconColor: Colors.white,
-                                childrenPadding:
-                                    const EdgeInsets.only(left: 20),
-                                leading: const Icon(
-                                  Icons.category,
-                                  color: Colors.white,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Text(
+                                      "  ${UserModel.userData!.firstName!} ${UserModel.userData!.lastName!}",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      )),
                                 ),
-                                iconColor: Colors.white,
-                                shape: const StadiumBorder(),
-                                title: const Text("Kategori İşlemleri",
-                                    style: TextStyle(color: Colors.white)),
-                                children: [
-                                    DrawerItem(
-                                      isSelected:
-                                          pageControl.pages[6].isActivated,
-                                      title: kCategoryListTitle,
-                                      press: () {
-                                        setState(() {
-                                          pageControl.onItemTapped(6);
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icons.list_alt_outlined,
-                                    ),
-                                    DrawerItem(
-                                      isSelected:
-                                          pageControl.pages[7].isActivated,
-                                      title: kCategoryCreateTitle,
-                                      press: () {
-                                        setState(() {
-                                          pageControl.onItemTapped(7);
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                      icon: Icons.add_box,
-                                    ),
-                                  ])
-                            : const SizedBox(),
-                        DrawerItem(
-                          isSelected: false,
-                          title: kLogoutTitle,
-                          press: () {
-                            QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.warning,
-                              barrierDismissible: false,
-                              title: QuickAlertConstant.logout,
-                              text: QuickAlertConstant.logoutMessage,
-                              confirmBtnText: QuickAlertConstant.yes,
-                              cancelBtnText: QuickAlertConstant.no,
-                              confirmBtnColor: Colors.green,
-                              showCancelBtn: true,
-                              cancelBtnTextStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                              onConfirmBtnTap: () async {
-                                await deleteToken();
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LoginScreen()),
-                                  (route) =>
-                                      false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
-                                );
-                              },
-                              onCancelBtnTap: () {
-                                Navigator.pop(context);
-                              },
-                            );
-                          },
-                          icon: Icons.logout_outlined,
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: double.infinity,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 15),
+                          child: Divider(
+                            height: 1,
+                            thickness: 1,
+                            indent: 1,
+                            endIndent: 1,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    color: kPrimaryColor,
-                    child: Center(
-                      child: Text(
-                        kVersionTitle,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white),
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 10,
+                    ),
+                    children: [
+                      DrawerItem(
+                        isSelected: pageControl.pages[0].isActivated,
+                        title: kHomeTitle,
+                        press: () {
+                          setState(() {
+                            pageControl.onItemTapped(0);
+                          });
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.home,
                       ),
+                      DrawerItem(
+                        isSelected: pageControl.pages[3].isActivated,
+                        title: kProfileTitle,
+                        press: () {
+                          setState(() {
+                            pageControl.onItemTapped(3);
+                          });
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.person,
+                      ),
+                      ExpansionTile(
+                          initiallyExpanded: pageControl.pages[1].isActivated ||
+                                  pageControl.pages[2].isActivated
+                              ? true
+                              : false,
+                          collapsedIconColor: Colors.white,
+                          childrenPadding: const EdgeInsets.only(left: 20),
+                          leading: const Icon(
+                            Icons.outgoing_mail,
+                            color: Colors.white,
+                          ),
+                          iconColor: Colors.white,
+                          shape: const StadiumBorder(),
+                          title: const Text("Talep İşlemleri",
+                              style: TextStyle(color: Colors.white)),
+                          children: [
+                            DrawerItem(
+                              isSelected: pageControl.pages[2].isActivated,
+                              title: kTicketListTitle,
+                              press: () {
+                                setState(() {
+                                  pageControl.onItemTapped(2);
+                                });
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.mail,
+                            ),
+                            DrawerItem(
+                              isSelected: pageControl.pages[1].isActivated,
+                              title: kTicketTitle,
+                              press: () {
+                                setState(() {
+                                  pageControl.onItemTapped(1);
+                                });
+                                Navigator.pop(context);
+                              },
+                              icon: Icons.add_box,
+                            ),
+                          ]),
+                      UserModel.userData!.role == 2
+                          ? ExpansionTile(
+                              initiallyExpanded:
+                                  pageControl.pages[4].isActivated ||
+                                          pageControl.pages[5].isActivated
+                                      ? true
+                                      : false,
+                              collapsedIconColor: Colors.white,
+                              childrenPadding: const EdgeInsets.only(left: 20),
+                              leading: const Icon(
+                                Icons.person_search_rounded,
+                                color: Colors.white,
+                              ),
+                              iconColor: Colors.white,
+                              shape: const StadiumBorder(),
+                              title: const Text("Müşteri İşlemleri",
+                                  style: TextStyle(color: Colors.white)),
+                              children: [
+                                  DrawerItem(
+                                    isSelected:
+                                        pageControl.pages[4].isActivated,
+                                    title: kCustomerListTitle,
+                                    press: () {
+                                      setState(() {
+                                        pageControl.onItemTapped(4);
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.people_alt_rounded,
+                                  ),
+                                  DrawerItem(
+                                    isSelected:
+                                        pageControl.pages[5].isActivated,
+                                    title: "Müşteri Oluştur",
+                                    press: () {
+                                      setState(() {
+                                        pageControl.onItemTapped(5);
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.person_add_alt_1,
+                                  ),
+                                ])
+                          : const SizedBox(),
+                      UserModel.userData!.role == 2
+                          ? ExpansionTile(
+                              initiallyExpanded:
+                                  pageControl.pages[6].isActivated ||
+                                          pageControl.pages[7].isActivated
+                                      ? true
+                                      : false,
+                              collapsedIconColor: Colors.white,
+                              childrenPadding: const EdgeInsets.only(left: 20),
+                              leading: const Icon(
+                                Icons.category,
+                                color: Colors.white,
+                              ),
+                              iconColor: Colors.white,
+                              shape: const StadiumBorder(),
+                              title: const Text("Kategori İşlemleri",
+                                  style: TextStyle(color: Colors.white)),
+                              children: [
+                                  DrawerItem(
+                                    isSelected:
+                                        pageControl.pages[6].isActivated,
+                                    title: kCategoryListTitle,
+                                    press: () {
+                                      setState(() {
+                                        pageControl.onItemTapped(6);
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.list_alt_outlined,
+                                  ),
+                                  DrawerItem(
+                                    isSelected:
+                                        pageControl.pages[7].isActivated,
+                                    title: kCategoryCreateTitle,
+                                    press: () {
+                                      setState(() {
+                                        pageControl.onItemTapped(7);
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icons.add_box,
+                                  ),
+                                ])
+                          : const SizedBox(),
+                      DrawerItem(
+                        isSelected: false,
+                        title: kLogoutTitle,
+                        press: () {
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.warning,
+                            barrierDismissible: false,
+                            title: QuickAlertConstant.logout,
+                            text: QuickAlertConstant.logoutMessage,
+                            confirmBtnText: QuickAlertConstant.yes,
+                            cancelBtnText: QuickAlertConstant.no,
+                            confirmBtnColor: Colors.green,
+                            showCancelBtn: true,
+                            cancelBtnTextStyle: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            onConfirmBtnTap: () async {
+                              await deleteToken();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()),
+                                (route) =>
+                                    false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
+                              );
+                            },
+                            onCancelBtnTap: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                        icon: Icons.logout_outlined,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  color: kPrimaryColor,
+                  child: Center(
+                    child: Text(
+                      kVersionTitle,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            body: pageControl.getCurrentPageData().screen,
-            bottomNavigationBar: isKeyboardVisible == false
-                ? Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                      color: kPrimaryColor,
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: GNav(
-                        padding: const EdgeInsets.all(16),
-                        backgroundColor: kPrimaryColor,
-                        color: Colors.white,
-                        activeColor: Colors.white,
-                        tabBackgroundColor: Colors.white24,
-                        gap: 8,
-                        rippleColor: Colors.white,
-                        selectedIndex: navbarIndex(PageControl.currentIndex),
-                        tabs: [
-                          GButton(
-                            icon: Icons.home_outlined,
-                            text: 'Home',
-                            active: pageControl.pages[0].isActivated,
-                            onPressed: () {
-                              setState(() {
-                                pageControl.onItemTapped(0);
-                              });
-                            },
-                          ),
-                          GButton(
-                            icon: Icons.mail_outline_outlined,
-                            text: kTicketListTitle,
-                            active: pageControl.pages[2].isActivated,
-                            onPressed: () {
-                              setState(() {
-                                pageControl.onItemTapped(2);
-                              });
-                            },
-                          ),
-                          GButton(
-                            icon: Icons.person,
-                            text: kProfileTitle,
-                            active: pageControl.pages[3].isActivated,
-                            onPressed: () {
-                              setState(() {
-                                pageControl.onItemTapped(3);
-                              });
-                            },
-                          ),
-                        ]),
-                  )
-                : const SizedBox(),
           ),
+          body: pageControl.getCurrentPageData().screen,
+          bottomNavigationBar: isKeyboardVisible == false
+              ? Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25)),
+                    color: kPrimaryColor,
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: GNav(
+                      padding: const EdgeInsets.all(16),
+                      backgroundColor: kPrimaryColor,
+                      color: Colors.white,
+                      activeColor: Colors.white,
+                      tabBackgroundColor: Colors.white24,
+                      gap: 8,
+                      rippleColor: Colors.white,
+                      selectedIndex: navbarIndex(PageControl.currentIndex),
+                      tabs: [
+                        GButton(
+                          icon: Icons.home_outlined,
+                          text: 'Home',
+                          active: pageControl.pages[0].isActivated,
+                          onPressed: () {
+                            setState(() {
+                              pageControl.onItemTapped(0);
+                            });
+                          },
+                        ),
+                        GButton(
+                          icon: Icons.mail_outline_outlined,
+                          text: kTicketListTitle,
+                          active: pageControl.pages[2].isActivated,
+                          onPressed: () {
+                            setState(() {
+                              pageControl.onItemTapped(2);
+                            });
+                          },
+                        ),
+                        GButton(
+                          icon: Icons.person,
+                          text: kProfileTitle,
+                          active: pageControl.pages[3].isActivated,
+                          onPressed: () {
+                            setState(() {
+                              pageControl.onItemTapped(3);
+                            });
+                          },
+                        ),
+                      ]),
+                )
+              : const SizedBox(),
         );
       },
     );
