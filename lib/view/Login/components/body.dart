@@ -129,7 +129,6 @@ class _LoginBodyState extends State<LoginBody> {
                         UserInfoServices userInfoServices = UserInfoServices();
                         // ignore: unused_local_variable
                         var response = await userInfoServices.user();
-
                         // ignore: use_build_context_synchronously
                         Navigator.pushReplacement(
                           context,

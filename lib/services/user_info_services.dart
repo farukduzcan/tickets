@@ -25,8 +25,7 @@ class UserInfoServices {
         log("Kullanıcı Bilgileri Token Aktiflik Durumu $isTokenValid");
 
         var resultJson = UserModel.fromJson(json.decode(result.body));
-        saveUserData(resultJson.data!);
-        return resultJson;
+        await saveUserData(resultJson.data!);
       }
       if (result.statusCode == 401) {
         isTokenValid = false;
