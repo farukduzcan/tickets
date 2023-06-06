@@ -8,7 +8,7 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/extensions/error_extensions.dart';
 import 'package:tickets/models/fogetpass_mail_model.dart';
 import 'package:tickets/services/forgetpass_mail_services.dart';
-import 'package:tickets/view/Login/forget_confirm_screen.dart';
+import 'package:tickets/view/Login/components/forget_confirm_body.dart';
 import '../../../components/background.dart';
 
 class ForgetPassBody extends StatefulWidget {
@@ -86,8 +86,8 @@ class _ForgetPassBodyState extends State<ForgetPassBody> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) {
-                            return ForgetConfirmPage(
-                              mailAddress: _emailController.text,
+                            return ForgetConfirmBody(
+                              confirmmailAddress: _emailController.text,
                             );
                           }),
                         );

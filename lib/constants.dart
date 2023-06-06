@@ -141,7 +141,7 @@ String kTicketActionReply = "Yanıtla";
 
 String kUpdateProfileTitle = "Profil Düzenle";
 
-String kVersionTitle = "V 1.2.3";
+String kVersionTitle = "V 1.2.4";
 
 class QuickAlertConstant {
   static const String success = "Başarılı";

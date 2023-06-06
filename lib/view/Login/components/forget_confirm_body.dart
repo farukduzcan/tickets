@@ -35,14 +35,16 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
       borderRadius: BorderRadius.circular(20),
     ),
   );
-
+  bool timerisactive = true;
   int _counter = 120;
   late Timer _timerconfirm;
 
   void _timerCounter() {
-    setState(() {
-      _counter--;
-    });
+    if (timerisactive == true) {
+      setState(() {
+        _counter--;
+      });
+    }
   }
 
   @override
@@ -63,70 +65,79 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return LoginAndRegisterBackground(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Text(kForgetConfirmTitle, style: kTitleStyle),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: Text(
-                kForgetConfirmSubtitle,
-                style: const TextStyle(
-                  color: Color.fromRGBO(111, 121, 129, 1),
+    return Scaffold(
+      body: LoginAndRegisterBackground(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(kForgetConfirmTitle, style: kTitleStyle),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                child: Text(
+                  kForgetConfirmSubtitle,
+                  style: const TextStyle(
+                    color: Color.fromRGBO(111, 121, 129, 1),
+                  ),
                 ),
               ),
-            ),
-            Lottie.asset('assets/lottie/otp_verification.json',
-                width: size.width * 0.50, repeat: false),
-            Pinput(
-              toolbarEnabled: true,
-              length: 6,
-              closeKeyboardWhenCompleted: true,
-              autofocus: true,
-              defaultPinTheme: defaultPinTheme,
-              validator: (s) {
-                return s == ForgetPassMailModel.resetPasswordCode
-                    ? null
-                    : kConfirincorrect;
-              },
-              pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-              showCursor: true,
-              onCompleted: (pin) async {
-                if (pin == ForgetPassMailModel.resetPasswordCode) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return ForgetResetPage(
-                        mailAddress: widget.confirmmailAddress,
-                      );
-                    }),
-                  );
-                }
+              Lottie.asset('assets/lottie/otp_verification.json',
+                  width: size.width * 0.50, repeat: false),
+              Pinput(
+                toolbarEnabled: true,
+                length: 6,
+                closeKeyboardWhenCompleted: true,
+                autofocus: true,
+                defaultPinTheme: defaultPinTheme,
+                validator: (s) {
+                  return s == ForgetPassMailModel.resetPasswordCode
+                      ? null
+                      : kConfirincorrect;
+                },
+                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                showCursor: true,
+                onCompleted: (pin) async {
+                  setState(() {
+                    timerisactive = false;
+                  });
+                  if (pin == ForgetPassMailModel.resetPasswordCode &&
+                      timerisactive == false) {
+                    _timerconfirm.cancel();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgetResetPage(
+                                mailAddress: widget.confirmmailAddress,
+                              )),
+                      (route) =>
+                          false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
+                    );
+                  }
 
-                //print(widget.mailAddress);
-              },
-            ),
-            Text("Kalan Süre: $_counter sn",
-                style: const TextStyle(fontSize: 20, color: Colors.red)),
-            // Padding(
-            //   padding: const EdgeInsets.all(15.0),
-            //   child: RaundedButton(
-            //       buttonText: "KOD",
-            //       press: () {
-            //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //           content: Text(
-            //               "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
-            //           backgroundColor: Colors.red,
-            //         ));
-            //       }),
-            // ),
-          ],
+                  //print(widget.mailAddress);
+                },
+              ),
+              Text("Kalan Süre: $_counter sn",
+                  style: const TextStyle(fontSize: 20, color: Colors.red)),
+              // Padding(
+              //   padding: const EdgeInsets.all(15.0),
+              //   child: RaundedButton(
+              //       buttonText: "KOD",
+              //       press: () {
+              //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //           content: Text(
+              //               "Onay Kodunuz: ${ForgetPassMailModel.resetPasswordCode.toString()}"),
+              //           backgroundColor: Colors.red,
+              //         ));
+              //       }),
+              // ),
+            ],
+          ),
         ),
       ),
     );

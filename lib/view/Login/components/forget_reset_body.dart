@@ -90,17 +90,19 @@ class _ForgetResetBodyState extends State<ForgetResetBody> {
                       if (result?.data == null) {
                         // ignore: use_build_context_synchronously
                         QuickAlert.show(
+                            barrierDismissible: false,
                             context: context,
                             type: QuickAlertType.success,
                             title: kAlertSuccssesTitle,
                             text: kResetPasswordSuccess,
                             confirmBtnText: kLoginButtonTitle,
                             onConfirmBtnTap: () {
-                              Navigator.pushReplacement(
+                              Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(builder: (context) {
-                                  return const LoginScreen();
-                                }),
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()),
+                                (route) =>
+                                    false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
                               );
                             });
                       } else {

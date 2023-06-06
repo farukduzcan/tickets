@@ -10,7 +10,7 @@ import 'package:tickets/extensions/error_extensions.dart';
 import 'package:tickets/models/register_response_model.dart';
 import 'package:tickets/services/register_services.dart';
 import 'package:tickets/view/Login/login_screen.dart';
-import 'package:tickets/view/Signup/confirm_page.dart';
+import 'package:tickets/view/Signup/components/confirm_body.dart';
 import '../../../components/input_field.dart';
 import '../../../components/password_input_field.dart';
 
@@ -158,7 +158,7 @@ class _SingUpBodyState extends State<SingUpBody> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return ConfirmPage(
+                          return ConfirmBody(
                             mailAddress: _emailController.text,
                           );
                         }),

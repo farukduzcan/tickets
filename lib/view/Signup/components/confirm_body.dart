@@ -61,81 +61,83 @@ class _ConfirmBodyState extends State<ConfirmBody> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return LoginAndRegisterBackground(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Text(kConfirmTitle, style: kTitleStyle),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: Text(
-                kConfirmSubtitle,
-                style: const TextStyle(
-                  color: Color.fromRGBO(111, 121, 129, 1),
+    return Scaffold(
+      body: LoginAndRegisterBackground(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(kConfirmTitle, style: kTitleStyle),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+                child: Text(
+                  kConfirmSubtitle,
+                  style: const TextStyle(
+                    color: Color.fromRGBO(111, 121, 129, 1),
+                  ),
                 ),
               ),
-            ),
-            Lottie.asset('assets/lottie/otp_verification.json',
-                width: size.width * 0.50, repeat: false),
-            Pinput(
-              toolbarEnabled: true,
-              length: 6,
-              closeKeyboardWhenCompleted: true,
-              autofocus: true,
-              defaultPinTheme: defaultPinTheme,
-              validator: (s) {
-                return s == RegisterResponseModel.confirmationCode
-                    ? null
-                    : kConfirincorrect;
-              },
-              pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-              showCursor: true,
-              onCompleted: (pin) async {
-                if (pin == RegisterResponseModel.confirmationCode) {
-                  ConfirmServices confirmServices = ConfirmServices();
-                  var response = await confirmServices.confirm(
-                      code: pin, eMail: widget.mailAddress);
-                  if (response!.result!.isNegative == false) {
-                    // ignore: use_build_context_synchronously
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.success,
-                      title: kAlertSuccssesTitle,
-                      text: kConfirmSuccess,
-                      confirmBtnText: kOk,
-                      onConfirmBtnTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return const LoginScreen();
-                          }),
-                        );
-                      },
-                    );
+              Lottie.asset('assets/lottie/otp_verification.json',
+                  width: size.width * 0.50, repeat: false),
+              Pinput(
+                toolbarEnabled: true,
+                length: 6,
+                closeKeyboardWhenCompleted: true,
+                autofocus: true,
+                defaultPinTheme: defaultPinTheme,
+                validator: (s) {
+                  return s == RegisterResponseModel.confirmationCode
+                      ? null
+                      : kConfirincorrect;
+                },
+                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                showCursor: true,
+                onCompleted: (pin) async {
+                  if (pin == RegisterResponseModel.confirmationCode) {
+                    ConfirmServices confirmServices = ConfirmServices();
+                    var response = await confirmServices.confirm(
+                        code: pin, eMail: widget.mailAddress);
+                    if (response!.result!.isNegative == false) {
+                      // ignore: use_build_context_synchronously
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.success,
+                        title: kAlertSuccssesTitle,
+                        text: kConfirmSuccess,
+                        confirmBtnText: kOk,
+                        onConfirmBtnTap: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                            (route) => false,
+                          );
+                        },
+                      );
+                    }
                   }
-                }
 
-                //print(widget.mailAddress);
-              },
-            ),
-            Text("Kalan Süre: $_counter sn",
-                style: const TextStyle(fontSize: 20, color: Colors.red)),
-            // RaundedButton(
-            //     buttonText: "KOD",
-            //     press: () {
-            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            //         content: Text(
-            //             "Onay Kodunuz: ${RegisterResponseModel.confirmationCode.toString()}"),
-            //         backgroundColor: Colors.red,
-            //       ));
-            //     }),
-          ],
+                  //print(widget.mailAddress);
+                },
+              ),
+              Text("Kalan Süre: $_counter sn",
+                  style: const TextStyle(fontSize: 20, color: Colors.red)),
+              // RaundedButton(
+              //     buttonText: "KOD",
+              //     press: () {
+              //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //         content: Text(
+              //             "Onay Kodunuz: ${RegisterResponseModel.confirmationCode.toString()}"),
+              //         backgroundColor: Colors.red,
+              //       ));
+              //     }),
+            ],
+          ),
         ),
       ),
     );

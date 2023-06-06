@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen>
                             Column(
                               children: [
                                 Text(
-                                  "${UserModel.userCompany}",
+                                  "  ${UserModel.userCompany}",
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
