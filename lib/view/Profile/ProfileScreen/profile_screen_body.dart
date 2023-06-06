@@ -6,7 +6,6 @@ import 'package:tickets/view/Profile/UpdateProfile/update_profile_screen.dart';
 
 import '../../../constants.dart';
 import '../../../models/user_model.dart';
-import '../../../services/manage_info_services.dart';
 import '../../Login/login_screen.dart';
 
 class ProfileScreenBody extends StatefulWidget {
@@ -23,31 +22,28 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   @override
   void initState() {
     super.initState();
-    manageInfo();
   }
 
-  Future<void> manageInfo() async {
-    if (UserModel.userData!.role == 2) {
-      var manageInfo = ManageInfoServices();
-      // ignore: unused_local_variable
-      var response = await manageInfo.manageinfo();
-      setState(() {
-        companyName = response!.data!.name;
-      });
-    } else {
-      setState(() {
-        companyName = "Müşteri";
-      });
-    }
-  }
+  // Future<void> manageInfo() async {
+  //   if (UserModel.userData!.role == 2) {
+  //     var manageInfo = ManageInfoServices();
+  //     // ignore: unused_local_variable
+  //     var response = await manageInfo.manageinfo();
+  //     setState(() {
+  //       companyName = response!.data!.name;
+  //     });
+  //   } else {
+  //     setState(() {
+  //       companyName = "Müşteri";
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       key: _refreshIndicatorKey,
-      onRefresh: () async {
-        await manageInfo();
-      },
+      onRefresh: () async {},
       child: Scaffold(
         body: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(
@@ -56,7 +52,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Column(children: [
               Text(
-                " $companyName",
+                " ${UserModel.userCompany}",
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -204,6 +200,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                             color: Colors.black, fontWeight: FontWeight.bold),
                         onConfirmBtnTap: () async {
                           await deleteToken();
+                          await deleteUserData();
                           // ignore: use_build_context_synchronously
                           Navigator.pushAndRemoveUntil(
                             context,

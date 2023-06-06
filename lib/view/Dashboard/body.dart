@@ -169,6 +169,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                           pointColorMapper: (GDPData data, _) => data.color,
                           dataLabelMapper: (GDPData data, _) => data.text,
                           dataLabelSettings: const DataLabelSettings(
+                            showZeroValue: false,
                             isVisible: true,
                           ),
                           enableTooltip: true,

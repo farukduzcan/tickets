@@ -20,6 +20,8 @@ class TokenValidation {
           confirmBtnText: QuickAlertConstant.ok,
           onConfirmBtnTap: () async {
             await deleteToken();
+            await deleteUserData();
+
             TicketListServices.isTokenValid = null;
             // ignore: use_build_context_synchronously
             Navigator.pushAndRemoveUntil(

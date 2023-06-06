@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/manage_info_services.dart';
+
 class UserModel {
   static String? userToken;
   static UserData? userData;
+  static String? userCompany;
   // userdata bulunan role kodlarında 2 numaralı kod client, 3 numaralı kod customer
   UserModel({
     required this.data,
@@ -63,6 +66,18 @@ class UserData {
       };
 }
 
+Future<String> manageInfo() async {
+  if (UserModel.userData!.role == 2) {
+    var manageInfo = ManageInfoServices();
+    // ignore: unused_local_variable
+    var response = await manageInfo.manageinfo();
+
+    return response!.data!.name.toString();
+  } else {
+    return "Müşteri";
+  }
+}
+
 //ToDo: cahce json kaydetme
 //cache'den json okuma
 
@@ -70,12 +85,18 @@ Future<void> saveUserData(UserData user) async {
   final prefs = await SharedPreferences.getInstance();
   final userData = jsonEncode(user.toJson());
   prefs.setString('user', userData);
+  prefs.setString('companyname', await manageInfo());
   await loadUserData();
 }
 
 Future<void> loadUserData() async {
   final prefs = await SharedPreferences.getInstance();
   final userData = prefs.getString('user');
+  final companyname = prefs.getString('companyname');
+
+  if (companyname != null) {
+    UserModel.userCompany = companyname;
+  }
 
   if (userData != null) {
     final json = jsonDecode(userData);
@@ -108,4 +129,5 @@ Future<void> deleteToken() async {
 Future<void> deleteUserData() async {
   final prefs = await SharedPreferences.getInstance();
   prefs.remove('user');
+  prefs.remove('companyname');
 }

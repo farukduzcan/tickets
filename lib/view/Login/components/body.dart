@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tickets/components/already_account.dart';
 import 'package:tickets/components/input_field.dart';
-import 'package:tickets/components/messenger_bar_top.dart';
 import 'package:tickets/components/password_input_field.dart';
 import 'package:tickets/components/raunded_button.dart';
 import 'package:tickets/constants.dart';
@@ -12,6 +11,7 @@ import 'package:tickets/services/login_services.dart';
 import 'package:tickets/view/Login/forgetpass_screen.dart';
 import 'package:tickets/view/Signup/signup_screen.dart';
 import '../../../components/background.dart';
+import '../../../components/messenger_bar_top.dart';
 import '../../../models/user_model.dart';
 import '../../../services/user_info_services.dart';
 
@@ -110,11 +110,17 @@ class _LoginBodyState extends State<LoginBody> {
                           userName: _emailController.text,
                           password: _passwordController.text);
 
-                      if (result?.errors != null) {
+                      if (result?.errors != null &&
+                          result!.errors!.isNotEmpty) {
                         // ignore: use_build_context_synchronously
                         TopMessageBar(
-                          message: result!.errors.errorToString(),
+                          message: result.errors.errorToString(),
                         ).showTopMessageBarError(context);
+                        // ignore: use_build_context_synchronously
+                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        //   content: Text(result.errors!.errorToString()),
+                        //   backgroundColor: Colors.red,
+                        // ),);
                       }
 
                       if (result != null && result.data != null) {
@@ -134,6 +140,12 @@ class _LoginBodyState extends State<LoginBody> {
                       }
                       _loadingBar();
                     } catch (e) {
+                      _loadingBar();
+
+                      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //   content: Text(e.toString()),
+                      //   backgroundColor: Colors.red,
+                      // ));
                       TopMessageBar(
                         message: e.toString(),
                       ).showTopMessageBarError(context);
