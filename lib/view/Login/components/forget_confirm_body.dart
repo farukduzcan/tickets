@@ -114,11 +114,10 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                   showCursor: true,
                   onCompleted: (pin) async {
-                    setState(() {
-                      timerisactive = false;
-                    });
-                    if (pin == ForgetPassMailModel.resetPasswordCode &&
-                        timerisactive == false) {
+                    if (pin == ForgetPassMailModel.resetPasswordCode) {
+                      setState(() {
+                        timerisactive = false;
+                      });
                       _timerconfirm.cancel();
                       Navigator.pushAndRemoveUntil(
                         context,

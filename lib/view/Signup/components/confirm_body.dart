@@ -111,13 +111,11 @@ class _ConfirmBodyState extends State<ConfirmBody> {
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                   showCursor: true,
                   onCompleted: (pin) async {
-                    setState(() {
-                      timerisactive = false;
-                    });
-                    if (pin == RegisterResponseModel.confirmationCode &&
-                        timerisactive == false) {
+                    if (pin == RegisterResponseModel.confirmationCode) {
+                      setState(() {
+                        timerisactive = false;
+                      });
                       _timersingupconfirm.cancel();
-
                       ConfirmServices confirmServices = ConfirmServices();
                       var response = await confirmServices.confirm(
                           code: pin, eMail: widget.mailAddress);
