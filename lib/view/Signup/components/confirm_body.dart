@@ -36,11 +36,22 @@ class _ConfirmBodyState extends State<ConfirmBody> {
 
   int _counter = 120;
   late Timer _timersingupconfirm;
+  bool timerisactive = true;
 
   void _timerCounter() {
-    setState(() {
-      _counter--;
-    });
+    if (timerisactive == true) {
+      setState(() {
+        _counter--;
+        _counter <= 0 ? timerisactive = false : timerisactive = true;
+      });
+    } else if (timerisactive == false) {
+      _timersingupconfirm.cancel();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false,
+      );
+    }
   }
 
   @override
@@ -53,8 +64,6 @@ class _ConfirmBodyState extends State<ConfirmBody> {
 
   @override
   void dispose() {
-    _timersingupconfirm.cancel();
-    _timerCounter();
     super.dispose();
   }
 
@@ -82,51 +91,61 @@ class _ConfirmBodyState extends State<ConfirmBody> {
                   ),
                 ),
               ),
-              Lottie.asset('assets/lottie/otp_verification.json',
-                  width: size.width * 0.50, repeat: false),
-              Pinput(
-                toolbarEnabled: true,
-                length: 6,
-                closeKeyboardWhenCompleted: true,
-                autofocus: true,
-                defaultPinTheme: defaultPinTheme,
-                validator: (s) {
-                  return s == RegisterResponseModel.confirmationCode
-                      ? null
-                      : kConfirincorrect;
-                },
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                showCursor: true,
-                onCompleted: (pin) async {
-                  if (pin == RegisterResponseModel.confirmationCode) {
-                    ConfirmServices confirmServices = ConfirmServices();
-                    var response = await confirmServices.confirm(
-                        code: pin, eMail: widget.mailAddress);
-                    if (response!.result!.isNegative == false) {
-                      // ignore: use_build_context_synchronously
-                      QuickAlert.show(
-                        context: context,
-                        type: QuickAlertType.success,
-                        title: kAlertSuccssesTitle,
-                        text: kConfirmSuccess,
-                        confirmBtnText: kOk,
-                        onConfirmBtnTap: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                            (route) => false,
-                          );
-                        },
-                      );
-                    }
-                  }
-
-                  //print(widget.mailAddress);
-                },
-              ),
               Text("Kalan Süre: $_counter sn",
                   style: const TextStyle(fontSize: 20, color: Colors.red)),
+              Lottie.asset('assets/lottie/otp_verification.json',
+                  width: size.width * 0.50, repeat: false),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: Pinput(
+                  toolbarEnabled: true,
+                  length: 6,
+                  closeKeyboardWhenCompleted: true,
+                  autofocus: true,
+                  defaultPinTheme: defaultPinTheme,
+                  validator: (s) {
+                    return s == RegisterResponseModel.confirmationCode
+                        ? null
+                        : kConfirincorrect;
+                  },
+                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                  showCursor: true,
+                  onCompleted: (pin) async {
+                    setState(() {
+                      timerisactive = false;
+                    });
+                    if (pin == RegisterResponseModel.confirmationCode &&
+                        timerisactive == false) {
+                      _timersingupconfirm.cancel();
+
+                      ConfirmServices confirmServices = ConfirmServices();
+                      var response = await confirmServices.confirm(
+                          code: pin, eMail: widget.mailAddress);
+                      if (response!.result!.isNegative == false) {
+                        // ignore: use_build_context_synchronously
+                        QuickAlert.show(
+                          barrierDismissible: false,
+                          context: context,
+                          type: QuickAlertType.success,
+                          title: kAlertSuccssesTitle,
+                          text: kConfirmSuccess,
+                          confirmBtnText: kOk,
+                          onConfirmBtnTap: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                              (route) => false,
+                            );
+                          },
+                        );
+                      }
+                    }
+
+                    //print(widget.mailAddress);
+                  },
+                ),
+              ),
               // RaundedButton(
               //     buttonText: "KOD",
               //     press: () {

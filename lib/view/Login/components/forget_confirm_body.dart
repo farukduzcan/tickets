@@ -10,6 +10,8 @@ import 'package:tickets/constants.dart';
 import 'package:tickets/models/fogetpass_mail_model.dart';
 import 'package:tickets/view/Login/forget_reset_screen.dart';
 
+import '../login_screen.dart';
+
 class ForgetConfirmBody extends StatefulWidget {
   final String confirmmailAddress;
   const ForgetConfirmBody({
@@ -43,15 +45,21 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
     if (timerisactive == true) {
       setState(() {
         _counter--;
+        _counter <= 0 ? timerisactive = false : timerisactive = true;
       });
+    } else if (timerisactive == false) {
+      _timerconfirm.cancel();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false,
+      );
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    _timerCounter();
-    _timerconfirm.cancel();
   }
 
   @override
@@ -86,44 +94,48 @@ class _ForgetConfirmBodyState extends State<ForgetConfirmBody> {
                   ),
                 ),
               ),
-              Lottie.asset('assets/lottie/otp_verification.json',
-                  width: size.width * 0.50, repeat: false),
-              Pinput(
-                toolbarEnabled: true,
-                length: 6,
-                closeKeyboardWhenCompleted: true,
-                autofocus: true,
-                defaultPinTheme: defaultPinTheme,
-                validator: (s) {
-                  return s == ForgetPassMailModel.resetPasswordCode
-                      ? null
-                      : kConfirincorrect;
-                },
-                pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                showCursor: true,
-                onCompleted: (pin) async {
-                  setState(() {
-                    timerisactive = false;
-                  });
-                  if (pin == ForgetPassMailModel.resetPasswordCode &&
-                      timerisactive == false) {
-                    _timerconfirm.cancel();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgetResetPage(
-                                mailAddress: widget.confirmmailAddress,
-                              )),
-                      (route) =>
-                          false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
-                    );
-                  }
-
-                  //print(widget.mailAddress);
-                },
-              ),
               Text("Kalan Süre: $_counter sn",
                   style: const TextStyle(fontSize: 20, color: Colors.red)),
+              Lottie.asset('assets/lottie/otp_verification.json',
+                  width: size.width * 0.50, repeat: false),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: Pinput(
+                  toolbarEnabled: true,
+                  length: 6,
+                  closeKeyboardWhenCompleted: true,
+                  autofocus: true,
+                  defaultPinTheme: defaultPinTheme,
+                  validator: (s) {
+                    return s == ForgetPassMailModel.resetPasswordCode
+                        ? null
+                        : kConfirincorrect;
+                  },
+                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                  showCursor: true,
+                  onCompleted: (pin) async {
+                    setState(() {
+                      timerisactive = false;
+                    });
+                    if (pin == ForgetPassMailModel.resetPasswordCode &&
+                        timerisactive == false) {
+                      _timerconfirm.cancel();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgetResetPage(
+                                  mailAddress: widget.confirmmailAddress,
+                                )),
+                        (route) =>
+                            false, // Geri tuşuna basıldığında hiçbir sayfa kalmadığı için false döndür
+                      );
+                    }
+
+                    //print(widget.mailAddress);
+                  },
+                ),
+              ),
+
               // Padding(
               //   padding: const EdgeInsets.all(15.0),
               //   child: RaundedButton(
