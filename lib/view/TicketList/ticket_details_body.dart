@@ -337,7 +337,7 @@ class _TicketDetailsBodyState extends State<TicketDetailsBody> {
                       );
                     },
                   );
-                } else if (UserModel.userData!.role == 3) {
+                } else if (UserModel.userData!.role == 4) {
                   showModalBottomSheet(
                     isScrollControlled: true,
                     enableDrag: true,

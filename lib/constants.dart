@@ -141,7 +141,7 @@ String kTicketActionReply = "Yanıtla";
 
 String kUpdateProfileTitle = "Profil Düzenle";
 
-String kVersionTitle = "V 1.2.4";
+String kVersionTitle = "V 1.2.5";
 
 class QuickAlertConstant {
   static const String success = "Başarılı";
@@ -177,7 +177,7 @@ class TicketConstant {
   static const String ticketsStatus = "Talep Durumları";
   static const String newTickets = "Yeni Talepler";
   static const String inProgressTickets = "İşlem Bekleyen Talepler";
-  static const String closedTickets = "Tamamlanan Talopler";
+  static const String closedTickets = "Tamamlanan Talepler";
   static const String newTicket = "Yeni Talep";
   static const String inProgressTicket = "İşlem Bekleyen";
   static const String completedTicket = "Tamamlanan";

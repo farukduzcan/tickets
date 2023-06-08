@@ -39,7 +39,7 @@ class _BottomSheetReplyAreaState extends State<BottomSheetReplyArea> {
   String getUserRole() {
     if (widget.userRoleId == 2) {
       return "REPLY";
-    } else if (widget.userRoleId == 3) {
+    } else if (widget.userRoleId == 4) {
       return "CUSTOMER_REPLY";
     } else {
       return "REPLY";
