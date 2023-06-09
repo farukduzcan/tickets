@@ -1,6 +1,6 @@
 # 📲 Ticket App
 
-Bu uygulama bir destek talep uygulamasıdır. Bu uygulama üzerinden bir şirket hesabı açtıktan sonra şirket kendi kullanıcılarını oluşturup o kullanıcıların sorunlarına cevap verebilir ve onlara destek sağlayabilir.
+Bu uygulama bir destek talep uygulamasıdır. Şirketlerin müşterileri ile aralarındaki iletişimi sağlamaktadır. Şirket kendi müşterilerini oluşturabilirler bu müşteriler de kendi hesapları üzerinden şirkete taleplerde bulunup sorunlarını, problemlerini veya isteklerini dileklerini dile getirebilirler.
 
 ## Kullanılan Teknolojiler
 
