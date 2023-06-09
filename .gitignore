@@ -13,6 +13,7 @@ doc/api/
 
 # dotenv environment variables file
 .env*
+lib/services/global.dart
 
 # Avoid committing generated Javascript files:
 *.dart.js
