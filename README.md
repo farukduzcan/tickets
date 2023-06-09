@@ -42,6 +42,12 @@ Bu uygulama bir destek talep uygulamasıdır. Bu uygulama üzerinden bir şirket
  Şirketimize taleplerini iletecek kişiler için müşteri hesabı oluşturmamız gerekiyor, sidebar'da müşteri işlemleri alanından müşteri oluştur seçeneği ile müşterilerimizi oluşturabiliriz.
  
   <img src="JetDestek-ReadME/Customer-Create.gif" alt="Şifre Sıfırlama" width="400">
+ 
+   ### 👤🗑️ Müşteri Silme
+ 
+ Müşterilerimizi sola kaydırarak silebiliriz.
+ 
+  <img src="JetDestek-ReadME/Remove-Customer.gif" alt="Şifre Sıfırlama" width="400">
 
    ### 🏷️ Kategori Oluşturma
  
@@ -67,11 +73,17 @@ Bu uygulama bir destek talep uygulamasıdır. Bu uygulama üzerinden bir şirket
  
   <img src="JetDestek-ReadME/File-Ticket-Customer.gif" alt="Şifre Sıfırlama" width="400">
  
-   ### 📂⬇️ Dosyalı Talepten Dosya İndirm
+   ### 📂⬇️ Dosyalı Talepten Dosya İndirme
  
  Taleplerimizden dosyalarımızı indirebiliriz.
  
   <img src="JetDestek-ReadME/Client-File-Download.gif" alt="Şifre Sıfırlama" width="400">
+ 
+  ### 📬🗑️ Talep Silme
+ 
+ Taleplerimizi sola kaydırarak silebiliriz.
+ 
+  <img src="JetDestek-ReadME/Remove-Ticket.gif" alt="Şifre Sıfırlama" width="400">
  
    ### 🚪🔑 Şirket Hesabından Çıkış Yapma ve Müşteri Hesabına Giriş Yapma
  
